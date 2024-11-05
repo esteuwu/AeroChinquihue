@@ -1,5 +1,8 @@
 import sqlite3
 import sys
+if len(sys.argv) == 1:
+    print("You need to specify the output file.")
+    quit()
 con = sqlite3.connect(sys.argv[1])
 cur = con.cursor()
 destinations = [
