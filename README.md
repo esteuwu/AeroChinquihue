@@ -11,9 +11,10 @@ Instala las dependencias necesarias ejecutando:
 * Database.py: Clase Database.
 * main.py: Programa principal.
 
-## Herramientas (carpeta tools)
+### Herramientas (carpeta tools)
 
 * createDatabase.py: Crea una database inicial con los datos requeridos.
+* vacuumDatabase.py: Reduce el tamaño de la base de datos.
 
 ## Software necesario
 
