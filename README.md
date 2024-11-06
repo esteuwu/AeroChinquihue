@@ -21,6 +21,10 @@ Configura el archivo .env.
 * createDatabase.py: Crea una database inicial con los datos requeridos.
 * vacuumDatabase.py: Reduce el tamaño de la base de datos.
 
+## Limitaciones
+
+* Dado que para la base de datos se utiliza SQLite, **sólo un usuario puede abrir la base de datos a la vez**.
+
 ## Software necesario
 
 * [Git](https://git-scm.com/)
