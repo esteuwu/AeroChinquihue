@@ -4,5 +4,5 @@ import pathlib
 if not pathlib.Path("database.db").exists():
     raise FileNotFoundError("Database does not exist")
 database = Database("database.db")
-print(database.query())
+print(database.__str__())
 database.bye()

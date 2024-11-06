@@ -39,7 +39,7 @@ prices = [
 ]
 
 cur.execute("CREATE TABLE flights(destination, prices)")
-for i in range(0, len(destinations), 1):
+for i in range(len(destinations)):
     cur.execute(f"INSERT INTO flights VALUES ('{destinations[i]}', json_array(?, ?))", prices[i])
 con.commit()
 con.close()
