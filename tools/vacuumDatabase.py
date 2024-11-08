@@ -10,4 +10,3 @@ cur = con.cursor()
 
 cur.execute("VACUUM")
 con.commit()
-con.close()
