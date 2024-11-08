@@ -4,17 +4,17 @@ import sqlite3
 
 class Model:
     def __init__(self, filename):
-        self.con = sqlite3.connect(filename)
-        self.cur = self.con.cursor()
+        self.__con = sqlite3.connect(filename)
+        self.__cur = self.__con.cursor()
 
     # WARNING: This function is not final and will be removed in the future.
     def __str__(self) -> str:
         buffer = ""
         destinations = []
         prices = []
-        for result in self.cur.execute("SELECT destination FROM flights"):
+        for result in self.__cur.execute("SELECT destination FROM flights"):
             destinations.append(result[0])
-        for result in self.cur.execute("SELECT prices FROM flights"):
+        for result in self.__cur.execute("SELECT prices FROM flights"):
             prices.append(json.loads(result[0]))
         length = len(destinations)
         for i in range(length):

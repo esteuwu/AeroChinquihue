@@ -2,7 +2,7 @@
 
 class ViewModel:
     def __init__(self, model):
-        self.model = model
+        self.__model = model
 
     def __str__(self) -> str:
-        return self.model.__str__()
+        return self.__model.__str__()
