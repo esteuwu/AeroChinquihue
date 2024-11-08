@@ -2,11 +2,12 @@ import json
 import sqlite3
 
 
-class Database:
+class Model:
     def __init__(self, filename):
         self.con = sqlite3.connect(filename)
         self.cur = self.con.cursor()
 
+    # WARNING: This function is not final and is present for demonstration purposes only.
     def __str__(self) -> str:
         buffer = ""
         destinations = []
@@ -22,6 +23,3 @@ class Database:
             if i != length - 1:
                 buffer += "\n"
         return buffer
-
-    def bye(self):
-        self.con.commit()
