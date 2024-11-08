@@ -17,8 +17,8 @@ Instala las dependencias necesarias ejecutando:
 
 ### Model-View-ViewModel (MVVM)
 * mvvmModel.py: Modelo de base de datos (SQLite3).
-* mvvmViewModel: Interacciones entre modelo y vista.
-* mvvmView: Vista de PyQt.
+* mvvmViewModel.py: Interacciones entre modelo y vista.
+* mvvmView.py: Vista de PyQt.
 
 ### Herramientas (carpeta tools)
 
