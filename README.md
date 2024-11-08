@@ -6,15 +6,19 @@ Este programa es funcional en Python 3.12. No probado en otras versiones.
 Instala las dependencias necesarias ejecutando:
 > pip install -r requirements.txt
 
-Configura el archivo .env.
+**Copia** el archivo .env.example a .env y configura el entorno.
 > \# Debes colocar el nombre de la base de datos, por ejemplo database.db
 >
 > DATABASE_FILENAME=
 
 ## Estructura de archivos
 
-* Database.py: Clase Database.
 * main.py: Programa principal.
+
+### Model-View-ViewModel (MVVM)
+* mvvmModel.py: Modelo de base de datos (SQLite3).
+* mvvmViewModel.py: Interacciones entre modelo y vista.
+* mvvmView.py: Vista de PyQt.
 
 ### Herramientas (carpeta tools)
 
@@ -33,3 +37,7 @@ Configura el archivo .env.
 ## Software recomendado
 
 * [PyCharm](https://www.jetbrains.com/pycharm/): IDE para programar en Python
+
+## Créditos
+
+* https://github.com/Bombadil-Tom/pyqt-mvvm-example
