@@ -7,11 +7,10 @@ class Model:
         self.con = sqlite3.connect(filename)
         self.cur = self.con.cursor()
 
-    # WARNING: This function is not final and is present for demonstration purposes only.
+    # WARNING: This function is not final and will be removed in the future.
     def __str__(self) -> str:
         buffer = ""
         destinations = []
-        length: int
         prices = []
         for result in self.cur.execute("SELECT destination FROM flights"):
             destinations.append(result[0])
