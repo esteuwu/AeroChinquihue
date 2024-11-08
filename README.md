@@ -6,15 +6,17 @@ Este programa es funcional en Python 3.12. No probado en otras versiones.
 Instala las dependencias necesarias ejecutando:
 > pip install -r requirements.txt
 
-Configura el archivo .env.
+**Copia** el archivo .env.example a .env y configura el entorno.
 > \# Debes colocar el nombre de la base de datos, por ejemplo database.db
 >
 > DATABASE_FILENAME=
 
 ## Estructura de archivos
 
-* Database.py: Clase Database.
 * main.py: Programa principal.
+* mvvm/*.py: Click [aquí](model-view-viewmodel-(mvvm)).
+
+## Model-View-ViewModel (MVVM)
 
 ### Herramientas (carpeta tools)
 
