@@ -25,4 +25,3 @@ class Database:
 
     def bye(self):
         self.con.commit()
-        self.con.close()
