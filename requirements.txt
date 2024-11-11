@@ -1,7 +1,1 @@
-cffi==1.17.1
-pycparser==2.22
-pyescrypt==0.1.0
-PyQt6==6.7.1
-PyQt6-Qt6==6.7.3
-PyQt6_sip==13.8.0
 python-dotenv==1.0.1
