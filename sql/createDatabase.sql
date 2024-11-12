@@ -1,0 +1,14 @@
+CREATE TABLE flights(destination, prices);
+INSERT INTO flights VALUES ('Cochamó', json_array(20000, 5000));
+INSERT INTO flights VALUES ('Puelo Bajo', json_array(20000, 5000));
+INSERT INTO flights VALUES ('Contao', json_array(20000, 5000));
+INSERT INTO flights VALUES ('Río Negro', json_array(25000, 6000));
+INSERT INTO flights VALUES ('Pupelde', json_array(25000, 6000));
+INSERT INTO flights VALUES ('Chepu', json_array(30000, 8000));
+INSERT INTO flights VALUES ('Ayacara', json_array(30000, 8000));
+INSERT INTO flights VALUES ('Pillán', json_array(40000, 12000));
+INSERT INTO flights VALUES ('Reñihue', json_array(40000, 12000));
+INSERT INTO flights VALUES ('Isla Quenac', json_array(40000, 12000));
+INSERT INTO flights VALUES ('Palqui', json_array(40000, 12000));
+INSERT INTO flights VALUES ('Chaitén', json_array(50000, 15000));
+INSERT INTO flights VALUES ('Santa Bárbara', json_array(50000, 15000));
