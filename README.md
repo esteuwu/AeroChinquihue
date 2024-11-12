@@ -28,12 +28,11 @@ Contiene archivos relacionados con el patrón de arquitectura
 Contiene funcionalidad relacionada con la base de datos (SQLite3).
 * mvvm_view_model.py: **Modelo de vista**.
 Maneja las interacciones entre modelo y vista.
-* mvvm_view.py: **Vista**. Interfaz de usuario (PyQt6).
+* mvvm_view.py: **Vista**. Interfaz de usuario (PyQt).
 
-#### Carpeta tools
+#### Carpeta sql
 
-* createDatabase.py: Crea una base de datos inicial con la información requerida.
-* vacuumDatabase.py: Reduce el tamaño de la base de datos ejecutando el comando [VACUUM](https://www.sqlite.org/lang_vacuum.html).
+* createDatabase.sql: Crea una base de datos inicial con la información requerida.
 
 ## Software necesario
 
