@@ -2,7 +2,6 @@
 Este programa es funcional en Python 3.12. No probado en otras versiones.
 
 ## Requisitos
-
 En caso de que quieras desarrollar, instala las dependencias necesarias ejecutando:
 > pip install -r requirements.dev.txt -r requirements.txt
 
@@ -15,7 +14,6 @@ En caso de que sólo quieras ejecutar el programa, instala las dependencias nece
 > DATABASE_FILENAME=
 
 ## Estructura de archivos
-
 * main.py: Programa principal.
 
 #### Carpeta mvvm
@@ -25,7 +23,6 @@ Contiene archivos relacionados al patrón de arquitectura [Modelo–vista–mode
 * mvvm_view.py: **Vista**. Interfaz de usuario (PyQt6).
 
 #### Carpeta tools
-
 * createDatabase.py: Crea una base de datos inicial con la información requerida.
 * vacuumDatabase.py: Reduce el tamaño de la base de datos ejecutando el comando [VACUUM](https://www.sqlite.org/lang_vacuum.html).
 
@@ -38,13 +35,10 @@ Contiene archivos relacionados al patrón de arquitectura [Modelo–vista–mode
 * [Python](https://www.python.org/)
 
 ## Software recomendado
-
 * [PyCharm](https://www.jetbrains.com/pycharm/): IDE para programar en Python
 
 ## Créditos
-
 * https://github.com/Bombadil-Tom/pyqt-mvvm-example
 
 ## Licencia
-
 * El repositorio está licenciado bajo la licencia MIT, la cual puede verse [aquí](https://github.com/esteuwu/AeroChinquihue/blob/master/LICENSE).
