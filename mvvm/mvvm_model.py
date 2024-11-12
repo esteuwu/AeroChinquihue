@@ -9,14 +9,13 @@ class Model:
 
     # WARNING: This function is not final and will be removed in the future.
     def __str__(self) -> str:
-        buffer = ""
+        buffer = "Destino,Precio Pasaje,Precio Encomienda"
         destinations = []
         prices = []
         for result in self.__cur.execute("SELECT destination FROM flights"):
             destinations.append(result[0])
         for result in self.__cur.execute("SELECT prices FROM flights"):
             prices.append(json.loads(result[0]))
-        buffer += "Destino,Precio Pasaje,Precio Encomienda"
         for i in range(len(destinations)):
             buffer += f"\n{destinations[i]},{prices[i][0]},{prices[i][1]}"
         return buffer
