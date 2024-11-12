@@ -27,7 +27,7 @@ Instala las dependencias necesarias ejecutando:
 
 ## Limitaciones
 
-* Dado que para la base de datos se utiliza SQLite, **sólo un usuario puede abrir la base de datos a la vez**.
+* Dado que para la base de datos se utiliza SQLite, **solo un usuario puede abrir la base de datos a la vez**.
 
 ## Software necesario
 

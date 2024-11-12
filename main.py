@@ -1,6 +1,6 @@
 if __name__ == "__main__":
     import dotenv
-    from mvvm import mvvmModel, mvvmViewModel, mvvmView
+    from mvvm import mvvm_model, mvvm_view_model, mvvm_view
     import os
     import pathlib
 
@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     if not pathlib.Path(DATABASE_FILENAME).exists():
         raise FileNotFoundError("Database does not exist")
-    model = mvvmModel.Model(DATABASE_FILENAME)
-    viewModel = mvvmViewModel.ViewModel(model)
-    view = mvvmView.View(viewModel)
-    print(view.__str__())
+    model = mvvm_model.Model(DATABASE_FILENAME)
+    viewModel = mvvm_view_model.ViewModel(model)
+    view = mvvm_view.View(viewModel)
+    print(str(view))
