@@ -3,10 +3,13 @@ Este programa es funcional en Python 3.12. No probado en otras versiones.
 
 ## Requisitos
 
-Instala las dependencias necesarias ejecutando:
+En caso de que quieras desarrollar, instala las dependencias necesarias ejecutando:
+> pip install -r requirements.dev.txt -r requirements.txt
+
+En caso de que sólo quieras ejecutar el programa, instala las dependencias necesarias ejecutando:
 > pip install -r requirements.txt
 
-**Copia** el archivo .env.example a .env y configura el entorno.
+**Copia** el archivo .env.example a .env y configura las variables de entorno.
 > \# Debes colocar el nombre de la base de datos, por ejemplo database.db
 >
 > DATABASE_FILENAME=
@@ -15,23 +18,23 @@ Instala las dependencias necesarias ejecutando:
 
 * main.py: Programa principal.
 
-### Model-View-ViewModel (MVVM)
-* mvvmModel.py: Modelo de base de datos (SQLite3).
-* mvvmViewModel.py: Interacciones entre modelo y vista.
-* mvvmView.py: Vista de PyQt.
+#### Carpeta mvvm
+Contiene archivos relacionados al patrón de arquitectura [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+* mvvm_model.py: **Modelo**. Contiene funcionalidad relacionada a la base de datos (SQLite3).
+* mvvm_view_model.py: **Modelo de vista**. Maneja las interacciones entre modelo y vista.
+* mvvm_view.py: **Vista**. Interfaz de usuario (PyQt6).
 
-### Herramientas (carpeta tools)
+#### Carpeta tools
 
-* createDatabase.py: Crea una database inicial con los datos requeridos.
-* vacuumDatabase.py: Reduce el tamaño de la base de datos.
-
-## Limitaciones
-
-* Dado que para la base de datos se utiliza SQLite, **solo un usuario puede abrir la base de datos a la vez**.
+* createDatabase.py: Crea una base de datos inicial con la información requerida.
+* vacuumDatabase.py: Reduce el tamaño de la base de datos ejecutando el comando [VACUUM](https://www.sqlite.org/lang_vacuum.html).
 
 ## Software necesario
 
+#### Desarrollo
 * [Git](https://git-scm.com/)
+
+#### Uso
 * [Python](https://www.python.org/)
 
 ## Software recomendado
@@ -41,3 +44,7 @@ Instala las dependencias necesarias ejecutando:
 ## Créditos
 
 * https://github.com/Bombadil-Tom/pyqt-mvvm-example
+
+## Licencia
+
+* El repositorio está licenciado bajo la licencia MIT, la cual puede verse [aquí](https://github.com/esteuwu/AeroChinquihue/blob/master/LICENSE).
