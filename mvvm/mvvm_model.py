@@ -16,6 +16,6 @@ class Model:
             destinations.append(result[0])
         for result in self.__cur.execute("SELECT prices FROM flights"):
             prices.append(json.loads(result[0]))
-        for i in range(len(destinations)):
-            buffer += f"\n{destinations[i]},{prices[i][0]},{prices[i][1]}"
+        for i, destination in enumerate(destinations):
+            buffer += f"\n{destination},{prices[i][0]},{prices[i][1]}"
         return buffer

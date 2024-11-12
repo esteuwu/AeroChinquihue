@@ -1,3 +1,4 @@
+# pylint: disable=C0114
 if __name__ == "__main__":
     import dotenv
     from mvvm import mvvm_model, mvvm_view_model, mvvm_view
