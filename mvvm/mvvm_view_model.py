@@ -5,4 +5,4 @@ class ViewModel:
         self.__model = model
 
     def __str__(self) -> str:
-        return self.__model.__str__()
+        return str(self.__model)
