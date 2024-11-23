@@ -1,15 +1,16 @@
 # pylint: disable=C0114
 if __name__ == "__main__":
+    # Imports
     import dotenv
     from mvvm import mvvm_model, mvvm_view_model, mvvm_view
     import os
     import pathlib
     import PySide6.QtWidgets as QtWidgets
     import sys
-
+    # Environment variables
     dotenv.load_dotenv()
     DATABASE_FILENAME = os.getenv("DATABASE_FILENAME")
-
+    # Driver code
     app = QtWidgets.QApplication(sys.argv)
     if not pathlib.Path(DATABASE_FILENAME).exists():
         QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.")
