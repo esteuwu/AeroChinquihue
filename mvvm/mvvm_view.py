@@ -1,3 +1,4 @@
+# pylint: disable=I1101
 from PySide6 import QtCore, QtWidgets
 
 
@@ -5,34 +6,34 @@ class View(QtWidgets.QWidget):
     class ClientWidget(QtWidgets.QWidget):
         def handle_flight_button(self):
             # Show airplane widget
-            self.airplaneLabel.show()
+            self.airplane_label.show()
             self.airplane.show()
             # Show date and time pickers
-            self.dateLabel.show()
+            self.date_label.show()
             self.date.show()
-            self.timeLabel.show()
+            self.time_label.show()
             self.time.show()
             # Hide weight widgets
-            self.weightLabel.hide()
+            self.weight_label.hide()
             self.weight.hide()
             # Show seats widgets
-            self.seatsLabel.show()
+            self.seats_label.show()
             self.seats.show()
 
         def handle_freight_button(self):
             # Hide airplane widget
-            self.airplaneLabel.hide()
+            self.airplane_label.hide()
             self.airplane.hide()
             # Hide date and time pickers
-            self.dateLabel.hide()
+            self.date_label.hide()
             self.date.hide()
-            self.timeLabel.hide()
+            self.time_label.hide()
             self.time.hide()
             # Hide seats widgets
-            self.seatsLabel.hide()
+            self.seats_label.hide()
             self.seats.hide()
             # Show weight widgets
-            self.weightLabel.show()
+            self.weight_label.show()
             self.weight.show()
 
         def handle_ok_button(self):
@@ -41,7 +42,7 @@ class View(QtWidgets.QWidget):
 
         def __init__(self, viewmodel):
             super().__init__()
-            self.viewModel = viewmodel
+            self.view_model = viewmodel
             # Main layout
             self.layout = QtWidgets.QVBoxLayout(self)
             # Window title
@@ -49,22 +50,22 @@ class View(QtWidgets.QWidget):
             # Service label
             self.layout.addWidget(QtWidgets.QLabel("Servicio"))
             # Button group
-            self.buttonGroup = QtWidgets.QButtonGroup()
-            self.buttonGroup.setExclusive(True)
+            self.button_group = QtWidgets.QButtonGroup()
+            self.button_group.setExclusive(True)
             # Horizontal layout for button group
-            self.buttonGroupLayout = QtWidgets.QHBoxLayout()
+            self.button_group_layout = QtWidgets.QHBoxLayout()
             # Flight button
-            self.flightButton = QtWidgets.QRadioButton("Vuelo")
-            self.flightButton.clicked.connect(self.handle_flight_button)
-            self.buttonGroup.addButton(self.flightButton)
-            self.buttonGroupLayout.addWidget(self.flightButton)
+            self.flight_button = QtWidgets.QRadioButton("Vuelo")
+            self.flight_button.clicked.connect(self.handle_flight_button)
+            self.button_group.addButton(self.flight_button)
+            self.button_group_layout.addWidget(self.flight_button)
             # Freight button
-            self.freightButton = QtWidgets.QRadioButton("Encomienda")
-            self.freightButton.clicked.connect(self.handle_freight_button)
-            self.buttonGroup.addButton(self.freightButton)
-            self.buttonGroupLayout.addWidget(self.freightButton)
+            self.freight_button = QtWidgets.QRadioButton("Encomienda")
+            self.freight_button.clicked.connect(self.handle_freight_button)
+            self.button_group.addButton(self.freight_button)
+            self.button_group_layout.addWidget(self.freight_button)
             # Add button group layout to main layout
-            self.layout.addLayout(self.buttonGroupLayout)
+            self.layout.addLayout(self.button_group_layout)
             # Name input
             self.layout.addWidget(QtWidgets.QLabel("Nombre"))
             self.name = QtWidgets.QLineEdit()
@@ -78,56 +79,56 @@ class View(QtWidgets.QWidget):
             # Destination list
             self.layout.addWidget(QtWidgets.QLabel("Destino"))
             self.destination = QtWidgets.QComboBox()
-            self.destination.addItems(self.viewModel.get_destinations())
+            self.destination.addItems(self.view_model.get_destinations())
             self.layout.addWidget(self.destination)
             # Airplane list
-            self.airplaneLabel = QtWidgets.QLabel("Avión")
-            self.layout.addWidget(self.airplaneLabel)
+            self.airplane_label = QtWidgets.QLabel("Avión")
+            self.layout.addWidget(self.airplane_label)
             self.airplane = QtWidgets.QComboBox()
-            self.airplane.addItems(self.viewModel.get_airplanes())
+            self.airplane.addItems(self.view_model.get_airplanes())
             self.layout.addWidget(self.airplane)
             # Horizontal layout for date and time layouts
-            self.dateTimeLayout = QtWidgets.QHBoxLayout()
+            self.date_time_layout = QtWidgets.QHBoxLayout()
             # Vertical layout for date picker
-            self.dateLayout = QtWidgets.QVBoxLayout()
-            self.dateLabel = QtWidgets.QLabel("Fecha de ida")
-            self.dateLayout.addWidget(self.dateLabel)
+            self.date_layout = QtWidgets.QVBoxLayout()
+            self.date_label = QtWidgets.QLabel("Fecha de ida")
+            self.date_layout.addWidget(self.date_label)
             self.date = QtWidgets.QCalendarWidget()
             self.date.setMinimumDate(QtCore.QDate.currentDate())
-            self.dateLayout.addWidget(self.date)
-            self.dateTimeLayout.addLayout(self.dateLayout)
+            self.date_layout.addWidget(self.date)
+            self.date_time_layout.addLayout(self.date_layout)
             # Vertical layout for time picker
-            self.timeLayout = QtWidgets.QVBoxLayout()
-            self.timeLabel = QtWidgets.QLabel("Hora de ida")
-            self.timeLayout.addWidget(self.timeLabel)
+            self.time_layout = QtWidgets.QVBoxLayout()
+            self.time_label = QtWidgets.QLabel("Hora de ida")
+            self.time_layout.addWidget(self.time_label)
             self.time = QtWidgets.QListWidget()
-            self.timeLayout.addWidget(self.time)
-            self.dateTimeLayout.addLayout(self.timeLayout)
+            self.time_layout.addWidget(self.time)
+            self.date_time_layout.addLayout(self.time_layout)
             # Add date and time layout to main layout
-            self.layout.addLayout(self.dateTimeLayout)
+            self.layout.addLayout(self.date_time_layout)
             # Seats
-            self.seatsLabel = QtWidgets.QLabel("Asientos")
-            self.layout.addWidget(self.seatsLabel)
+            self.seats_label = QtWidgets.QLabel("Asientos")
+            self.layout.addWidget(self.seats_label)
             self.seats = QtWidgets.QLineEdit()
             self.seats.setPlaceholderText("ej. 1")
             self.layout.addWidget(self.seats)
             # Weight
-            self.weightLabel = QtWidgets.QLabel("Peso (en kilogramos)")
-            self.layout.addWidget(self.weightLabel)
+            self.weight_label = QtWidgets.QLabel("Peso (en kilogramos)")
+            self.layout.addWidget(self.weight_label)
             self.weight = QtWidgets.QLineEdit()
             self.weight.setPlaceholderText("ej. 10")
             self.layout.addWidget(self.weight)
             # Set default service
-            self.flightButton.click()
+            self.flight_button.click()
             # Payment method
             self.layout.addWidget(QtWidgets.QLabel("Medio de pago"))
-            self.paymentMethod = QtWidgets.QComboBox()
-            self.paymentMethod.addItems(self.viewModel.get_payment_methods())
-            self.layout.addWidget(self.paymentMethod)
+            self.payment_method = QtWidgets.QComboBox()
+            self.payment_method.addItems(self.view_model.get_payment_methods())
+            self.layout.addWidget(self.payment_method)
             # OK button
-            self.okButton = QtWidgets.QPushButton("OK")
-            self.okButton.clicked.connect(self.handle_ok_button)
-            self.layout.addWidget(self.okButton)
+            self.ok_button = QtWidgets.QPushButton("OK")
+            self.ok_button.clicked.connect(self.handle_ok_button)
+            self.layout.addWidget(self.ok_button)
 
     class Identification:
         def __init__(self, identification):
@@ -149,10 +150,9 @@ class View(QtWidgets.QWidget):
             buffer = 11 - buffer % 11
             if buffer == 11:
                 return identification[-1::] == '0'
-            elif buffer == 10:
+            if buffer == 10:
                 return identification[-1::] == 'K' or identification[-1::] == 'k'
-            else:
-                return identification[-1::] == str(buffer)
+            return identification[-1::] == str(buffer)
 
     class ManagerAuthenticationWidget(QtWidgets.QWidget):
         def handle_ok_button(self):
@@ -160,13 +160,14 @@ class View(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
 
         def handle_skip_authentication_button(self):
-            QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removida en el futuro.")
+            QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removid"
+                                                                   "a en el futuro.")
             self.widget = View.ManagerWidget()
             self.widget.show()
 
         def __init__(self, viewmodel):
             super().__init__()
-            self.viewModel = viewmodel
+            self.view_model = viewmodel
             self.widget = None
             # Main layout
             self.layout = QtWidgets.QVBoxLayout(self)
@@ -182,14 +183,14 @@ class View(QtWidgets.QWidget):
             self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
             self.layout.addWidget(self.password)
             # OK button
-            self.okButton = QtWidgets.QPushButton("OK")
-            self.okButton.clicked.connect(self.handle_ok_button)
-            self.layout.addWidget(self.okButton)
+            self.ok_button = QtWidgets.QPushButton("OK")
+            self.ok_button.clicked.connect(self.handle_ok_button)
+            self.layout.addWidget(self.ok_button)
             # Skip authentication button
             # This will be removed in the future.
-            self.skipAuthenticationButton = QtWidgets.QPushButton("Saltar autenticación")
-            self.skipAuthenticationButton.clicked.connect(self.handle_skip_authentication_button)
-            self.layout.addWidget(self.skipAuthenticationButton)
+            self.skip_authentication_button = QtWidgets.QPushButton("Saltar autenticación")
+            self.skip_authentication_button.clicked.connect(self.handle_skip_authentication_button)
+            self.layout.addWidget(self.skip_authentication_button)
 
     class ManagerWidget(QtWidgets.QWidget):
         def __init__(self):
@@ -214,10 +215,10 @@ class View(QtWidgets.QWidget):
         # Welcome label
         self.layout.addWidget(QtWidgets.QLabel("Bienvenido a AeroChinquihue."))
         # Client button
-        self.clientButton = QtWidgets.QPushButton("Acceso Clientes")
-        self.clientButton.clicked.connect(self.handle_client_button)
-        self.layout.addWidget(self.clientButton)
+        self.client_button = QtWidgets.QPushButton("Acceso Clientes")
+        self.client_button.clicked.connect(self.handle_client_button)
+        self.layout.addWidget(self.client_button)
         # Manager button
-        self.managerButton = QtWidgets.QPushButton("Acceso Gerente")
-        self.managerButton.clicked.connect(self.handle_manager_button)
-        self.layout.addWidget(self.managerButton)
+        self.manager_button = QtWidgets.QPushButton("Acceso Gerente")
+        self.manager_button.clicked.connect(self.handle_manager_button)
+        self.layout.addWidget(self.manager_button)

@@ -1,4 +1,4 @@
-# pylint: disable=C0114
+# pylint: disable=C0114,I1101
 if __name__ == "__main__":
     # Imports
     import dotenv
@@ -13,7 +13,8 @@ if __name__ == "__main__":
     # Driver code
     app = QtWidgets.QApplication(sys.argv)
     if not pathlib.Path(DATABASE_FILENAME).exists():
-        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.")
+        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no e"
+                                                                             "xiste.")
         sys.exit(1)
     model = mvvm_model.Model(DATABASE_FILENAME)
     viewModel = mvvm_view_model.ViewModel(model)
