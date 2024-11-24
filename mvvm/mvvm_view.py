@@ -1,5 +1,6 @@
 # pylint: disable=I1101
 from PySide6 import QtCore, QtWidgets
+from mvvm import mvvm_view_model
 
 
 class View(QtWidgets.QWidget):
@@ -37,10 +38,32 @@ class View(QtWidgets.QWidget):
             self.weight.show()
 
         def handle_ok_button(self):
+            # Identification validation
             if not View.Identification(self.identification.text()).is_identification_valid():
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
+                return
+            # Flight
+            if self.flight_button.isChecked():
+                result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                if result == 16384:
+                    self.view_model.add_flight(self.name.text(),
+                                               View.Identification(self.identification.text()).get_raw_identification(),
+                                               self.destination.currentText(), self.airplane.currentText(),
+                                               self.date.selectedDate().toJulianDay(), None, self.seats.text(),
+                                               self.payment_method.currentText())
+                    QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
+            # Freight
+            if self.freight_button.isChecked():
+                result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                if result == 16384:
+                    self.view_model.add_freight(self.name.text(), View.Identification(
+                        self.identification.text()).get_raw_identification(), self.destination.currentText(),
+                                                self.weight.text(), self.payment_method.currentText())
+                    QtWidgets.QMessageBox.information(self, "Información",
+                                                      "Encomienda reservada con éxito.\nDebe hacer entrega de la "
+                                                      "encomienda en el aeródromo La Paloma.")
 
-        def __init__(self, viewmodel):
+        def __init__(self, viewmodel: mvvm_view_model.ViewModel):
             super().__init__()
             self.view_model = viewmodel
             # Main layout
@@ -134,6 +157,9 @@ class View(QtWidgets.QWidget):
         def __init__(self, identification):
             self.identification = identification
 
+        def get_raw_identification(self):
+            return self.identification.replace('-', '').replace('.', '')[:-1:]
+
         def is_identification_valid(self):
             identification = self.identification.replace('-', '').replace('.', '')
             if identification.count('K') + identification.count('k') > 1 or len(identification) < 2:
@@ -160,8 +186,7 @@ class View(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
 
         def handle_skip_authentication_button(self):
-            QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removid"
-                                                                   "a en el futuro.")
+            QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removida en el futuro.")
             self.widget = View.ManagerWidget()
             self.widget.show()
 

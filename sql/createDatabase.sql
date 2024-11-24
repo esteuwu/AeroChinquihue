@@ -1,9 +1,9 @@
 -- Airplanes
-CREATE TABLE airplanes(airplane);
-INSERT INTO airplanes VALUES('Cessna 208 Caravan');
-INSERT INTO airplanes VALUES('Cessna 310');
-INSERT INTO airplanes VALUES('Let L-410 Turbolet');
--- Flights
+CREATE TABLE airplanes(airplane, seats);
+INSERT INTO airplanes VALUES('Cessna 208 Caravan', 9);
+INSERT INTO airplanes VALUES('Cessna 310', 5);
+INSERT INTO airplanes VALUES('Let L-410 Turbolet', 19);
+-- Destinations
 CREATE TABLE destinations(destination, prices, frequency);
 INSERT INTO destinations VALUES ('Ayacara', json_array(30000, 8000), 30);
 INSERT INTO destinations VALUES ('Chaitén', json_array(50000, 15000), 45);
@@ -18,6 +18,10 @@ INSERT INTO destinations VALUES ('Pupelde', json_array(25000, 6000), 60);
 INSERT INTO destinations VALUES ('Reñihue', json_array(40000, 12000), 30);
 INSERT INTO destinations VALUES ('Río Negro', json_array(25000, 6000), 30);
 INSERT INTO destinations VALUES ('Santa Bárbara', json_array(50000, 15000), 180);
+-- Flights
+CREATE TABLE flights(uuid, name, identification, destination, airplane, leaveDate, leaveTime, seats, paymentMethod);
+-- Freights
+CREATE TABLE freights(uuid, name, identification, destination, weight, paymentMethod);
 -- Payment Methods
 CREATE TABLE paymentMethods(paymentMethod);
 INSERT INTO paymentMethods VALUES('Efectivo');
