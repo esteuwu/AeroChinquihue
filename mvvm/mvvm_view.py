@@ -1,11 +1,10 @@
-import PySide6.QtCore as QtCore
-import PySide6.QtWidgets as QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 
 class BaseWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        # VBoxLayout
+        # Main layout
         self.layout = QtWidgets.QVBoxLayout(self)
 
 
@@ -14,46 +13,63 @@ class View(BaseWidget):
         def __init__(self, viewmodel):
             super().__init__()
             self.viewModel = viewmodel
-            # Window Title
-            self.setWindowTitle("Reserva de Vuelos")
-            # Service
+            # Window title
+            self.setWindowTitle("AeroChinquihue")
+            # Service label
             self.layout.addWidget(QtWidgets.QLabel("Servicio"))
             # Button group
             self.buttonGroup = QtWidgets.QButtonGroup()
             self.buttonGroup.setExclusive(True)
-            # Flight
-            self.flight = QtWidgets.QRadioButton("Vuelo")
-            self.flight.setChecked(True)
-            self.buttonGroup.addButton(self.flight)
-            self.layout.addWidget(self.flight)
-            # Freight
-            self.freight = QtWidgets.QRadioButton("Encomienda")
-            self.buttonGroup.addButton(self.freight)
-            self.layout.addWidget(self.freight)
-            # Name
+            # Horizontal layout for button group
+            self.buttonGroupLayout = QtWidgets.QHBoxLayout()
+            # Flight button
+            self.flightButton = QtWidgets.QRadioButton("Vuelo")
+            self.flightButton.setChecked(True)
+            self.buttonGroup.addButton(self.flightButton)
+            self.buttonGroupLayout.addWidget(self.flightButton)
+            # Freight button
+            self.freightButton = QtWidgets.QRadioButton("Encomienda")
+            self.buttonGroup.addButton(self.freightButton)
+            self.buttonGroupLayout.addWidget(self.freightButton)
+            # Add button group layout to main layout
+            self.layout.addLayout(self.buttonGroupLayout)
+            # Name input
             self.layout.addWidget(QtWidgets.QLabel("Nombre"))
             self.name = QtWidgets.QLineEdit()
-            self.name.setPlaceholderText("ej. Esteban Urrutia")
+            self.name.setPlaceholderText("ej. John Doe")
             self.layout.addWidget(self.name)
-            # Identification
+            # Identification input
             self.layout.addWidget(QtWidgets.QLabel("RUT"))
             self.identification = QtWidgets.QLineEdit()
-            self.identification.setPlaceholderText("ej. 21.988.485-0")
+            self.identification.setPlaceholderText("ej. 12.345.678-5")
             self.layout.addWidget(self.identification)
-            # Destination
+            # Destination list
             self.layout.addWidget(QtWidgets.QLabel("Destino"))
             self.destination = QtWidgets.QComboBox()
             self.destination.addItems(self.viewModel.get_destinations())
             self.layout.addWidget(self.destination)
-            # Airplane
+            # Airplane list
             self.layout.addWidget(QtWidgets.QLabel("Avión"))
             self.airplane = QtWidgets.QComboBox()
             self.airplane.addItems(self.viewModel.get_airplanes())
             self.layout.addWidget(self.airplane)
-            # Date
+            # Horizontal layout for date and time layouts
+            self.dateTimeLayout = QtWidgets.QHBoxLayout()
+            # Vertical layout for date picker
+            self.dateLayout = QtWidgets.QVBoxLayout()
+            self.dateLayout.addWidget(QtWidgets.QLabel("Fecha de ida"))
             self.date = QtWidgets.QCalendarWidget()
             self.date.setMinimumDate(QtCore.QDate.currentDate())
-            self.layout.addWidget(self.date)
+            self.dateLayout.addWidget(self.date)
+            self.dateTimeLayout.addLayout(self.dateLayout)
+            # Vertical layout for time picker
+            self.timeLayout = QtWidgets.QVBoxLayout()
+            self.timeLayout.addWidget(QtWidgets.QLabel("Hora de ida"))
+            self.time = QtWidgets.QListWidget()
+            self.timeLayout.addWidget(self.time)
+            self.dateTimeLayout.addLayout(self.timeLayout)
+            # Add date and time layout to main layout
+            self.layout.addLayout(self.dateTimeLayout)
             # Seats
             self.layout.addWidget(QtWidgets.QLabel("Asientos"))
             self.seats = QtWidgets.QLineEdit()
@@ -64,15 +80,15 @@ class View(BaseWidget):
             self.paymentMethod = QtWidgets.QComboBox()
             self.paymentMethod.addItems(self.viewModel.get_payment_methods())
             self.layout.addWidget(self.paymentMethod)
-            # Book button
-            self.bookButton = QtWidgets.QPushButton("Reservar vuelo")
-            self.layout.addWidget(self.bookButton)
+            # Confirm button
+            self.confirmButton = QtWidgets.QPushButton("Confirmar")
+            self.layout.addWidget(self.confirmButton)
 
     class ManagerWidget(BaseWidget):
         def __init__(self, viewmodel):
             super().__init__()
             self.viewModel = viewmodel
-            # Window Title
+            # Window title
             self.setWindowTitle("Administración")
 
     def handle_client_button(self):
@@ -87,15 +103,15 @@ class View(BaseWidget):
         super().__init__()
         self.view_model = viewmodel
         self.widget = None
-        # Window Title
+        # Window title
         self.setWindowTitle("AeroChinquihue")
-        # Label
+        # Welcome label
         self.layout.addWidget(QtWidgets.QLabel("Bienvenido a AeroChinquihue."))
-        # Client Button
+        # Client button
         self.clientButton = QtWidgets.QPushButton("Acceso Clientes")
         self.clientButton.clicked.connect(self.handle_client_button)
         self.layout.addWidget(self.clientButton)
-        # Manager Button
+        # Manager button
         self.managerButton = QtWidgets.QPushButton("Acceso Gerente")
         self.managerButton.clicked.connect(self.handle_manager_button)
         self.layout.addWidget(self.managerButton)

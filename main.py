@@ -5,7 +5,7 @@ if __name__ == "__main__":
     from mvvm import mvvm_model, mvvm_view_model, mvvm_view
     import os
     import pathlib
-    import PySide6.QtWidgets as QtWidgets
+    from PySide6 import QtWidgets
     import sys
     # Environment variables
     dotenv.load_dotenv()
