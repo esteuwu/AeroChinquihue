@@ -1,36 +1,8 @@
 from PySide6 import QtCore, QtWidgets
 
 
-class BaseWidget(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
-
-
-class View(BaseWidget):
-    class ClientWidget(BaseWidget):
-        def is_identification_valid(self):
-            identification = self.identification.text().replace('-', '').replace('.', '')
-            if identification.count('K') + identification.count('k') > 1 or len(identification) < 2:
-                return False
-            if not identification.replace('K', '').replace('k', '').isnumeric():
-                return False
-            buffer = 0
-            multiplier = 2
-            for character in identification[-2::-1]:
-                if multiplier > 7:
-                    multiplier = 2
-                buffer += int(character) * multiplier
-                multiplier += 1
-            buffer = 11 - buffer % 11
-            if buffer == 11:
-                return identification[-1::] == '0'
-            elif buffer == 10:
-                return identification[-1::] == 'K' or identification[-1::] == 'k'
-            else:
-                return identification[-1::] == str(buffer)
-
+class View(QtWidgets.QWidget):
+    class ClientWidget(QtWidgets.QWidget):
         def handle_flight_button(self):
             # Show airplane widget
             self.airplaneLabel.show()
@@ -64,12 +36,14 @@ class View(BaseWidget):
             self.weight.show()
 
         def handle_ok_button(self):
-            if not self.is_identification_valid():
+            if not View.Identification(self.identification.text()).is_identification_valid():
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
 
         def __init__(self, viewmodel):
             super().__init__()
             self.viewModel = viewmodel
+            # Main layout
+            self.layout = QtWidgets.QVBoxLayout(self)
             # Window title
             self.setWindowTitle("AeroChinquihue")
             # Service label
@@ -155,25 +129,86 @@ class View(BaseWidget):
             self.okButton.clicked.connect(self.handle_ok_button)
             self.layout.addWidget(self.okButton)
 
-    class ManagerWidget(BaseWidget):
+    class Identification:
+        def __init__(self, identification):
+            self.identification = identification
+
+        def is_identification_valid(self):
+            identification = self.identification.replace('-', '').replace('.', '')
+            if identification.count('K') + identification.count('k') > 1 or len(identification) < 2:
+                return False
+            if not identification.replace('K', '').replace('k', '').isnumeric():
+                return False
+            buffer = 0
+            multiplier = 2
+            for character in identification[-2::-1]:
+                if multiplier > 7:
+                    multiplier = 2
+                buffer += int(character) * multiplier
+                multiplier += 1
+            buffer = 11 - buffer % 11
+            if buffer == 11:
+                return identification[-1::] == '0'
+            elif buffer == 10:
+                return identification[-1::] == 'K' or identification[-1::] == 'k'
+            else:
+                return identification[-1::] == str(buffer)
+
+    class ManagerAuthenticationWidget(QtWidgets.QWidget):
+        def handle_ok_button(self):
+            if not View.Identification(self.identification.text()).is_identification_valid():
+                QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
+
+        def handle_skip_authentication_button(self):
+            QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removida en el futuro.")
+            self.widget = View.ManagerWidget()
+            self.widget.show()
+
         def __init__(self, viewmodel):
             super().__init__()
             self.viewModel = viewmodel
+            self.widget = None
+            # Main layout
+            self.layout = QtWidgets.QVBoxLayout(self)
             # Window title
-            self.setWindowTitle("Administración")
+            self.setWindowTitle("Inicio de sesión")
+            # Identification input
+            self.layout.addWidget(QtWidgets.QLabel("RUT"))
+            self.identification = QtWidgets.QLineEdit()
+            self.layout.addWidget(self.identification)
+            # Password input
+            self.layout.addWidget(QtWidgets.QLabel("Contraseña"))
+            self.password = QtWidgets.QLineEdit()
+            self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+            self.layout.addWidget(self.password)
+            # OK button
+            self.okButton = QtWidgets.QPushButton("OK")
+            self.okButton.clicked.connect(self.handle_ok_button)
+            self.layout.addWidget(self.okButton)
+            # Skip authentication button
+            # This will be removed in the future.
+            self.skipAuthenticationButton = QtWidgets.QPushButton("Saltar autenticación")
+            self.skipAuthenticationButton.clicked.connect(self.handle_skip_authentication_button)
+            self.layout.addWidget(self.skipAuthenticationButton)
+
+    class ManagerWidget(QtWidgets.QWidget):
+        def __init__(self):
+            super().__init__()
 
     def handle_client_button(self):
         self.widget = self.ClientWidget(self.view_model)
         self.widget.show()
 
     def handle_manager_button(self):
-        self.widget = self.ManagerWidget(self.view_model)
+        self.widget = self.ManagerAuthenticationWidget(self.view_model)
         self.widget.show()
 
     def __init__(self, viewmodel):
         super().__init__()
         self.view_model = viewmodel
         self.widget = None
+        # Main layout
+        self.layout = QtWidgets.QVBoxLayout(self)
         # Window title
         self.setWindowTitle("AeroChinquihue")
         # Welcome label

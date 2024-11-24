@@ -3,22 +3,13 @@ import sqlite3
 
 class Model:
     def get_airplanes(self):
-        airplanes = []
-        for result in self.cursor.execute("SELECT airplane FROM airplanes"):
-            airplanes.append(result[0])
-        return airplanes
+        return self.cursor.execute("SELECT airplane FROM airplanes")
 
     def get_destinations(self):
-        destinations = []
-        for result in self.cursor.execute("SELECT destination FROM flights"):
-            destinations.append(result[0])
-        return destinations
+        return self.cursor.execute("SELECT destination FROM destinations")
 
     def get_payment_methods(self):
-        payment_methods = []
-        for result in self.cursor.execute("SELECT paymentMethod FROM paymentMethods"):
-            payment_methods.append(result[0])
-        return payment_methods
+        return self.cursor.execute("SELECT paymentMethod FROM paymentMethods")
 
     def __init__(self, filename):
         self.connection = sqlite3.connect(filename)
