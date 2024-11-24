@@ -45,6 +45,7 @@ class View(QtWidgets.QWidget):
             # Flight
             if self.flight_button.isChecked():
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                # Yes button
                 if result == 16384:
                     self.view_model.add_flight(self.name.text(),
                                                View.Identification(self.identification.text()).get_raw_identification(),
@@ -55,13 +56,14 @@ class View(QtWidgets.QWidget):
             # Freight
             if self.freight_button.isChecked():
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                # Yes button
                 if result == 16384:
                     self.view_model.add_freight(self.name.text(), View.Identification(
                         self.identification.text()).get_raw_identification(), self.destination.currentText(),
                                                 self.weight.text(), self.payment_method.currentText())
                     QtWidgets.QMessageBox.information(self, "Información",
-                                                      "Encomienda reservada con éxito.\nDebe hacer entrega de la "
-                                                      "encomienda en el aeródromo La Paloma.")
+                                                      "Encomienda reservada con éxito.\nDebe hacer entrega de esta en "
+                                                      "el aeródromo La Paloma.")
 
         def __init__(self, viewmodel: mvvm_view_model.ViewModel):
             super().__init__()
