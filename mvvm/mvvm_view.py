@@ -51,19 +51,15 @@ class View(QtWidgets.QWidget):
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
-                    self.view_model.add_flight((self.name.text(), View.Identification(
-                        self.identification.text()).get_raw_identification(), self.destination.currentText(), self.date.selectedDate().toJulianDay(), None, self.airplane.currentText(), self.seats.text(), self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
+                    self.view_model.add_flight((self.name.text(), View.Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), QtCore.QDateTime(self.date.selectedDate(), QtCore.QTime()).toSecsSinceEpoch(), self.airplane.currentText(), self.seats.text(), self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
                     QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
             # Freight
             if self.freight_button.isChecked():
-                result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por "
-                                                                          f"kilo: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
+                result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
                     self.view_model.add_freight((self.name.text(), View.Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), self.weight.text(), self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
-                    QtWidgets.QMessageBox.information(self, "Información", "Encomienda reservada con éxito.\nDebe "
-                                                                           "hacer entrega de esta en el aeródromo La "
-                                                                           "Paloma.")
+                    QtWidgets.QMessageBox.information(self, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
 
         def __init__(self, viewmodel):
             super().__init__()
@@ -164,8 +160,7 @@ class View(QtWidgets.QWidget):
 
         def is_identification_valid(self):
             identification = self.identification.replace('-', '').replace('.', '')
-            if identification.count('K') + identification.count('k') > 1 or len(
-                    identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
+            if identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
                 return False
             buffer = 0
             multiplier = 2
@@ -317,5 +312,5 @@ class View(QtWidgets.QWidget):
         self.layout.addWidget(QtWidgets.QLabel())
         # About Qt button
         self.about_qt_button = QtWidgets.QPushButton("Acerca de Qt")
-        self.about_qt_button.clicked.connect(lambda: QtWidgets.QApplication.aboutQt())
+        self.about_qt_button.clicked.connect(QtWidgets.QApplication.aboutQt)
         self.layout.addWidget(self.about_qt_button)

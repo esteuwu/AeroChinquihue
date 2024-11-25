@@ -3,11 +3,11 @@ import uuid
 
 
 class ViewModel:
-    def add_flight(self, parameters):
-        return self.model.add_flight((str(uuid.uuid4()),) + parameters)
+    def add_flight(self, values):
+        return self.model.add_flight((str(uuid.uuid4()),) + values)
 
-    def add_freight(self, parameters):
-        return self.model.add_freight((str(uuid.uuid4()),) + parameters)
+    def add_freight(self, values):
+        return self.model.add_freight((str(uuid.uuid4()),) + values)
 
     def delete_flight(self, flight_uuid):
         return self.model.delete_flight((flight_uuid,))
