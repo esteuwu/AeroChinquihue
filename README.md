@@ -15,6 +15,8 @@ instala las dependencias necesarias ejecutando:
 > \# Debes colocar el nombre de la base de datos, por ejemplo database.db
 >
 > DATABASE_FILENAME=
+>
+> PICTURE_FILENAME=
 
 ## Estructura de archivos
 
@@ -25,14 +27,21 @@ instala las dependencias necesarias ejecutando:
 Contiene archivos relacionados con el patrón de arquitectura
 [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
 * mvvm_model.py: **Modelo**.
-Contiene funcionalidad relacionada con la base de datos (SQLite3).
+Contiene funcionalidad relacionada con la base de datos (SQLite).
 * mvvm_view_model.py: **Modelo de vista**.
 Maneja las interacciones entre modelo y vista.
-* mvvm_view.py: **Vista**. Interfaz de usuario (PyQt).
+* mvvm_view.py: **Vista**. Interfaz de usuario (PySide).
 
 #### Carpeta sql
 
 * createDatabase.sql: Crea una base de datos inicial con la información requerida.
+
+## Crear la base de datos
+
+Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema
+ y ejecutar un comando tal como:
+
+> sqlite3 database.db < sql/createDatabase.sql
 
 ## Software necesario
 
