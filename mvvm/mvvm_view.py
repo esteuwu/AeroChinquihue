@@ -48,6 +48,13 @@ class View(QtWidgets.QWidget):
                 return
             # Flight
             if self.flight_button.isChecked():
+                # Seats validation - not final
+                if not self.seats.text().isnumeric():
+                    QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.")
+                    return
+                if int(self.seats.text()) < 1:
+                    QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.")
+                    return
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
@@ -55,6 +62,13 @@ class View(QtWidgets.QWidget):
                     QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
             # Freight
             if self.freight_button.isChecked():
+                # Weight validation - not final
+                if not self.weight.text().isnumeric():
+                    QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.")
+                    return
+                if int(self.weight.text()) < 1:
+                    QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.")
+                    return
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
@@ -214,14 +228,13 @@ class View(QtWidgets.QWidget):
 
     class ManagerSummaryWidget(QtWidgets.QWidget):
         def handle_flight_table_button(self):
-            self.widget = View.ManagerFlightTableWidget()
+            self.widget = View.ManagerFlightTableWidget(self.view_model)
             self.widget.show()
 
         def handle_freight_table_button(self):
-            self.widget = View.ManagerFreightTableWidget()
+            self.widget = View.ManagerFreightTableWidget(self.view_model)
             self.widget.show()
 
-    # fixme
         def __init__(self, viewmodel):
             super().__init__()
             self.view_model = viewmodel
@@ -232,22 +245,23 @@ class View(QtWidgets.QWidget):
             self.setWindowTitle("Administración")
             # Statistics
             self.layout.addWidget(QtWidgets.QLabel("Ventas Diarias"))
-            # HBox for flights and freights
+            # Horizontal layout for flights and freights layouts
             self.flights_freights_layout = QtWidgets.QHBoxLayout()
-            # VBox for flights
+            # Epoch
+            day_epoch = QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime()).toSecsSinceEpoch()
+            # Vertical layout for flights
             self.flights_layout = QtWidgets.QVBoxLayout()
             self.flights_layout.addWidget(QtWidgets.QLabel("Vuelos"))
-            start = QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime()).toSecsSinceEpoch()
-            self.daily_flights = QtWidgets.QLabel(str(self.view_model.get_flights_in_range(start, start + 86400 - 1)))
+            self.daily_flights = QtWidgets.QLabel(str(self.view_model.get_flights_in_range(day_epoch, day_epoch + 86400 - 1)))
             self.flights_layout.addWidget(self.daily_flights)
             self.flights_freights_layout.addLayout(self.flights_layout)
-            # HBox for freights
+            # Vertical layout for freights
             self.freights_layout = QtWidgets.QVBoxLayout()
             self.freights_layout.addWidget(QtWidgets.QLabel("Encomiendas"))
-            self.daily_freights = QtWidgets.QLabel(str(self.view_model.get_freights_in_range(start, start + 86400 - 1)))
+            self.daily_freights = QtWidgets.QLabel(str(self.view_model.get_freights_in_range(day_epoch, day_epoch + 86400 - 1)))
             self.freights_layout.addWidget(self.daily_freights)
             self.flights_freights_layout.addLayout(self.freights_layout)
-            # Add secondary layout in main layout
+            # Add horizontal layout in main layout
             self.layout.addLayout(self.flights_freights_layout)
             # Flight table button
             self.flight_table_button = QtWidgets.QPushButton()
@@ -259,19 +273,43 @@ class View(QtWidgets.QWidget):
             self.freight_table_button.clicked.connect(self.handle_freight_table_button)
             self.freight_table_button.setText("Tabla de encomiendas")
             self.layout.addWidget(self.freight_table_button)
-    # fixme
 
     class ManagerFlightTableWidget(QtWidgets.QWidget):
-        def __init__(self):
+        def __init__(self, viewmodel):
             super().__init__()
+            self.view_model = viewmodel
             # Window Title
             self.setWindowTitle("Registro de Vuelos")
+            # Main layout
+            self.layout = QtWidgets.QVBoxLayout(self)
+            self.table = QtWidgets.QTableWidget()
+            self.table.setColumnCount(10)
+            self.table.setHorizontalHeaderLabels(["UUID", "Nombre", "RUT", "Destino", "Salida", "Avión", "Asientos", "Costo", "Medio de pago", "Epoch"])
+            self.data = self.view_model.get_flights()
+            self.table.setRowCount(len(self.data))
+            self.layout.addWidget(self.table)
+            for data_index, data_value in enumerate(self.data):
+                for entry_index, entry_value in enumerate(data_value):
+                    self.table.setItem(data_index, entry_index, QtWidgets.QTableWidgetItem(str(entry_value)))
 
     class ManagerFreightTableWidget(QtWidgets.QWidget):
-        def __init__(self):
+        def __init__(self, viewmodel):
             super().__init__()
+            self.view_model = viewmodel
             # Window Title
             self.setWindowTitle("Registro de Encomiendas")
+            # Main layout
+            self.layout = QtWidgets.QVBoxLayout(self)
+            self.table = QtWidgets.QTableWidget()
+            self.table.setColumnCount(8)
+            self.table.setHorizontalHeaderLabels(
+                ["UUID", "Nombre", "RUT", "Destino", "Peso", "Costo", "Medio de pago", "Epoch"])
+            self.data = self.view_model.get_freights()
+            self.table.setRowCount(len(self.data))
+            self.layout.addWidget(self.table)
+            for data_index, data_value in enumerate(self.data):
+                for entry_index, entry_value in enumerate(data_value):
+                    self.table.setItem(data_index, entry_index, QtWidgets.QTableWidgetItem(str(entry_value)))
 
     def handle_client_button(self):
         self.widget = self.ClientWidget(self.view_model)

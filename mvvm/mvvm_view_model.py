@@ -21,6 +21,12 @@ class ViewModel:
     def get_destinations(self):
         return self.resultset_to_list(self.model.get_destinations())
 
+    def get_flights(self):
+        return self.model.get_flights().fetchall()
+
+    def get_freights(self):
+        return self.model.get_freights().fetchall()
+
     def get_flights_in_range(self, start_range, end_range):
         return self.model.get_flights_in_range((start_range, end_range))
 
