@@ -3,11 +3,11 @@ import sqlite3
 
 class Model:
     def add_flight(self, parameters):
-        self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", parameters)
+        self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", parameters)
         self.connection.commit()
 
     def add_freight(self, parameters):
-        self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?);", parameters)
+        self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?);", parameters)
         self.connection.commit()
 
     def get_airplanes(self):

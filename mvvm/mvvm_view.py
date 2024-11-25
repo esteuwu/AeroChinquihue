@@ -1,6 +1,5 @@
 # pylint: disable=I1101
 from PySide6 import QtCore, QtWidgets
-from mvvm import mvvm_view_model
 
 
 class View(QtWidgets.QWidget):
@@ -47,25 +46,25 @@ class View(QtWidgets.QWidget):
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
                 # Yes button
                 if result == 16384:
-                    self.view_model.add_flight(self.name.text(),
+                    self.view_model.add_flight((self.name.text(),
                                                View.Identification(self.identification.text()).get_raw_identification(),
                                                self.destination.currentText(), self.airplane.currentText(),
                                                self.date.selectedDate().toJulianDay(), None, self.seats.text(),
-                                               self.payment_method.currentText())
+                                               self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText()))
                     QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
             # Freight
             if self.freight_button.isChecked():
                 result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
                 # Yes button
                 if result == 16384:
-                    self.view_model.add_freight(self.name.text(), View.Identification(
+                    self.view_model.add_freight((self.name.text(), View.Identification(
                         self.identification.text()).get_raw_identification(), self.destination.currentText(),
-                                                self.weight.text(), self.payment_method.currentText())
+                                                self.weight.text(), self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText()))
                     QtWidgets.QMessageBox.information(self, "Información",
                                                       "Encomienda reservada con éxito.\nDebe hacer entrega de esta en "
                                                       "el aeródromo La Paloma.")
 
-        def __init__(self, viewmodel: mvvm_view_model.ViewModel):
+        def __init__(self, viewmodel):
             super().__init__()
             self.view_model = viewmodel
             # Main layout
@@ -222,6 +221,7 @@ class View(QtWidgets.QWidget):
     class ManagerWidget(QtWidgets.QWidget):
         def __init__(self):
             super().__init__()
+            self.setWindowTitle("AeroChinquihue")
 
     def handle_client_button(self):
         self.widget = self.ClientWidget(self.view_model)

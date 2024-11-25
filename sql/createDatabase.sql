@@ -19,9 +19,9 @@ INSERT INTO destinations VALUES ('Reñihue', json_array(40000, 12000), 30);
 INSERT INTO destinations VALUES ('Río Negro', json_array(25000, 6000), 30);
 INSERT INTO destinations VALUES ('Santa Bárbara', json_array(50000, 15000), 180);
 -- Flights
-CREATE TABLE flights(uuid, name, identification, destination, airplane, leaveDate, leaveTime, seats, paymentMethod);
+CREATE TABLE flights(uuid, name, identification, destination, leaveDate, leaveTime, airplane, seats, cost, paymentMethod);
 -- Freights
-CREATE TABLE freights(uuid, name, identification, destination, weight, paymentMethod);
+CREATE TABLE freights(uuid, name, identification, destination, weight, cost, paymentMethod);
 -- Payment Methods
 CREATE TABLE paymentMethods(paymentMethod);
 INSERT INTO paymentMethods VALUES('Efectivo');
