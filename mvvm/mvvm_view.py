@@ -5,14 +5,14 @@ from PySide6 import QtCore, QtWidgets
 class View(QtWidgets.QWidget):
     class ClientWidget(QtWidgets.QWidget):
         def handle_flight_button(self):
-            # Show airplane widget
-            self.airplane_label.show()
-            self.airplane.show()
             # Show date and time pickers
             self.date_label.show()
             self.date.show()
             self.time_label.show()
             self.time.show()
+            # Show airplane widget
+            self.airplane_label.show()
+            self.airplane.show()
             # Hide weight widgets
             self.weight_label.hide()
             self.weight.hide()
@@ -21,14 +21,14 @@ class View(QtWidgets.QWidget):
             self.seats.show()
 
         def handle_freight_button(self):
-            # Hide airplane widget
-            self.airplane_label.hide()
-            self.airplane.hide()
             # Hide date and time pickers
             self.date_label.hide()
             self.date.hide()
             self.time_label.hide()
             self.time.hide()
+            # Hide airplane widget
+            self.airplane_label.hide()
+            self.airplane.hide()
             # Hide seats widgets
             self.seats_label.hide()
             self.seats.hide()
@@ -43,23 +43,27 @@ class View(QtWidgets.QWidget):
                 return
             # Flight
             if self.flight_button.isChecked():
-                result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
-                    self.view_model.add_flight((self.name.text(),
-                                               View.Identification(self.identification.text()).get_raw_identification(),
-                                               self.destination.currentText(), self.airplane.currentText(),
-                                               self.date.selectedDate().toJulianDay(), None, self.seats.text(),
-                                               self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText()))
+                    self.view_model.add_flight((self.name.text(), View.Identification(
+                        self.identification.text()).get_raw_identification(), self.destination.currentText(),
+                                                self.date.selectedDate().toJulianDay(), None,
+                                                self.airplane.currentText(), self.seats.text(),
+                                                self.view_model.get_prices_for_destination(
+                                                    self.destination.currentText())[0] * int(self.seats.text()),
+                                                self.payment_method.currentText()))
                     QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
             # Freight
             if self.freight_button.isChecked():
-                result = QtWidgets.QMessageBox.question(self, "Pregunta", "")
+                result = QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
                 # Yes button
                 if result == 16384:
                     self.view_model.add_freight((self.name.text(), View.Identification(
                         self.identification.text()).get_raw_identification(), self.destination.currentText(),
-                                                self.weight.text(), self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText()))
+                                                 self.weight.text(), self.view_model.get_prices_for_destination(
+                        self.destination.currentText())[1] * int(self.weight.text()),
+                                                 self.payment_method.currentText()))
                     QtWidgets.QMessageBox.information(self, "Información",
                                                       "Encomienda reservada con éxito.\nDebe hacer entrega de esta en "
                                                       "el aeródromo La Paloma.")
@@ -105,12 +109,6 @@ class View(QtWidgets.QWidget):
             self.destination = QtWidgets.QComboBox()
             self.destination.addItems(self.view_model.get_destinations())
             self.layout.addWidget(self.destination)
-            # Airplane list
-            self.airplane_label = QtWidgets.QLabel("Avión")
-            self.layout.addWidget(self.airplane_label)
-            self.airplane = QtWidgets.QComboBox()
-            self.airplane.addItems(self.view_model.get_airplanes())
-            self.layout.addWidget(self.airplane)
             # Horizontal layout for date and time layouts
             self.date_time_layout = QtWidgets.QHBoxLayout()
             # Vertical layout for date picker
@@ -130,6 +128,12 @@ class View(QtWidgets.QWidget):
             self.date_time_layout.addLayout(self.time_layout)
             # Add date and time layout to main layout
             self.layout.addLayout(self.date_time_layout)
+            # Airplane list
+            self.airplane_label = QtWidgets.QLabel("Avión")
+            self.layout.addWidget(self.airplane_label)
+            self.airplane = QtWidgets.QComboBox()
+            self.airplane.addItems(self.view_model.get_airplanes())
+            self.layout.addWidget(self.airplane)
             # Seats
             self.seats_label = QtWidgets.QLabel("Asientos")
             self.layout.addWidget(self.seats_label)
@@ -159,13 +163,12 @@ class View(QtWidgets.QWidget):
             self.identification = identification
 
         def get_raw_identification(self):
-            return self.identification.replace('-', '').replace('.', '')[:-1:]
+            return self.identification.replace('-', '').replace('.', '')[:-1]
 
         def is_identification_valid(self):
             identification = self.identification.replace('-', '').replace('.', '')
-            if identification.count('K') + identification.count('k') > 1 or len(identification) < 2:
-                return False
-            if not identification.replace('K', '').replace('k', '').isnumeric():
+            if identification.count('K') + identification.count('k') > 1 or len(
+                    identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
                 return False
             buffer = 0
             multiplier = 2
@@ -176,10 +179,10 @@ class View(QtWidgets.QWidget):
                 multiplier += 1
             buffer = 11 - buffer % 11
             if buffer == 11:
-                return identification[-1::] == '0'
+                return identification[-1] == '0'
             if buffer == 10:
-                return identification[-1::] == 'K' or identification[-1::] == 'k'
-            return identification[-1::] == str(buffer)
+                return identification[-1] == 'K' or identification[-1] == 'k'
+            return identification[-1] == str(buffer)
 
     class ManagerAuthenticationWidget(QtWidgets.QWidget):
         def handle_ok_button(self):
@@ -212,8 +215,7 @@ class View(QtWidgets.QWidget):
             self.ok_button = QtWidgets.QPushButton("OK")
             self.ok_button.clicked.connect(self.handle_ok_button)
             self.layout.addWidget(self.ok_button)
-            # Skip authentication button
-            # This will be removed in the future.
+            # Skip authentication button - this will be removed in the future.
             self.skip_authentication_button = QtWidgets.QPushButton("Saltar autenticación")
             self.skip_authentication_button.clicked.connect(self.handle_skip_authentication_button)
             self.layout.addWidget(self.skip_authentication_button)

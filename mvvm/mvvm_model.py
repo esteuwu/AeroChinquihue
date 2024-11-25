@@ -10,6 +10,12 @@ class Model:
         self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?);", parameters)
         self.connection.commit()
 
+    def delete_flight(self, uuid):
+        self.cursor.execute("DELETE FROM flights WHERE uuid=?", uuid)
+
+    def delete_freight(self, uuid):
+        self.cursor.execute("DELETE FROM freights WHERE uuid=?", uuid)
+
     def get_airplanes(self):
         return self.cursor.execute("SELECT airplane FROM airplanes")
 
