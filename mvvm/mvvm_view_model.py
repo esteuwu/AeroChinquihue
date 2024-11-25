@@ -21,6 +21,12 @@ class ViewModel:
     def get_destinations(self):
         return self.resultset_to_list(self.model.get_destinations())
 
+    def get_flights_in_range(self, start_range, end_range):
+        return self.model.get_flights_in_range((start_range, end_range))
+
+    def get_freights_in_range(self, start_range, end_range):
+        return self.model.get_freights_in_range((start_range, end_range))
+
     def get_payment_methods(self):
         return self.resultset_to_list(self.model.get_payment_methods())
 

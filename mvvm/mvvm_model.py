@@ -3,11 +3,11 @@ import sqlite3
 
 class Model:
     def add_flight(self, parameters):
-        self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", parameters)
+        self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", parameters)
         self.connection.commit()
 
     def add_freight(self, parameters):
-        self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?);", parameters)
+        self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", parameters)
         self.connection.commit()
 
     def delete_flight(self, uuid):
@@ -21,6 +21,14 @@ class Model:
 
     def get_destinations(self):
         return self.cursor.execute("SELECT destination FROM destinations")
+
+    def get_flights_in_range(self, ranges):
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT createdAt FROM flights WHERE createdAt BETWEEN ? AND "
+                                   "?);", ranges).fetchone()[0]
+
+    def get_freights_in_range(self, ranges):
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT createdAt FROM freights WHERE createdAt BETWEEN ? AND "
+                                   "?);", ranges).fetchone()[0]
 
     def get_payment_methods(self):
         return self.cursor.execute("SELECT paymentMethod FROM paymentMethods")
