@@ -16,6 +16,8 @@ instala las dependencias necesarias ejecutando:
 >
 > DATABASE_FILENAME=
 >
+> \# Debes colocar el nombre de la imagen de presentación, por ejemplo AeroChinquihue.png que viene incluido
+>
 > PICTURE_FILENAME=
 
 ## Estructura de archivos
