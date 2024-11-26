@@ -1,4 +1,4 @@
-# pylint: disable=I1101
+# pylint: disable=I1101,R0903
 import os
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -333,43 +333,38 @@ class ManagerFreightTableWidget(QtWidgets.QWidget):
 
 class View(QtWidgets.QWidget):
     def handle_client_button(self):
-        self.widget = ClientWidget(self.view_model)
+        self.widget = ClientWidget(self.viewmodel)
         self.widget.show()
 
     def handle_manager_button(self):
-        self.widget = ManagerAuthenticationWidget(self.view_model)
+        self.widget = ManagerAuthenticationWidget(self.viewmodel)
         self.widget.show()
 
     def __init__(self, viewmodel):
         super().__init__()
-        self.view_model = viewmodel
+        self.viewmodel = viewmodel
         self.widget = None
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
         # Window title
         self.setWindowTitle("AeroChinquihue")
+        # Main layout
+        self.layout = QtWidgets.QVBoxLayout(self)
         # Picture
-        self.picture_pixmap = QtGui.QPixmap()
-        self.picture_pixmap.load(os.getenv("PICTURE_FILENAME"))
-        self.picture_pixmap = self.picture_pixmap.scaled(300, 300, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation)
         self.picture_label = QtWidgets.QLabel()
-        self.picture_label.setPixmap(self.picture_pixmap)
+        self.picture_label.setPixmap(QtGui.QPixmap(os.getenv("PICTURE_FILENAME")).scaled(300, 300, QtCore.Qt.
+                                                                                         AspectRatioMode.
+                                                                                         KeepAspectRatio, QtCore.Qt.
+                                                                                         TransformationMode.
+                                                                                         SmoothTransformation))
         self.layout.addWidget(self.picture_label)
         # Welcome label
         self.welcome_label = QtWidgets.QLabel("Vuelos en toda la Región de Los Lagos.")
         self.welcome_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.layout.addWidget(self.welcome_label)
-        # Client button
-        self.client_button = QtWidgets.QPushButton("Acceso Empleados")
-        self.client_button.clicked.connect(self.handle_client_button)
-        self.layout.addWidget(self.client_button)
+        # Employee button
+        self.employee_button = QtWidgets.QPushButton("Acceso Empleados")
+        self.employee_button.clicked.connect(self.handle_client_button)
+        self.layout.addWidget(self.employee_button)
         # Manager button
         self.manager_button = QtWidgets.QPushButton("Acceso Gerente")
         self.manager_button.clicked.connect(self.handle_manager_button)
         self.layout.addWidget(self.manager_button)
-        # Empty label
-        self.layout.addWidget(QtWidgets.QLabel())
-        # About Qt button
-        self.about_qt_button = QtWidgets.QPushButton("Acerca de Qt")
-        self.about_qt_button.clicked.connect(QtWidgets.QApplication.aboutQt)
-        self.layout.addWidget(self.about_qt_button)

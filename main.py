@@ -2,21 +2,22 @@
 if __name__ == "__main__":
     # Imports
     import dotenv
-    from mvvm import mvvm_model, mvvm_view_model, mvvm_view
+    import mvvm
     import os
     import pathlib
-    from PySide6 import QtWidgets
+    import PySide6.QtWidgets
     import sys
     # Environment variables
     dotenv.load_dotenv()
     DATABASE_FILENAME = os.getenv("DATABASE_FILENAME")
     # Driver code
-    app = QtWidgets.QApplication(sys.argv)
+    app = PySide6.QtWidgets.QApplication(sys.argv)
     if not pathlib.Path(DATABASE_FILENAME).exists():
-        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.")
+        PySide6.QtWidgets.QMessageBox.critical(PySide6.QtWidgets.QWidget(), "Error crítico", "La base de datos no "
+                                                                                             "existe.")
         sys.exit(1)
-    model = mvvm_model.Model(DATABASE_FILENAME)
-    viewModel = mvvm_view_model.ViewModel(model)
-    view = mvvm_view.View(viewModel)
+    model = mvvm.Model(DATABASE_FILENAME)
+    viewModel = mvvm.ViewModel(model)
+    view = mvvm.View(viewModel)
     view.show()
     sys.exit(app.exec())
