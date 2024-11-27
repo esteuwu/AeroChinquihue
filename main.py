@@ -12,5 +12,5 @@ if __name__ == "__main__":
         raise FileNotFoundError("Database does not exist")
     model = mvvm_model.Model(DATABASE_FILENAME)
     viewModel = mvvm_view_model.ViewModel(model)
-    view = mvvm_view.View(viewModel)
-    print(str(view))
+    view = mvvm_view.View(viewpip install PySide6
+
