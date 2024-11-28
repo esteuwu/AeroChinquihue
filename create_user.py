@@ -29,5 +29,7 @@ password = bytes(sys.argv[3], "utf-8")
 salt = secrets.token_bytes(32)
 hashed_password = hasher.digest(password, salt)
 
-cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (sys.argv[1], mvvm.Identification(sys.argv[2]).get_raw_identification(), base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
+cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (sys.argv[1], mvvm.Identification(sys.argv[2]).
+                                                          get_raw_identification(), base64.b64encode(hashed_password).
+                                                          decode(), base64.b64encode(salt).decode()))
 connection.commit()
