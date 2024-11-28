@@ -1,3 +1,3 @@
 from .model import Model
-from .view import View
+from .view import Identification, View
 from .viewmodel import ViewModel

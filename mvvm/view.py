@@ -42,7 +42,7 @@ class ClientWidget(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.")
             return
         # Identification validation
-        if not Identification(self.identification.text()).is_identification_valid():
+        if not Identification.is_identification_valid(self.identification.text()):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
             return
         # Flight
@@ -187,8 +187,9 @@ class Identification:
     def get_raw_identification(self):
         return self.identification.replace('-', '').replace('.', '')[:-1]
 
-    def is_identification_valid(self):
-        identification = self.identification.replace('-', '').replace('.', '')
+    @staticmethod
+    def is_identification_valid(identification):
+        identification = identification.replace('-', '').replace('.', '')
         if identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
             return False
         buffer = 0
@@ -208,22 +209,23 @@ class Identification:
 
 class ManagerAuthenticationWidget(QtWidgets.QWidget):
     def handle_ok_button(self):
-        if not Identification(self.identification.text()).is_identification_valid():
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
-
-    def handle_skip_authentication_button(self):
-        QtWidgets.QMessageBox.information(self, "Información", "Esta funcionalidad será removida en el futuro.")
-        self.widget = ManagerSummaryWidget(self.view_model)
-        self.widget.show()
+        if not Identification.is_identification_valid(self.identification.text()):
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
+        if self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), self.password.text()):
+            QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido seas, {self.viewmodel.get_name_by_identification(Identification(self.identification.text()).get_raw_identification())}")
+            self.widget = ManagerSummaryWidget(self.viewmodel)
+            self.widget.show()
+        else:
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
 
     def __init__(self, viewmodel):
         super().__init__()
-        self.view_model = viewmodel
+        self.viewmodel = viewmodel
         self.widget = None
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
         # Window title
         self.setWindowTitle("Inicio de sesión")
+        # Main layout
+        self.layout = QtWidgets.QVBoxLayout(self)
         # Identification input
         self.layout.addWidget(QtWidgets.QLabel("RUT"))
         self.identification = QtWidgets.QLineEdit()
@@ -237,10 +239,6 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
         self.ok_button = QtWidgets.QPushButton("OK")
         self.ok_button.clicked.connect(self.handle_ok_button)
         self.layout.addWidget(self.ok_button)
-        # Skip authentication button - this will be removed in the future.
-        self.skip_authentication_button = QtWidgets.QPushButton("Saltar autenticación")
-        self.skip_authentication_button.clicked.connect(self.handle_skip_authentication_button)
-        self.layout.addWidget(self.skip_authentication_button)
 
 
 class ManagerSummaryWidget(QtWidgets.QWidget):

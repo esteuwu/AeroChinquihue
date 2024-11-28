@@ -1,4 +1,6 @@
+import base64
 import json
+import pyescrypt
 import uuid
 
 
@@ -33,11 +35,25 @@ class ViewModel:
     def get_freights_in_range(self, start_range: int, end_range: int) -> int:
         return self.model.get_freights_in_range((start_range, end_range))[0]
 
+    def get_name_by_identification(self, identification):
+        return self.model.get_name_by_identification((identification,))[0]
+
     def get_payment_methods(self):
         return self.resultset_to_list(self.model.get_payment_methods())
 
     def get_prices_for_destination(self, destination: str) -> list:
         return json.loads(self.model.get_prices_for_destination((destination,))[0])
+
+    def is_password_valid(self, identifier, password):
+        hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
+        try:
+            hasher.compare(
+                bytes(password, "utf-8"),
+                base64.b64decode(self.model.get_hashed_password((identifier,))[0]),
+                base64.b64decode(self.model.get_password_salt((identifier,))[0]))
+        except pyescrypt.WrongPassword:
+            return False
+        return True
 
     @staticmethod
     def resultset_to_list(resultset):
