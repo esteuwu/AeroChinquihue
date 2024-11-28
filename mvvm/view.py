@@ -213,7 +213,7 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
         if self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(),
                                             self.password.text()):
-            QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido seas, {self.viewmodel.get_name_for_identification(Identification(self.identification.text()).get_raw_identification())}")
+            QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido seas, {self.viewmodel.get_name_by_identification(Identification(self.identification.text()).get_raw_identification())}")
             self.widget = ManagerSummaryWidget(self.viewmodel)
             self.widget.show()
         else:
