@@ -50,3 +50,7 @@ INSERT INTO payment_methods VALUES ('Efectivo');
 INSERT INTO payment_methods VALUES ('Tarjeta de Crédito');
 INSERT INTO payment_methods VALUES ('Tarjeta de Débito');
 INSERT INTO payment_methods VALUES ('Transferencia');
+-- Users
+CREATE TABLE users (
+    name TEXT, identification TEXT, hashed_password TEXT, salt TEXT
+);

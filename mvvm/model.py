@@ -26,17 +26,27 @@ class Model:
         return self.cursor.execute("SELECT uuid, name, identification, destination, leave, airplane, seats, cost, "
                                    "payment_method, epoch FROM flights;").fetchall()
 
-    def get_freights(self):
-        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, cost, payment_method, "
-                                   "epoch FROM freights;").fetchall()
-
     def get_flights_in_range(self, ranges: tuple) -> tuple:
         return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);",
                                    ranges).fetchone()
 
+    def get_freights(self):
+        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, cost, payment_method, "
+                                   "epoch FROM freights;").fetchall()
+
     def get_freights_in_range(self, ranges: tuple) -> tuple:
         return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);",
                                    ranges).fetchone()
+
+    def get_hashed_password(self, identification: tuple) -> tuple:
+        return (self.cursor.execute("SELECT hashed_password FROM users WHERE identification = ?;", identification).
+                fetchone())
+
+    def get_name_for_identification(self, identification: tuple) -> tuple:
+        return self.cursor.execute("SELECT name FROM users WHERE identification = ?", identification).fetchone()
+
+    def get_password_salt(self, identification: tuple) -> tuple:
+        return self.cursor.execute("SELECT salt FROM users WHERE identification = ?;", identification).fetchone()
 
     def get_payment_methods(self):
         return self.cursor.execute("SELECT payment_method FROM payment_methods;").fetchall()
