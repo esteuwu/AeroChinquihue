@@ -75,3 +75,31 @@ Contiene código relacionado con el patrón de arquitectura
 ## Licencia
 
 * El repositorio está licenciado bajo la licencia MIT, la cual puede verse [aquí](https://github.com/esteuwu/AeroChinquihue/blob/master/LICENSE).
+
+## TODO
+
+Solo para uso interno.
+
+* [ ] Agregar sistema de localización (borrar strings localizadas del código)
+
+* [x] Implementar contraseñas mediante hashing y salting, usando Yescrypt
+
+* [ ] Bloquear el tamaño de la ventana
+
+* [ ] Hacer que todo ocurra en una sola ventana (puede chocar con n.º 3)
+
+* [ ] Descuento de 10%
+
+* [ ] Conectar datepicker y hacer tabla de frecuencia
+
+* [ ] Agregar algoritmo de hora de salida
+
+* [ ] Agregar botón de revelar contraseña
+
+* [ ] Usar validadores en QLineEdit's
+
+* [ ] Pasar toda la interfaz a archivos .ui en vez de hacerlo todo manual
+
+* [ ] Mejorar algoritmo rut
+
+* [ ] Mejorar validación
