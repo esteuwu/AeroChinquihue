@@ -46,11 +46,12 @@ class ViewModel:
 
     def is_password_valid(self, identification: int, password: str):
         hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
+        shadow_password = self.model.get_shadow_password((identification,))[0].replace("$y$", '').split('$')
         try:
             hasher.compare(
                 bytes(password, "utf-8"),
-                base64.b64decode(self.model.get_hashed_password((identification,))[0]),
-                base64.b64decode(self.model.get_password_salt((identification,))[0]))
+                base64.b64decode(shadow_password[1]),
+                base64.b64decode(shadow_password[0]))
         except pyescrypt.WrongPassword:
             return False
         return True

@@ -51,6 +51,4 @@ INSERT INTO payment_methods VALUES ('Tarjeta de Crédito');
 INSERT INTO payment_methods VALUES ('Tarjeta de Débito');
 INSERT INTO payment_methods VALUES ('Transferencia');
 -- Users
-CREATE TABLE users (
-    name TEXT, identification TEXT, hashed_password TEXT, salt TEXT
-);
+CREATE TABLE users (name TEXT, identification TEXT, shadow_password TEXT);
