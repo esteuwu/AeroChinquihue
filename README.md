@@ -1,6 +1,6 @@
 # AeroChinquihue
 
-![Imagen de AeroChinquihue](AeroChinquihue.png)
+![Imagen de AeroChinquihue](assets/AeroChinquihue.png)
 
 Vuelos en toda la Región de Los Lagos.
 
@@ -76,13 +76,13 @@ Contiene código relacionado con el patrón de arquitectura
 
 * El repositorio está licenciado bajo la licencia MIT, la cual puede verse [aquí](https://github.com/esteuwu/AeroChinquihue/blob/master/LICENSE).
 
-## TODO
+## To-do
 
 Solo para uso interno.
 
 * [ ] Agregar sistema de localización (borrar strings localizadas del código)
 
-* [x] Implementar contraseñas mediante hashing y salting, usando Yescrypt
+* [x] Implementar contraseñas mediante hashing y salting, usando yescrypt
 
 * [ ] Bloquear el tamaño de la ventana
 
@@ -100,6 +100,6 @@ Solo para uso interno.
 
 * [ ] Pasar toda la interfaz a archivos .ui en vez de hacerlo todo manual
 
-* [ ] Mejorar algoritmo rut
+* [x] Mejorar algoritmo rut
 
-* [ ] Mejorar validación
+* [x] Mejorar validación

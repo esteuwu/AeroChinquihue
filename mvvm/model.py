@@ -12,9 +12,11 @@ class Model:
 
     def delete_flight(self, uuid: tuple):
         self.cursor.execute("DELETE FROM flights WHERE uuid = ?;", uuid)
+        self.connection.commit()
 
     def delete_freight(self, uuid: tuple):
         self.cursor.execute("DELETE FROM freights WHERE uuid = ?;", uuid)
+        self.connection.commit()
 
     def get_airplanes(self):
         return self.cursor.execute("SELECT airplane FROM airplanes;").fetchall()
@@ -26,24 +28,19 @@ class Model:
         return self.cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?", identification).fetchone()
 
     def get_flights(self):
-        return self.cursor.execute("SELECT uuid, name, identification, destination, leave, airplane, seats, cost, "
-                                   "payment_method, epoch FROM flights;").fetchall()
+        return self.cursor.execute("SELECT uuid, name, identification, destination, leave, airplane, seats, cost, payment_method, epoch FROM flights;").fetchall()
 
     def get_flights_in_range(self, ranges: tuple) -> tuple:
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);",
-                                   ranges).fetchone()
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
 
     def get_freights(self):
-        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, cost, payment_method, "
-                                   "epoch FROM freights;").fetchall()
+        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, cost, payment_method, epoch FROM freights;").fetchall()
 
     def get_freights_in_range(self, ranges: tuple) -> tuple:
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);",
-                                   ranges).fetchone()
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
 
     def get_hashed_password(self, identification: tuple) -> tuple:
-        return (self.cursor.execute("SELECT hashed_password FROM users WHERE identification = ?;", identification).
-                fetchone())
+        return self.cursor.execute("SELECT hashed_password FROM users WHERE identification = ?;", identification).fetchone()
 
     def get_name(self, identification: tuple) -> tuple:
         return self.cursor.execute("SELECT name FROM users WHERE identification = ?", identification).fetchone()
@@ -60,3 +57,5 @@ class Model:
     def __init__(self, filename: str):
         self.connection = sqlite3.connect(filename)
         self.cursor = self.connection.cursor()
+        if self.cursor.execute("SELECT COUNT() FROM users").fetchone()[0] == 0:
+            raise ValueError("No users exist in database")
