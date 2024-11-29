@@ -1,5 +1,9 @@
 # AeroChinquihue
 
+![Imagen de AeroChinquihue](AeroChinquihue.png)
+
+Vuelos en toda la Región de Los Lagos.
+
 Este programa es funcional en Python 3.12. No probado en otras versiones.
 
 ## Requisitos
