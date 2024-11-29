@@ -38,18 +38,21 @@ class Model:
         return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);",
                                    ranges).fetchone()
 
+    def get_hashed_password(self, identification: tuple) -> tuple:
+        return (self.cursor.execute("SELECT hashed_password FROM users WHERE identification = ?;", identification).
+                fetchone())
+
     def get_name_for_identification(self, identification: tuple) -> tuple:
         return self.cursor.execute("SELECT name FROM users WHERE identification = ?", identification).fetchone()
+
+    def get_password_salt(self, identification: tuple) -> tuple:
+        return self.cursor.execute("SELECT salt FROM users WHERE identification = ?;", identification).fetchone()
 
     def get_payment_methods(self):
         return self.cursor.execute("SELECT payment_method FROM payment_methods;").fetchall()
 
     def get_prices_for_destination(self, destination: tuple) -> tuple:
         return self.cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
-
-    def get_shadow_password(self, identification: tuple) -> tuple:
-        return (self.cursor.execute("SELECT shadow_password FROM users WHERE identification = ?;", identification).
-                fetchone())
 
     def __init__(self, filename: str):
         self.connection = sqlite3.connect(filename)
