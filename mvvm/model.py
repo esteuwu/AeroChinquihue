@@ -22,6 +22,9 @@ class Model:
     def get_destinations(self):
         return self.cursor.execute("SELECT destination FROM destinations;").fetchall()
 
+    def get_flight_count(self, identification: tuple) -> tuple:
+        return self.cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?", identification).fetchone()
+
     def get_flights(self):
         return self.cursor.execute("SELECT uuid, name, identification, destination, leave, airplane, seats, cost, "
                                    "payment_method, epoch FROM flights;").fetchall()
@@ -42,7 +45,7 @@ class Model:
         return (self.cursor.execute("SELECT hashed_password FROM users WHERE identification = ?;", identification).
                 fetchone())
 
-    def get_name_for_identification(self, identification: tuple) -> tuple:
+    def get_name(self, identification: tuple) -> tuple:
         return self.cursor.execute("SELECT name FROM users WHERE identification = ?", identification).fetchone()
 
     def get_password_salt(self, identification: tuple) -> tuple:
@@ -51,7 +54,7 @@ class Model:
     def get_payment_methods(self):
         return self.cursor.execute("SELECT payment_method FROM payment_methods;").fetchall()
 
-    def get_prices_for_destination(self, destination: tuple) -> tuple:
+    def get_prices(self, destination: tuple) -> tuple:
         return self.cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
 
     def __init__(self, filename: str):

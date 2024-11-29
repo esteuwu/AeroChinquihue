@@ -23,6 +23,9 @@ class ViewModel:
     def get_destinations(self):
         return self.resultset_to_list(self.model.get_destinations())
 
+    def get_flight_count(self, identification: int) -> int:
+        return self.model.get_flight_count((identification,))[0]
+
     def get_flights(self) -> list:
         return self.model.get_flights()
 
@@ -35,14 +38,14 @@ class ViewModel:
     def get_freights_in_range(self, start_range: int, end_range: int) -> int:
         return self.model.get_freights_in_range((start_range, end_range))[0]
 
-    def get_name_by_identification(self, identification: int) -> int:
-        return self.model.get_name_for_identification((identification,))[0]
+    def get_name(self, identification: int) -> int:
+        return self.model.get_name((identification,))[0]
 
     def get_payment_methods(self):
         return self.resultset_to_list(self.model.get_payment_methods())
 
-    def get_prices_for_destination(self, destination: str) -> list:
-        return json.loads(self.model.get_prices_for_destination((destination,))[0])
+    def get_prices(self, destination: str) -> list:
+        return json.loads(self.model.get_prices((destination,))[0])
 
     def is_password_valid(self, identification: int, password: str):
         hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)

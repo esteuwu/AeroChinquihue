@@ -55,7 +55,7 @@ class ClientWidget(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.")
                 return
             result = QtWidgets.QMessageBox.question(self, "Pregunta",
-                                                    f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?")
+                                                    f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.view_model.get_prices(self.destination.currentText())[0]}\nSubtotal: ${self.view_model.get_prices(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?")
             # Yes button
             if result == 16384:
                 self.view_model.add_flight((self.name.text(),
@@ -63,7 +63,7 @@ class ClientWidget(QtWidgets.QWidget):
                                             self.destination.currentText(), QtCore.QDateTime(self.date.selectedDate(),
                                                                                              QtCore.QTime()).toSecsSinceEpoch(),
                                             self.airplane.currentText(), self.seats.text(),
-                                            self.view_model.get_prices_for_destination(self.destination.currentText())[
+                                            self.view_model.get_prices(self.destination.currentText())[
                                                 0] * int(self.seats.text()), self.payment_method.currentText(),
                                             QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
@@ -77,13 +77,13 @@ class ClientWidget(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.")
                 return
             result = QtWidgets.QMessageBox.question(self, "Pregunta",
-                                                    f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices_for_destination(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
+                                                    f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.view_model.get_prices(self.destination.currentText())[1]}\nSubtotal: ${self.view_model.get_prices(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?")
             # Yes button
             if result == 16384:
                 self.view_model.add_freight((self.name.text(),
                                              Identification(self.identification.text()).get_raw_identification(),
                                              self.destination.currentText(), self.weight.text(),
-                                             self.view_model.get_prices_for_destination(self.destination.currentText())[
+                                             self.view_model.get_prices(self.destination.currentText())[
                                                  1] * int(self.weight.text()), self.payment_method.currentText(),
                                              QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self, "Información",
@@ -211,13 +211,23 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
     def handle_ok_button(self):
         if not Identification.is_identification_valid(self.identification.text()):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
+            return
         if self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(),
                                             self.password.text()):
-            QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido seas, {self.viewmodel.get_name_by_identification(Identification(self.identification.text()).get_raw_identification())}")
+            QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido seas, {self.viewmodel.get_name(Identification(self.identification.text()).get_raw_identification())}")
             self.widget = ManagerSummaryWidget(self.viewmodel)
             self.widget.show()
         else:
             QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
+            return
+
+    def handle_reveal_password_button(self):
+        if self.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Password:
+            self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Normal)
+            self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-hide-svgrepo-com.svg")))
+        elif self.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Normal:
+            self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+            self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
 
     def __init__(self, viewmodel):
         super().__init__()
@@ -231,11 +241,20 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
         self.layout.addWidget(QtWidgets.QLabel("RUT"))
         self.identification = QtWidgets.QLineEdit()
         self.layout.addWidget(self.identification)
+        # Horizontal layout for password input
+        self.password_layout = QtWidgets.QHBoxLayout()
         # Password input
         self.layout.addWidget(QtWidgets.QLabel("Contraseña"))
         self.password = QtWidgets.QLineEdit()
         self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
-        self.layout.addWidget(self.password)
+        self.password_layout.addWidget(self.password)
+        # Reveal password button
+        self.reveal_password_button = QtWidgets.QPushButton()
+        self.reveal_password_button.clicked.connect(self.handle_reveal_password_button)
+        self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
+        self.password_layout.addWidget(self.reveal_password_button)
+        # Add password layout into main layout
+        self.layout.addLayout(self.password_layout)
         # OK button
         self.ok_button = QtWidgets.QPushButton("OK")
         self.ok_button.clicked.connect(self.handle_ok_button)
