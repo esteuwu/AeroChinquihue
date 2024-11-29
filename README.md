@@ -94,7 +94,7 @@ Solo para uso interno.
 
 * [ ] Agregar algoritmo de hora de salida
 
-* [ ] Agregar botón de revelar contraseña
+* [x] Agregar botón de revelar contraseña
 
 * [ ] Usar validadores en QLineEdit's
 
