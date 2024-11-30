@@ -35,6 +35,35 @@ y ejecutar un comando tal como:
 
 > sqlite3 database.db < sql/createDatabase.sql
 
+### Creando un usuario (gerente) en la base de datos
+
+Puedes usar el script create_user.py para esto.
+
+Ejemplo:
+
+> python create_user.py "John Doe" 12.345.678-5 JohnDoe123
+
+Las contraseñas están sujetas a hashing y salting mediante el uso de
+[yescrypt](https://en.wikipedia.org/wiki/Yescrypt) (sitio web en inglés), por
+lo tanto, no se guardan en texto plano en la base de datos.
+
+Los usuarios lucen así en la base de datos:
+
+> sqlite> SELECT * FROM users;
+>
+> John Doe|12345678|DAvEmTm3fQYjWLuqMZ/+aXgQJptxW3idghEJydn3I2c=|b0Q8nnAd5QFlxKgB8ogFAlmOCU7/8BmSkDgWBrTM6Bk=
+>
+> sqlite>
+
+Los usuarios se guardan de la siguiente manera:
+
+> name|identification|hashed_password|salt
+
+* name: Nombre del usuario.
+* identification: RUT del usuario sin dígito verificador.
+* salt: Salt de la contraseña.
+* hashed_password: Contraseña hasheada junto con la respectiva salt.
+
 ## Estructura de archivos
 
 * main.py: Programa principal.
