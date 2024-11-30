@@ -17,6 +17,9 @@ class ViewModel:
     def delete_freight(self, freight_uuid: str):
         self.model.delete_freight((freight_uuid,))
 
+    def does_user_exist(self, identification: int) -> bool:
+        return self.model.does_user_exist((identification,))
+
     def get_airplanes(self):
         return self.resultset_to_list(self.model.get_airplanes())
 

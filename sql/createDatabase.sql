@@ -1,10 +1,12 @@
 -- Airplanes
-CREATE TABLE airplanes (airplane TEXT, seats INTEGER);
+CREATE TABLE airplanes (airplane TEXT PRIMARY KEY, seats INTEGER);
 INSERT INTO airplanes VALUES ('Cessna 208 Caravan', 9);
 INSERT INTO airplanes VALUES ('Cessna 310', 5);
 INSERT INTO airplanes VALUES ('Let L-410 Turbolet', 19);
 -- Destinations
-CREATE TABLE destinations (destination TEXT, prices TEXT, frequency INTEGER);
+CREATE TABLE destinations (
+    destination TEXT PRIMARY KEY, prices TEXT, frequency INTEGER
+);
 INSERT INTO destinations VALUES ('Ayacara', json_array(30000, 8000), 30);
 INSERT INTO destinations VALUES ('Chaitén', json_array(50000, 15000), 45);
 INSERT INTO destinations VALUES ('Chepu', json_array(30000, 8000), 60);
@@ -22,7 +24,7 @@ INSERT INTO destinations VALUES (
 );
 -- Flights
 CREATE TABLE flights (
-    uuid TEXT,
+    uuid TEXT PRIMARY KEY,
     name TEXT,
     identification INTEGER,
     destination TEXT,
@@ -35,7 +37,7 @@ CREATE TABLE flights (
 );
 -- Freights
 CREATE TABLE freights (
-    uuid TEXT,
+    uuid TEXT PRIMARY KEY,
     name TEXT,
     identification INTEGER,
     destination TEXT,
@@ -45,12 +47,15 @@ CREATE TABLE freights (
     epoch INTEGER
 );
 -- Payment Methods
-CREATE TABLE payment_methods (payment_method TEXT);
+CREATE TABLE payment_methods (payment_method TEXT PRIMARY KEY);
 INSERT INTO payment_methods VALUES ('Efectivo');
 INSERT INTO payment_methods VALUES ('Tarjeta de Crédito');
 INSERT INTO payment_methods VALUES ('Tarjeta de Débito');
 INSERT INTO payment_methods VALUES ('Transferencia');
 -- Users
 CREATE TABLE users (
-    name TEXT, identification TEXT, hashed_password TEXT, salt TEXT
+    name TEXT,
+    identification INTEGER PRIMARY KEY,
+    hashed_password TEXT,
+    salt TEXT
 );

@@ -100,6 +100,8 @@ Solo para uso interno.
 
 * [ ] Pasar toda la interfaz a archivos .ui en vez de hacerlo todo manual
 
-* [x] Mejorar algoritmo rut
+* [ ] Revisar algoritmo rut
 
 * [x] Mejorar validación
+
+* [ ] Avisar de que solo se puede seleccionar una entrada para Gerente

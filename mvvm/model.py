@@ -18,6 +18,9 @@ class Model:
         self.cursor.execute("DELETE FROM freights WHERE uuid = ?;", uuid)
         self.connection.commit()
 
+    def does_user_exist(self, identification: tuple):
+        return bool(self.cursor.execute("SELECT COUNT() FROM users WHERE identification = ?", identification).fetchone()[0])
+
     def get_airplanes(self):
         return self.cursor.execute("SELECT airplane FROM airplanes;").fetchall()
 

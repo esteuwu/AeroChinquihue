@@ -190,7 +190,7 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
     def handle_ok_button(self):
         password = self.password.text()
         self.password.setText('')
-        if not Identification.is_identification_valid(self.identification.text()) or not self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), password):
+        if not (Identification.is_identification_valid(self.identification.text()) and self.viewmodel.does_user_exist(Identification(self.identification.text()).get_raw_identification()) and self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), password)):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
             return
         QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido, {self.viewmodel.get_name(Identification(self.identification.text()).get_raw_identification())}.")
@@ -294,6 +294,7 @@ class ManagerTableWidget(QtWidgets.QWidget):
         if QtWidgets.QMessageBox.question(self, "Pregunta", f"Está seguro de borrar la entrada número {self.table.currentRow() + 1}?") == 16384:
             self.delete_function(self.table.item(self.table.currentRow(), 0).text())
             self.table.removeRow(self.table.currentRow())
+            self.table.setCurrentCell(-1, -1)
             QtWidgets.QMessageBox.information(self, "Información", "Entrada borrada con éxito.")
 
     def __init__(self, window_title, rows, columns, delete_function):
@@ -315,6 +316,8 @@ class ManagerTableWidget(QtWidgets.QWidget):
         self.delete_entry_button = QtWidgets.QPushButton("Borrar entrada")
         self.delete_entry_button.clicked.connect(self.handle_delete_entry_button)
         self.layout.addWidget(self.delete_entry_button)
+        # Do not select the first entry if there is one by default
+        self.table.setCurrentCell(-1, -1)
 
 
 class View(QtWidgets.QWidget):
