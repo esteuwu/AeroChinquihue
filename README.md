@@ -61,8 +61,9 @@ Los usuarios se guardan de la siguiente manera:
 
 * name: Nombre del usuario.
 * identification: RUT del usuario sin dígito verificador.
-* salt: Salt de la contraseña.
-* hashed_password: Contraseña hasheada junto con la respectiva salt.
+* salt: Salt de la contraseña codificada en [base64](https://es.wikipedia.org/wiki/Base64).
+* hashed_password: Contraseña hasheada junto con la respectiva salt, nuevamente
+codificada en base64.
 
 ## Estructura de archivos
 
