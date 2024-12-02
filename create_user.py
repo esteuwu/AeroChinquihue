@@ -7,7 +7,7 @@ import sqlite3
 import sys
 import dotenv
 import pyescrypt
-import AeroChinquihue.view
+from AeroChinquihue import Identification
 # Condition checks
 if len(sys.argv) < 2:
     print("You need to specify a name.")
@@ -18,7 +18,7 @@ if len(sys.argv) < 3:
 if len(sys.argv) < 4:
     print("You need to specify a password.")
     sys.exit(3)
-if not AeroChinquihue.view.Identification.is_identification_valid(sys.argv[2]):
+if not Identification.is_identification_valid(sys.argv[2]):
     print("You need to specify a valid identification.")
     sys.exit(4)
 # Load environment variables and connect to database
@@ -31,5 +31,5 @@ password = bytes(sys.argv[3], "utf-8")
 salt = secrets.token_bytes(32)
 hashed_password = hasher.digest(password, salt)
 # Execute database query and commit changes to database
-cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (AeroChinquihue.view.Identification(sys.argv[2]).get_raw_identification(), sys.argv[1], base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
+cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (Identification(sys.argv[2]).get_raw_identification(), sys.argv[1], base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
 connection.commit()

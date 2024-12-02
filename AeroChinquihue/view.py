@@ -1,7 +1,7 @@
 # pylint: disable=I1101,R0903
 import os
 from PySide6 import QtCore, QtGui, QtWidgets
-from .identification import Identification
+from . import Identification
 
 
 class ClientWidget(QtWidgets.QWidget):
