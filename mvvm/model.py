@@ -57,7 +57,7 @@ class Model:
     def __init__(self):
         dotenv.load_dotenv()
         database_filename = os.getenv("DATABASE_FILENAME")
-        if not pathlib.Path(database_filename).exists:
+        if not pathlib.Path(database_filename).exists():
             raise FileNotFoundError("Database does not exist")
         self.connection = sqlite3.connect(database_filename)
         self.cursor = self.connection.cursor()
