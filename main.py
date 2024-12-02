@@ -6,7 +6,11 @@ if __name__ == "__main__":
     import sys
     # Driver code
     app = QtWidgets.QApplication(sys.argv)
-    model = Model()
+    try:
+        model = Model()
+    except FileNotFoundError:
+        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.")
+        sys.exit(1)
     viewModel = ViewModel(model)
     view = View(viewModel)
     view.show()
