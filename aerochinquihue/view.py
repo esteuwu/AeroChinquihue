@@ -1,4 +1,4 @@
-# pylint: disable=I1101
+# pylint: disable=I1101,R0903
 import os
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
@@ -207,11 +207,11 @@ class ManagerAuthenticationWidget(BaseWidget):
 
 class ManagerSummaryWidget(BaseWidget):
     def handle_flight_table_button(self):
-        self.widget = ManagerTableWidget("Registro de Vuelos", self.viewmodel.get_flights(), ["UUID", "Nombre", "RUT", "Destino", "Salida", "Avión", "Asientos", "Costo", "Medio de pago", "Epoch"], self.viewmodel.delete_flight)
+        self.widget = ManagerTableWidget("Registro de Vuelos", self.viewmodel.get_flights(), ["UUID", "Nombre", "RUT", "Destino", "Avión", "Salida", "Asientos", "Medio de pago", "Costo", "Epoch"], self.viewmodel.delete_flight)
         self.widget.show()
 
     def handle_freight_table_button(self):
-        self.widget = ManagerTableWidget("Registro de Encomiendas", self.viewmodel.get_freights(), ["UUID", "Nombre", "RUT", "Destino", "Peso", "Costo", "Medio de pago", "Epoch"], self.viewmodel.delete_freight)
+        self.widget = ManagerTableWidget("Registro de Encomiendas", self.viewmodel.get_freights(), ["UUID", "Nombre", "RUT", "Destino", "Peso", "Medio de pago", "Costo", "Epoch"], self.viewmodel.delete_freight)
         self.widget.show()
 
     def __init__(self, viewmodel: ViewModel):
