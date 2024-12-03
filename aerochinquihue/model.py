@@ -1,3 +1,4 @@
+"""Provides the Model class to interact with the database."""
 import os
 import pathlib
 import sqlite3
@@ -5,6 +6,7 @@ import dotenv
 
 
 class Model:
+    """Class to interact with the database."""
     def add_flight(self, values: tuple):
         self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
         self.connection.commit()
@@ -31,19 +33,24 @@ class Model:
         return self.cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?", identification).fetchone()
 
     def get_flights(self):
-        return self.cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
+        return self.cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_met"
+                                   "hod, cost, epoch FROM flights;").fetchall()
 
     def get_flights_in_range(self, ranges: tuple) -> tuple:
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);",
+                                   ranges).fetchone()
 
     def get_freights(self):
-        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
+        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch"
+                                   " FROM freights;").fetchall()
 
     def get_freights_in_range(self, ranges: tuple) -> tuple:
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);",
+                                   ranges).fetchone()
 
     def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
-        return self.cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;", identification).fetchone()
+        return (self.cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;", identification)
+                .fetchone())
 
     def get_name(self, identification: tuple) -> tuple:
         return self.cursor.execute("SELECT name FROM users WHERE identification = ?", identification).fetchone()

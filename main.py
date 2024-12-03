@@ -9,7 +9,9 @@ if __name__ == "__main__":
     try:
         model = Model()
     except FileNotFoundError:
-        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.")
+        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), "Error crítico", "La base de datos no existe.", QtWidgets.
+                                       QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.
+                                       NoButton)
         sys.exit(1)
     viewModel = ViewModel(model)
     view = View(viewModel)

@@ -1,3 +1,4 @@
+"""Provides the ViewModel class to interact between the Model and View classes."""
 import base64
 import json
 import uuid
@@ -6,6 +7,7 @@ from .model import Model
 
 
 class ViewModel:
+    """Class to interact between the Model and View classes."""
     def add_flight(self, values: tuple):
         self.model.add_flight((str(uuid.uuid4()),) + values)
 

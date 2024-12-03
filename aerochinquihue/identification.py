@@ -1,17 +1,23 @@
+"""Provides the Identification class to interact with identifications."""
 # pylint: disable=R0903
+
+
 class Identification:
+    """Class to interact with identifications."""
     def __init__(self, identification: str):
         if not self._is_identification_valid(identification):
             raise ValueError("Invalid identification")
         self.identification = identification
 
     def get_raw_identification(self):
+        """Removes the verification digit from the provided identification and returns it as an integer."""
         return int(self.identification.replace('-', '').replace('.', '')[:-1])
 
     @staticmethod
     def _is_identification_valid(identification: str):
         identification = identification.replace('-', '').replace('.', '')
-        if identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
+        if (identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.
+                replace('K', '').replace('k', '').isnumeric()):
             return False
         multiplier = 2
         result = 0
