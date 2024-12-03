@@ -133,7 +133,7 @@ Solo para uso interno.
 
 * [ ] Pasar toda la interfaz a archivos .ui en vez de hacerlo todo manual
 
-* [ ] Revisar algoritmo rut
+* [x] Revisar algoritmo rut
 
 * [x] Mejorar validación
 

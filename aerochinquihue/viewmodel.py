@@ -2,6 +2,7 @@ import base64
 import json
 import uuid
 import pyescrypt
+from .model import Model
 
 
 class ViewModel:
@@ -17,9 +18,6 @@ class ViewModel:
     def delete_freight(self, freight_uuid: str):
         self.model.delete_freight((freight_uuid,))
 
-    def does_user_exist(self, identification: int) -> bool:
-        return self.model.does_user_exist((identification,))
-
     def get_airplanes(self):
         return self.resultset_to_list(self.model.get_airplanes())
 
@@ -29,19 +27,19 @@ class ViewModel:
     def get_flight_count(self, identification: int) -> int:
         return self.model.get_flight_count((identification,))[0]
 
-    def get_flights(self) -> list:
+    def get_flights(self):
         return self.model.get_flights()
 
     def get_flights_in_range(self, start_range: int, end_range: int) -> int:
         return self.model.get_flights_in_range((start_range, end_range))[0]
 
-    def get_freights(self) -> list:
+    def get_freights(self):
         return self.model.get_freights()
 
     def get_freights_in_range(self, start_range: int, end_range: int) -> int:
         return self.model.get_freights_in_range((start_range, end_range))[0]
 
-    def get_name(self, identification: int) -> int:
+    def get_name(self, identification: int) -> str:
         return self.model.get_name((identification,))[0]
 
     def get_payment_methods(self):
@@ -52,8 +50,9 @@ class ViewModel:
 
     def is_password_valid(self, identification: int, password: str):
         hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
+        result = self.model.get_hashed_password_and_salt((identification,))
         try:
-            hasher.compare(bytes(password, "utf-8"), base64.b64decode(self.model.get_hashed_password((identification,))[0]), base64.b64decode(self.model.get_password_salt((identification,))[0]))
+            hasher.compare(bytes(password, "utf-8"), base64.b64decode(result[0]), base64.b64decode(result[1]))
         except pyescrypt.WrongPassword:
             return False
         return True
@@ -65,5 +64,5 @@ class ViewModel:
             results.append(result[0])
         return results
 
-    def __init__(self, model):
+    def __init__(self, model: Model):
         self.model = model
