@@ -18,18 +18,19 @@ if len(sys.argv) < 3:
 if len(sys.argv) < 4:
     print("You need to specify a password.")
     sys.exit(3)
-if not Identification.is_identification_valid(sys.argv[2]):
+try:
+    identification = Identification(sys.argv[2])
+except ValueError:
     print("You need to specify a valid identification.")
     sys.exit(4)
 # Load environment variables and connect to database
 dotenv.load_dotenv()
 connection = sqlite3.connect(os.getenv("DATABASE_FILENAME"))
 cursor = connection.cursor()
-# Begin hashing and salting the password
+# Hash the password
 hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
-password = bytes(sys.argv[3], "utf-8")
 salt = secrets.token_bytes(32)
-hashed_password = hasher.digest(password, salt)
-# Execute database query and commit changes to database
-cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (Identification(sys.argv[2]).get_raw_identification(), sys.argv[1], base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
+hashed_password = hasher.digest(bytes(sys.argv[3], "utf-8"), salt)
+# Update database and commit changes
+cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (identification.get_raw_identification(), sys.argv[1], base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
 connection.commit()
