@@ -1,9 +1,17 @@
-# pylint: disable=I1101,R0903
-# R0903 IS SUBJECT TO REVISION. IT IS BY NO MEANS A PERMANENT EXCLUSION.
+# pylint: disable=I1101
 import os
-from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
 from .viewmodel import ViewModel
+
+
+class BaseWidget(QtUiTools.QUiLoader):
+    def __init__(self, path):
+        super().__init__()
+        self.ui_widget = self.load(path)
+
+    def show(self):
+        self.ui_widget.show()
 
 
 class ClientWidget(QtWidgets.QWidget):
@@ -162,63 +170,42 @@ class ClientWidget(QtWidgets.QWidget):
         self.flight_button.click()
 
 
-class ManagerAuthenticationWidget(QtWidgets.QWidget):
+class ManagerAuthenticationWidget(BaseWidget):
     def handle_ok_button(self):
-        password = self.password.text()
-        self.password.setText('')
+        password = self.ui_widget.password.text()
+        self.ui_widget.password.setText('')
         try:
-            Identification(self.identification.text())
+            identification = Identification(self.ui_widget.identification.text())
         except ValueError:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return
-        if not self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), password):
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+        if not self.viewmodel.is_password_valid(identification.get_raw_identification(), password):
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return
-        QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido, {self.viewmodel.get_name(Identification(self.identification.text()).get_raw_identification())}.")
+        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self.viewmodel.get_name(identification.get_raw_identification())}.")
         self.widget = ManagerSummaryWidget(self.viewmodel)
         self.widget.show()
 
     def handle_reveal_password_button(self):
-        if self.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Password:
-            self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Normal)
-            self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-hide-svgrepo-com.svg")))
-        elif self.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Normal:
-            self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
-            self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
+        if self.ui_widget.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Password:
+            self.ui_widget.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Normal)
+            self.ui_widget.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-hide-svgrepo-com.svg")))
+        elif self.ui_widget.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Normal:
+            self.ui_widget.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
+            self.ui_widget.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
 
     def __init__(self, viewmodel: ViewModel):
-        super().__init__()
+        super().__init__(os.path.join("ui", "ManagerAuthenticationWidget.ui"))
         self.viewmodel = viewmodel
         self.widget = None
-        # Window title
-        self.setWindowTitle("Inicio de sesión")
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
-        # Identification input
-        self.layout.addWidget(QtWidgets.QLabel("RUT"))
-        self.identification = QtWidgets.QLineEdit()
-        self.layout.addWidget(self.identification)
-        # Horizontal layout for password input
-        self.password_layout = QtWidgets.QHBoxLayout()
-        # Password input
-        self.layout.addWidget(QtWidgets.QLabel("Contraseña"))
-        self.password = QtWidgets.QLineEdit()
-        self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
-        self.password_layout.addWidget(self.password)
         # Reveal password button
-        self.reveal_password_button = QtWidgets.QPushButton()
-        self.reveal_password_button.clicked.connect(self.handle_reveal_password_button)
-        self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
-        self.password_layout.addWidget(self.reveal_password_button)
-        # Add password layout in main layout
-        self.layout.addLayout(self.password_layout)
+        self.ui_widget.reveal_password_button.clicked.connect(self.handle_reveal_password_button)
+        self.ui_widget.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
         # OK button
-        self.ok_button = QtWidgets.QPushButton("OK")
-        self.ok_button.clicked.connect(self.handle_ok_button)
-        self.layout.addWidget(self.ok_button)
+        self.ui_widget.ok_button.clicked.connect(self.handle_ok_button)
 
 
-class ManagerSummaryWidget(QtWidgets.QWidget):
+class ManagerSummaryWidget(BaseWidget):
     def handle_flight_table_button(self):
         self.widget = ManagerTableWidget("Registro de Vuelos", self.viewmodel.get_flights(), ["UUID", "Nombre", "RUT", "Destino", "Salida", "Avión", "Asientos", "Costo", "Medio de pago", "Epoch"], self.viewmodel.delete_flight)
         self.widget.show()
@@ -228,43 +215,19 @@ class ManagerSummaryWidget(QtWidgets.QWidget):
         self.widget.show()
 
     def __init__(self, viewmodel: ViewModel):
-        super().__init__()
+        super().__init__(os.path.join("ui", "ManagerSummaryWidget.ui"))
         self.viewmodel = viewmodel
         self.widget = None
-        # Window title
-        self.setWindowTitle("Administración")
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
-        # Daily sales label
-        self.layout.addWidget(QtWidgets.QLabel("Ventas Diarias"))
-        # Horizontal layout for flights and freights layouts
-        self.flights_freights_layout = QtWidgets.QHBoxLayout()
         # Epoch
-        epoch = QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime()).toSecsSinceEpoch()
-        # Vertical layout for flights
-        self.flights_layout = QtWidgets.QVBoxLayout()
-        self.flights_layout.addWidget(QtWidgets.QLabel("Vuelos"))
-        self.daily_flights = QtWidgets.QLabel(str(self.viewmodel.get_flights_in_range(epoch, epoch + 86399)))
-        self.flights_layout.addWidget(self.daily_flights)
-        self.flights_freights_layout.addLayout(self.flights_layout)
-        # Vertical layout for freights
-        self.freights_layout = QtWidgets.QVBoxLayout()
-        self.freights_layout.addWidget(QtWidgets.QLabel("Encomiendas"))
-        self.daily_freights = QtWidgets.QLabel(str(self.viewmodel.get_freights_in_range(epoch, epoch + 86399)))
-        self.freights_layout.addWidget(self.daily_freights)
-        self.flights_freights_layout.addLayout(self.freights_layout)
-        # Add horizontal layout in main layout
-        self.layout.addLayout(self.flights_freights_layout)
+        epoch = QtCore.QDateTime.currentSecsSinceEpoch()
+        # Daily flights
+        self.ui_widget.daily_flights.setText(str(self.viewmodel.get_flights_in_range(epoch, epoch + 86399)))
+        # Daily freights
+        self.ui_widget.daily_freights.setText(str(self.viewmodel.get_freights_in_range(epoch, epoch + 86399)))
         # Flight table button
-        self.flight_table_button = QtWidgets.QPushButton()
-        self.flight_table_button.clicked.connect(self.handle_flight_table_button)
-        self.flight_table_button.setText("Tabla de vuelos")
-        self.layout.addWidget(self.flight_table_button)
+        self.ui_widget.flight_table_button.clicked.connect(self.handle_flight_table_button)
         # Freight table button
-        self.freight_table_button = QtWidgets.QPushButton()
-        self.freight_table_button.clicked.connect(self.handle_freight_table_button)
-        self.freight_table_button.setText("Tabla de encomiendas")
-        self.layout.addWidget(self.freight_table_button)
+        self.ui_widget.freight_table_button.clicked.connect(self.handle_freight_table_button)
 
 
 class ManagerTableWidget(QtWidgets.QWidget):
@@ -301,7 +264,7 @@ class ManagerTableWidget(QtWidgets.QWidget):
         self.table.setCurrentCell(-1, -1)
 
 
-class View(QtWidgets.QWidget):
+class View(BaseWidget):
     def handle_employee_button(self):
         self.widget = ClientWidget(self.viewmodel)
         self.widget.show()
@@ -311,26 +274,12 @@ class View(QtWidgets.QWidget):
         self.widget.show()
 
     def __init__(self, viewmodel: ViewModel):
-        super().__init__()
+        super().__init__(os.path.join("ui", "View.ui"))
         self.viewmodel = viewmodel
         self.widget = None
-        # Window title
-        self.setWindowTitle("AeroChinquihue")
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
-        # Picture
-        self.picture_label = QtWidgets.QLabel()
-        self.picture_label.setPixmap(QtGui.QPixmap(os.path.join("assets", os.getenv("PICTURE_FILENAME"))).scaled(300, 300, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation))
-        self.layout.addWidget(self.picture_label)
-        # Welcome label
-        self.welcome_label = QtWidgets.QLabel("Vuelos en toda la Región de Los Lagos.")
-        self.welcome_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.layout.addWidget(self.welcome_label)
+        # Picture label
+        self.ui_widget.picture_label.setPixmap(QtGui.QPixmap(os.path.join("assets", os.getenv("PICTURE_FILENAME"))).scaled(300, 300, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.TransformationMode.SmoothTransformation))
         # Employee button
-        self.employee_button = QtWidgets.QPushButton("Acceso Empleados")
-        self.employee_button.clicked.connect(self.handle_employee_button)
-        self.layout.addWidget(self.employee_button)
+        self.ui_widget.employee_button.clicked.connect(self.handle_employee_button)
         # Manager button
-        self.manager_button = QtWidgets.QPushButton("Acceso Gerente")
-        self.manager_button.clicked.connect(self.handle_manager_button)
-        self.layout.addWidget(self.manager_button)
+        self.ui_widget.manager_button.clicked.connect(self.handle_manager_button)
