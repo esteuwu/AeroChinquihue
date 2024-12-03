@@ -219,7 +219,8 @@ class ManagerSummaryWidget(BaseWidget):
         self.viewmodel = viewmodel
         self.widget = None
         # Epoch
-        epoch = QtCore.QDateTime.currentSecsSinceEpoch()
+        epoch = QtCore.QDateTime()
+        epoch.setDate(QtCore.QDate.currentDate())
         # Daily flights
         self.ui_widget.daily_flights.setText(str(self.viewmodel.get_flights_in_range(epoch, epoch + 86399)))
         # Daily freights
