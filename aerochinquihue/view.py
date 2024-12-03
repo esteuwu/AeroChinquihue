@@ -2,6 +2,7 @@
 import os
 from PySide6 import QtCore, QtGui, QtWidgets
 from .identification import Identification
+from .viewmodel import ViewModel
 
 
 class ClientWidget(QtWidgets.QWidget):
@@ -43,7 +44,9 @@ class ClientWidget(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.")
             return
         # Identification validation
-        if not Identification.is_identification_valid(self.identification.text()):
+        try:
+            Identification(self.identification.text())
+        except ValueError:
             QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
             return
         # Flight
@@ -67,7 +70,7 @@ class ClientWidget(QtWidgets.QWidget):
                 self.viewmodel.add_freight((self.name.text(), Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), int(self.weight.text()), self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
 
-    def __init__(self, viewmodel):
+    def __init__(self, viewmodel: ViewModel):
         super().__init__()
         self.viewmodel = viewmodel
         # Window title
@@ -162,7 +165,12 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
     def handle_ok_button(self):
         password = self.password.text()
         self.password.setText('')
-        if not (Identification.is_identification_valid(self.identification.text()) and self.viewmodel.does_user_exist(Identification(self.identification.text()).get_raw_identification()) and self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), password)):
+        try:
+            Identification(self.identification.text())
+        except ValueError:
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
+            return
+        if not self.viewmodel.is_password_valid(Identification(self.identification.text()).get_raw_identification(), password):
             QtWidgets.QMessageBox.warning(self, "Advertencia", "RUT o contraseña inválidos.")
             return
         QtWidgets.QMessageBox.information(self, "Información", f"Bienvenido, {self.viewmodel.get_name(Identification(self.identification.text()).get_raw_identification())}.")
@@ -177,7 +185,7 @@ class ManagerAuthenticationWidget(QtWidgets.QWidget):
             self.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
             self.reveal_password_button.setIcon(QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
 
-    def __init__(self, viewmodel):
+    def __init__(self, viewmodel: ViewModel):
         super().__init__()
         self.viewmodel = viewmodel
         self.widget = None
@@ -218,7 +226,7 @@ class ManagerSummaryWidget(QtWidgets.QWidget):
         self.widget = ManagerTableWidget("Registro de Encomiendas", self.viewmodel.get_freights(), ["UUID", "Nombre", "RUT", "Destino", "Peso", "Costo", "Medio de pago", "Epoch"], self.viewmodel.delete_freight)
         self.widget.show()
 
-    def __init__(self, viewmodel):
+    def __init__(self, viewmodel: ViewModel):
         super().__init__()
         self.viewmodel = viewmodel
         self.widget = None
@@ -301,7 +309,7 @@ class View(QtWidgets.QWidget):
         self.widget = ManagerAuthenticationWidget(self.viewmodel)
         self.widget.show()
 
-    def __init__(self, viewmodel):
+    def __init__(self, viewmodel: ViewModel):
         super().__init__()
         self.viewmodel = viewmodel
         self.widget = None
