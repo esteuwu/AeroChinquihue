@@ -50,32 +50,32 @@ class ClientWidget(QtWidgets.QWidget):
     def handle_ok_button(self):
         # No. https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
         if len(self.name.text().strip()) == 0:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.")
             return
         # Identification validation
         try:
             Identification(self.identification.text())
         except ValueError:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.")
             return
         # Flight
         if self.flight_button.isChecked():
             # Seats validation - not final
             if not (self.seats.text().isnumeric() and int(self.seats.text()) > 0):
-                QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+                QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.")
                 return
             # Yes button
-            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton) == 16384:
+            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?") == 16384:
                 self.viewmodel.add_flight((self.name.text(), Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), QtCore.QDateTime(self.date.selectedDate(), QtCore.QTime()).toSecsSinceEpoch(), self.airplane.currentText(), int(self.seats.text()), self.viewmodel.get_prices(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
         # Freight
         elif self.freight_button.isChecked():
             # Weight validation - not final
             if not (self.weight.text().isnumeric() and int(self.weight.text()) > 0):
-                QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+                QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.")
                 return
             # Yes button
-            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.viewmodel.get_prices(self.destination.currentText())[1]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton) == 16384:
+            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.viewmodel.get_prices(self.destination.currentText())[1]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?") == 16384:
                 self.viewmodel.add_freight((self.name.text(), Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), int(self.weight.text()), self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
 
@@ -177,10 +177,10 @@ class ManagerAuthenticationWidget(BaseWidget):
         try:
             identification = Identification(self.ui_widget.identification.text())
         except ValueError:
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.")
             return
         if not self.viewmodel.is_password_valid(identification.get_raw_identification(), password):
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.")
             return
         QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self.viewmodel.get_name(identification.get_raw_identification())}.")
         self.widget = ManagerSummaryWidget(self.viewmodel)
@@ -233,9 +233,9 @@ class ManagerSummaryWidget(BaseWidget):
 class ManagerTableWidget(QtWidgets.QWidget):
     def handle_delete_entry_button(self):
         if self.table.currentRow() == -1:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "No hay ninguna entrada seleccionada.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "No hay ninguna entrada seleccionada.")
             return
-        if QtWidgets.QMessageBox.question(self, "Pregunta", f"Está seguro de borrar la entrada número {self.table.currentRow() + 1}?", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton) == 16384:
+        if QtWidgets.QMessageBox.question(self, "Pregunta", f"Está seguro de borrar la entrada número {self.table.currentRow() + 1}?") == 16384:
             self.delete_function(self.table.item(self.table.currentRow(), 0).text())
             self.table.removeRow(self.table.currentRow())
             self.table.setCurrentCell(-1, -1)
