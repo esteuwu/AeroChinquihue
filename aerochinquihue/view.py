@@ -6,7 +6,7 @@ from .viewmodel import ViewModel
 
 
 class BaseWidget(QtUiTools.QUiLoader):
-    def __init__(self, path):
+    def __init__(self, path: str):
         super().__init__()
         self.ui_widget = self.load(path)
 
