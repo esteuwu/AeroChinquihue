@@ -1,7 +1,7 @@
 # pylint: disable=C0114,I1101
 if __name__ == "__main__":
     # Imports
-    from AeroChinquihue import Model, View, ViewModel
+    from aerochinquihue import Model, View, ViewModel
     from PySide6 import QtWidgets
     import sys
     # Driver code

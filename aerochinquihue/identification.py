@@ -1,3 +1,4 @@
+# pylint: disable=R0903
 class Identification:
     def __init__(self, identification: str):
         if not self._is_identification_valid(identification):

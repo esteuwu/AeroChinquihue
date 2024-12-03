@@ -7,7 +7,7 @@ import sqlite3
 import sys
 import dotenv
 import pyescrypt
-from AeroChinquihue import Identification
+from aerochinquihue import Identification
 # Condition checks
 if len(sys.argv) < 2:
     print("You need to specify a name.")

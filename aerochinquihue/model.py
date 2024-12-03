@@ -1,7 +1,7 @@
-import dotenv
 import os
 import pathlib
 import sqlite3
+import dotenv
 
 
 class Model:
