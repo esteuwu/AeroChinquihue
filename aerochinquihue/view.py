@@ -221,6 +221,7 @@ class ManagerSummaryWidget(BaseWidget):
         # Epoch
         epoch = QtCore.QDateTime()
         epoch.setDate(QtCore.QDate.currentDate())
+        epoch = epoch.toSecsSinceEpoch()
         # Daily flights
         self.ui_widget.daily_flights.setText(str(self.viewmodel.get_flights_in_range(epoch, epoch + 86399)))
         # Daily freights
@@ -231,38 +232,33 @@ class ManagerSummaryWidget(BaseWidget):
         self.ui_widget.freight_table_button.clicked.connect(self.handle_freight_table_button)
 
 
-class ManagerTableWidget(QtWidgets.QWidget):
+class ManagerTableWidget(BaseWidget):
     def handle_delete_entry_button(self):
-        if self.table.currentRow() == -1:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "No hay ninguna entrada seleccionada.")
+        if self.ui_widget.table.currentRow() == -1:
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "No hay ninguna entrada seleccionada.")
             return
-        if QtWidgets.QMessageBox.question(self, "Pregunta", f"Está seguro de borrar la entrada número {self.table.currentRow() + 1}?") == 16384:
-            self.delete_function(self.table.item(self.table.currentRow(), 0).text())
-            self.table.removeRow(self.table.currentRow())
-            self.table.setCurrentCell(-1, -1)
-            QtWidgets.QMessageBox.information(self, "Información", "Entrada borrada con éxito.")
+        if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Está seguro de borrar la entrada número {self.ui_widget.table.currentRow() + 1}?") == 16384:
+            self.delete_function(self.ui_widget.table.item(self.ui_widget.table.currentRow(), 0).text())
+            self.ui_widget.table.removeRow(self.ui_widget.table.currentRow())
+            self.ui_widget.table.setCurrentCell(-1, -1)
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Entrada borrada con éxito.")
 
     def __init__(self, window_title, rows, columns, delete_function):
-        super().__init__()
+        super().__init__(os.path.join("ui", "ManagerTableWidget.ui"))
         self.delete_function = delete_function
         # Window title
-        self.setWindowTitle(window_title)
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
+        self.ui_widget.setWindowTitle(window_title)
         # Table
-        self.table = QtWidgets.QTableWidget(len(rows), len(columns))
-        self.table.setHorizontalHeaderLabels(columns)
-        self.table.setRowCount(len(rows))
+        self.ui_widget.table.setRowCount(len(rows))
+        self.ui_widget.table.setColumnCount(len(columns))
+        self.ui_widget.table.setHorizontalHeaderLabels(columns)
         for row_index, row_value in enumerate(rows):
             for column_index, column_value in enumerate(row_value):
-                self.table.setItem(row_index, column_index, QtWidgets.QTableWidgetItem(str(column_value)))
-        self.layout.addWidget(self.table)
+                self.ui_widget.table.setItem(row_index, column_index, QtWidgets.QTableWidgetItem(str(column_value)))
         # Delete entry button
-        self.delete_entry_button = QtWidgets.QPushButton("Borrar entrada")
-        self.delete_entry_button.clicked.connect(self.handle_delete_entry_button)
-        self.layout.addWidget(self.delete_entry_button)
+        self.ui_widget.delete_entry_button.clicked.connect(self.handle_delete_entry_button)
         # Do not select the first entry if there is one by default
-        self.table.setCurrentCell(-1, -1)
+        self.ui_widget.table.setCurrentCell(-1, -1)
 
 
 class View(BaseWidget):
