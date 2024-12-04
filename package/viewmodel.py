@@ -1,7 +1,9 @@
 """Provides the ViewModel class to interact between the Model and View classes."""
+# pylint: disable=C0123
 import base64
 import json
 import time
+import types
 import uuid
 import pyescrypt
 from .model import Model
@@ -54,6 +56,8 @@ class ViewModel:
     def is_password_valid(self, identification: int, password: str):
         hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
         result = self.model.get_hashed_password_and_salt((identification,))
+        if type(result) is types.NoneType:
+            raise ValueError("Specified identification does not have an user in the database")
         try:
             hasher.compare(bytes(password, "utf-8"), base64.b64decode(result[0]), base64.b64decode(result[1]))
         except pyescrypt.WrongPassword:
