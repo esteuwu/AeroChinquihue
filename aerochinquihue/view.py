@@ -85,9 +85,6 @@ class ClientWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "ClientWidget.ui"))
         self.viewmodel = viewmodel
-        # Button group
-        self.ui_widget.button_group = QtWidgets.QButtonGroup()
-        self.ui_widget.button_group.setExclusive(True)
         # Flight button
         self.ui_widget.flight_button.clicked.connect(self.handle_flight_button)
         # Freight button
