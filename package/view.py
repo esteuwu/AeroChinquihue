@@ -87,6 +87,8 @@ class ClientWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "ClientWidget.ui"))
         self.viewmodel = viewmodel
+        # Window title
+        self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
         # Flight button
         self.ui_widget.flight_button.clicked.connect(self.handle_flight_button)
         # Freight button
@@ -212,6 +214,8 @@ class View(BaseWidget):
         super().__init__(os.path.join("ui", "View.ui"))
         self.viewmodel = viewmodel
         self.widget = None
+        # Window title
+        self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
         # Employee button
         self.ui_widget.employee_button.clicked.connect(self.handle_employee_button)
         # Manager button
