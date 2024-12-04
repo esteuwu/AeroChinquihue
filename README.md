@@ -123,6 +123,10 @@ Solo para uso interno.
 
 * [ ] Agregar algoritmo de hora de salida
 
+### Entre necesario y no tan prioritario
+
+* [ ] Convertir los valores como tal antes de mostrarlos en la tabla de gerente
+
 ### No tan prioritario
 
 * [ ] Agregar sistema de localización (borrar strings localizadas del código)
