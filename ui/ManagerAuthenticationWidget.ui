@@ -47,6 +47,10 @@
          <property name="text">
           <string/>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/eye-password-show-svgrepo-com.svg</normaloff>assets/eye-password-show-svgrepo-com.svg</iconset>
+         </property>
         </widget>
        </item>
       </layout>

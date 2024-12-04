@@ -1,6 +1,6 @@
 # AeroChinquihue
 
-![Imagen de AeroChinquihue](assets/AeroChinquihue.png)
+![Imagen de AeroChinquihue](assets/picture.png)
 
 Vuelos en toda la Región de Los Lagos.
 

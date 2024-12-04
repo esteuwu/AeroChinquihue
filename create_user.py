@@ -7,7 +7,7 @@ import sqlite3
 import sys
 import dotenv
 import pyescrypt
-from aerochinquihue import Identification
+from package import Identification
 # Condition checks
 if len(sys.argv) < 2:
     print("You need to specify a name.")
@@ -32,7 +32,5 @@ hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
 salt = secrets.token_bytes(32)
 hashed_password = hasher.digest(bytes(sys.argv[3], "utf-8"), salt)
 # Update database and commit changes
-cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (identification.get_raw_identification(), sys.argv[1], base64.
-                                                          b64encode(hashed_password).decode(), base64.b64encode(salt).
-                                                          decode()))
+cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?);", (identification.get_raw_identification(), sys.argv[1], base64.b64encode(hashed_password).decode(), base64.b64encode(salt).decode()))
 connection.commit()

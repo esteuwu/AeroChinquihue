@@ -1,6 +1,7 @@
 """Provides the ViewModel class to interact between the Model and View classes."""
 import base64
 import json
+import time
 import uuid
 import pyescrypt
 from .model import Model
@@ -9,10 +10,10 @@ from .model import Model
 class ViewModel:
     """Class to interact between the Model and View classes."""
     def add_flight(self, values: tuple):
-        self.model.add_flight((str(uuid.uuid4()),) + values)
+        self.model.add_flight((str(uuid.uuid4()),) + values + (0, int(time.time())))
 
     def add_freight(self, values: tuple):
-        self.model.add_freight((str(uuid.uuid4()),) + values)
+        self.model.add_freight((str(uuid.uuid4()),) + values + (0, int(time.time())))
 
     def delete_flight(self, flight_uuid: str):
         self.model.delete_flight((flight_uuid,))

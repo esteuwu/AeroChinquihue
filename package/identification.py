@@ -16,8 +16,7 @@ class Identification:
     @staticmethod
     def _is_identification_valid(identification: str):
         identification = identification.replace('-', '').replace('.', '')
-        if (identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.
-                replace('K', '').replace('k', '').isnumeric()):
+        if identification.count('K') + identification.count('k') > 1 or len(identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
             return False
         multiplier = 2
         result = 0

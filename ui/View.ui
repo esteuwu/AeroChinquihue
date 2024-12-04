@@ -19,7 +19,10 @@
      <item>
       <widget class="QLabel" name="picture_label">
        <property name="text">
-        <string>TextLabel</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>assets/picture.scaled.png</pixmap>
        </property>
       </widget>
      </item>
