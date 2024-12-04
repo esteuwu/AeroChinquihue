@@ -16,161 +16,91 @@ class BaseWidget(QtUiTools.QUiLoader):
         self.ui_widget.show()
 
 
-class ClientWidget(QtWidgets.QWidget):
+class ClientWidget(BaseWidget):
     """Class that configures and shows the client widget."""
     def handle_flight_button(self):
         # Show date and time pickers
-        self.date_label.show()
-        self.date.show()
-        self.time_label.show()
-        self.time.show()
+        self.ui_widget.date_label.show()
+        self.ui_widget.date.show()
+        self.ui_widget.time_label.show()
+        self.ui_widget.time.show()
         # Show airplane widget
-        self.airplane_label.show()
-        self.airplane.show()
+        self.ui_widget.airplane_label.show()
+        self.ui_widget.airplane.show()
         # Hide weight widgets
-        self.weight_label.hide()
-        self.weight.hide()
+        self.ui_widget.weight_label.hide()
+        self.ui_widget.weight.hide()
         # Show seats widgets
-        self.seats_label.show()
-        self.seats.show()
+        self.ui_widget.seats_label.show()
+        self.ui_widget.seats.show()
 
     def handle_freight_button(self):
         # Hide date and time pickers
-        self.date_label.hide()
-        self.date.hide()
-        self.time_label.hide()
-        self.time.hide()
+        self.ui_widget.date_label.hide()
+        self.ui_widget.date.hide()
+        self.ui_widget.time_label.hide()
+        self.ui_widget.time.hide()
         # Hide airplane widget
-        self.airplane_label.hide()
-        self.airplane.hide()
+        self.ui_widget.airplane_label.hide()
+        self.ui_widget.airplane.hide()
         # Hide seats widgets
-        self.seats_label.hide()
-        self.seats.hide()
+        self.ui_widget.seats_label.hide()
+        self.ui_widget.seats.hide()
         # Show weight widgets
-        self.weight_label.show()
-        self.weight.show()
+        self.ui_widget.weight_label.show()
+        self.ui_widget.weight.show()
 
     def handle_ok_button(self):
         # No. https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
-        if len(self.name.text().strip()) == 0:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+        if len(self.ui_widget.name.text().strip()) == 0:
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         # Identification validation
         try:
-            Identification(self.identification.text())
+            Identification(self.ui_widget.identification.text())
         except ValueError:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         # Flight
-        if self.flight_button.isChecked():
+        if self.ui_widget.flight_button.isChecked():
             # Seats validation - not final
-            if not (self.seats.text().isnumeric() and int(self.seats.text()) > 0):
-                QtWidgets.QMessageBox.warning(self, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            if not (self.ui_widget.seats.text().isnumeric() and int(self.ui_widget.seats.text()) > 0):
+                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
                 return
             # Yes button
-            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Número de pasajeros: {self.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[0] * int(self.seats.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
-                self.viewmodel.add_flight((self.name.text(), Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), QtCore.QDateTime(self.date.selectedDate(), QtCore.QTime()).toSecsSinceEpoch(), self.airplane.currentText(), int(self.seats.text()), self.viewmodel.get_prices(self.destination.currentText())[0] * int(self.seats.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
-                QtWidgets.QMessageBox.information(self, "Información", "Vuelo reservado con éxito.")
+            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Número de pasajeros: {self.ui_widget.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
+                self.viewmodel.add_flight((self.ui_widget.name.text(), Identification(self.ui_widget.identification.text()).get_raw_identification(), self.ui_widget.destination.currentText(), QtCore.QDateTime(self.ui_widget.date.selectedDate(), QtCore.QTime()).toSecsSinceEpoch(), self.ui_widget.airplane.currentText(), int(self.ui_widget.seats.text()), self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text()), self.ui_widget.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
+                QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
         # Freight
-        elif self.freight_button.isChecked():
+        elif self.ui_widget.freight_button.isChecked():
             # Weight validation - not final
-            if not (self.weight.text().isnumeric() and int(self.weight.text()) > 0):
-                QtWidgets.QMessageBox.warning(self, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            if not (self.ui_widget.weight.text().isnumeric() and int(self.ui_widget.weight.text()) > 0):
+                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
                 return
             # Yes button
-            if QtWidgets.QMessageBox.question(self, "Pregunta", f"Peso: {self.weight.text()} kg\nCosto por kilo: ${self.viewmodel.get_prices(self.destination.currentText())[1]}\nSubtotal: ${self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
-                self.viewmodel.add_freight((self.name.text(), Identification(self.identification.text()).get_raw_identification(), self.destination.currentText(), int(self.weight.text()), self.viewmodel.get_prices(self.destination.currentText())[1] * int(self.weight.text()), self.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
-                QtWidgets.QMessageBox.information(self, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
+            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Peso: {self.ui_widget.weight.text()} kg\nCosto por kilo: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[1]}\nSubtotal: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[1] * int(self.ui_widget.weight.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
+                self.viewmodel.add_freight((self.ui_widget.name.text(), Identification(self.ui_widget.identification.text()).get_raw_identification(), self.ui_widget.destination.currentText(), int(self.ui_widget.weight.text()), self.viewmodel.get_prices(self.ui_widget.destination.currentText())[1] * int(self.ui_widget.weight.text()), self.ui_widget.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
+                QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
 
     def __init__(self, viewmodel: ViewModel):
-        super().__init__()
+        super().__init__(os.path.join("ui", "ClientWidget.ui"))
         self.viewmodel = viewmodel
-        # Window title
-        self.setWindowTitle("AeroChinquihue")
-        # Main layout
-        self.layout = QtWidgets.QVBoxLayout(self)
-        # Service label
-        self.layout.addWidget(QtWidgets.QLabel("Servicio"))
-        # Button group
-        self.button_group = QtWidgets.QButtonGroup()
-        self.button_group.setExclusive(True)
-        # Horizontal layout for button group
-        self.button_group_layout = QtWidgets.QHBoxLayout()
         # Flight button
-        self.flight_button = QtWidgets.QRadioButton("Vuelo")
-        self.flight_button.clicked.connect(self.handle_flight_button)
-        self.button_group.addButton(self.flight_button)
-        self.button_group_layout.addWidget(self.flight_button)
+        self.ui_widget.flight_button.clicked.connect(self.handle_flight_button)
         # Freight button
-        self.freight_button = QtWidgets.QRadioButton("Encomienda")
-        self.freight_button.clicked.connect(self.handle_freight_button)
-        self.button_group.addButton(self.freight_button)
-        self.button_group_layout.addWidget(self.freight_button)
-        # Add button group layout to main layout
-        self.layout.addLayout(self.button_group_layout)
-        # Name input
-        self.layout.addWidget(QtWidgets.QLabel("Nombre"))
-        self.name = QtWidgets.QLineEdit()
-        self.name.setPlaceholderText("ej. John Doe")
-        self.layout.addWidget(self.name)
-        # Identification input
-        self.layout.addWidget(QtWidgets.QLabel("RUT"))
-        self.identification = QtWidgets.QLineEdit()
-        self.identification.setPlaceholderText("ej. 12.345.678-5")
-        self.layout.addWidget(self.identification)
+        self.ui_widget.freight_button.clicked.connect(self.handle_freight_button)
         # Destination list
-        self.layout.addWidget(QtWidgets.QLabel("Destino"))
-        self.destination = QtWidgets.QComboBox()
-        self.destination.addItems(self.viewmodel.get_destinations())
-        self.layout.addWidget(self.destination)
-        # Horizontal layout for date and time layouts
-        self.date_time_layout = QtWidgets.QHBoxLayout()
+        self.ui_widget.destination.addItems(self.viewmodel.get_destinations())
         # Vertical layout for date picker
-        self.date_layout = QtWidgets.QVBoxLayout()
-        self.date_label = QtWidgets.QLabel("Fecha de ida")
-        self.date_layout.addWidget(self.date_label)
-        self.date = QtWidgets.QCalendarWidget()
-        self.date.setMinimumDate(QtCore.QDate.currentDate())
-        self.date_layout.addWidget(self.date)
-        self.date_time_layout.addLayout(self.date_layout)
-        # Vertical layout for time picker
-        self.time_layout = QtWidgets.QVBoxLayout()
-        self.time_label = QtWidgets.QLabel("Hora de ida")
-        self.time_layout.addWidget(self.time_label)
-        self.time = QtWidgets.QListWidget()
-        self.time_layout.addWidget(self.time)
-        self.date_time_layout.addLayout(self.time_layout)
-        # Add date and time layout to main layout
-        self.layout.addLayout(self.date_time_layout)
+        self.ui_widget.date.setMinimumDate(QtCore.QDate.currentDate())
         # Airplane list
-        self.airplane_label = QtWidgets.QLabel("Avión")
-        self.layout.addWidget(self.airplane_label)
-        self.airplane = QtWidgets.QComboBox()
-        self.airplane.addItems(self.viewmodel.get_airplanes())
-        self.layout.addWidget(self.airplane)
-        # Seats
-        self.seats_label = QtWidgets.QLabel("Asientos")
-        self.layout.addWidget(self.seats_label)
-        self.seats = QtWidgets.QLineEdit()
-        self.seats.setPlaceholderText("ej. 1")
-        self.layout.addWidget(self.seats)
-        # Weight
-        self.weight_label = QtWidgets.QLabel("Peso (en kilogramos)")
-        self.layout.addWidget(self.weight_label)
-        self.weight = QtWidgets.QLineEdit()
-        self.weight.setPlaceholderText("ej. 10")
-        self.layout.addWidget(self.weight)
+        self.ui_widget.airplane.addItems(self.viewmodel.get_airplanes())
         # Payment method
-        self.layout.addWidget(QtWidgets.QLabel("Medio de pago"))
-        self.payment_method = QtWidgets.QComboBox()
-        self.payment_method.addItems(self.viewmodel.get_payment_methods())
-        self.layout.addWidget(self.payment_method)
+        self.ui_widget.payment_method.addItems(self.viewmodel.get_payment_methods())
         # OK button
-        self.ok_button = QtWidgets.QPushButton("OK")
-        self.ok_button.clicked.connect(self.handle_ok_button)
-        self.layout.addWidget(self.ok_button)
+        self.ui_widget.ok_button.clicked.connect(self.handle_ok_button)
         # Set default service
-        self.flight_button.click()
+        self.ui_widget.flight_button.click()
 
 
 class ManagerAuthenticationWidget(BaseWidget):
