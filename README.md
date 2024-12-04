@@ -109,7 +109,7 @@ Solo para uso interno.
 
 ### Necesario
 
-* [ ] Documentar el código hasta el commit 693bb7b (Esteban)
+* [ ] Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
 
 * [ ] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50% implementado; implementado en Model y ViewModel con la función get_flight_count(), falta implementarlo en View)
 
