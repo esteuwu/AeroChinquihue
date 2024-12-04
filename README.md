@@ -12,8 +12,7 @@ En caso de que quieras desarrollar, instala las dependencias necesarias ejecutan
 
 > pip install -r requirements.dev.txt -r requirements.txt
 
-En caso de que solo quieras ejecutar el programa, instala las dependencias
-necesarias ejecutando:
+En caso de que solo quieras ejecutar el programa, instala las dependencias necesarias ejecutando:
 
 > pip install -r requirements.txt
 
@@ -30,8 +29,7 @@ necesarias ejecutando:
 
 ### Creando la base de datos
 
-Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema
-y ejecutar un comando tal como:
+Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema y ejecutar un comando tal como:
 
 > sqlite3 database.db < sql/createDatabase.sql
 
@@ -43,9 +41,7 @@ Ejemplo:
 
 > python create_user.py "John Doe" 12.345.678-5 JohnDoe123
 
-Las contraseñas están sujetas a hashing y salting mediante el uso de
-[yescrypt](https://en.wikipedia.org/wiki/Yescrypt) (sitio web en inglés), por
-lo tanto, no se guardan en texto plano en la base de datos.
+Las contraseñas están sujetas a hashing y salting mediante el uso de [yescrypt](https://en.wikipedia.org/wiki/Yescrypt) (sitio web en inglés), por lo tanto, no se guardan en texto plano en la base de datos.
 
 Los usuarios lucen así en la base de datos:
 
@@ -65,8 +61,7 @@ Los usuarios se guardan de la siguiente manera:
 
 * hashed_password: Contraseña hasheada junto con la respectiva salt, nuevamente
 
-* salt: Salt de la contraseña codificada en [base64](https://es.wikipedia.org/wiki/Base64).
-codificada en base64.
+* salt: Salt de la contraseña codificada en [base64](https://es.wikipedia.org/wiki/Base64). codificada en base64.
 
 ## Estructura de archivos
 
@@ -74,8 +69,7 @@ codificada en base64.
 
 ### Paquete mvvm
 
-Contiene código relacionado con el patrón de arquitectura
-[Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+Contiene código relacionado con el patrón de arquitectura [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
 
 * model.py: **Modelo**. Contiene funcionalidad relacionada con la base de datos (SQLite).
 
@@ -113,28 +107,28 @@ Contiene código relacionado con el patrón de arquitectura
 
 Solo para uso interno.
 
-* [ ] Agregar sistema de localización (borrar strings localizadas del código)
+### Necesario
 
-* [x] Implementar contraseñas mediante hashing y salting, usando yescrypt
+* [ ] Documentar el código hasta el commit 693bb7b (Esteban)
+
+* [ ] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50% implementado; implementado en Model y ViewModel con la función get_flight_count(), falta implementarlo en View)
+
+* [ ] Agregar límites de pasajeros y peso para cada avión y agregar validaciones correspondientes
+
+* [ ] Mostrar una fecha de entrega para encomiendas al confirmar la reserva
+
+* [ ] Agregar opción de obviar pago utilizando credenciales de gerente en vista de empleados (agregar callback functions)
+
+* [ ] Permitir la modificación de valores en la vista de gerente y agregar validaciones correspondientes
+
+* [ ] Agregar algoritmo de hora de salida
+
+### No tan prioritario
+
+* [ ] Agregar sistema de localización (borrar strings localizadas del código)
 
 * [ ] Bloquear el tamaño de la ventana
 
 * [ ] Hacer que todo ocurra en una sola ventana (puede chocar con n.º 3)
 
-* [ ] Descuento de 10%
-
-* [ ] Conectar datepicker y hacer tabla de frecuencia
-
-* [ ] Agregar algoritmo de hora de salida
-
-* [x] Agregar botón de revelar contraseña
-
-* [ ] Usar validadores en QLineEdit's
-
-* [ ] Pasar toda la interfaz a archivos .ui en vez de hacerlo todo manual
-
-* [x] Revisar algoritmo rut
-
-* [x] Mejorar validación
-
-* [ ] Avisar de que solo se puede seleccionar una entrada para Gerente
+* [ ] Avisar de que solo se puede seleccionar una entrada para Gerente, posiblemente usando QTableWidget.selectedRanges() (dificultad: media)
