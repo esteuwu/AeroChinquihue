@@ -53,7 +53,7 @@ class ClientWidget(BaseWidget):
     def handle_ok_button(self):
         # No. https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
         if len(self.ui_widget.name.text().strip()) == 0:
-            QtWidgets.QMessageBox.warning(self, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         # Identification validation
         try:
@@ -68,7 +68,7 @@ class ClientWidget(BaseWidget):
                 QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
                 return
             # Yes button
-            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Número de pasajeros: {self.ui_widget.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text())}\nDesea confirmar la reserva?") == 16384:
+            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Número de pasajeros: {self.ui_widget.seats.text()}\nCosto por pasajero: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0]}\nSubtotal: ${self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
                 self.viewmodel.add_flight((self.ui_widget.name.text(), Identification(self.ui_widget.identification.text()).get_raw_identification(), self.ui_widget.destination.currentText(), QtCore.QDateTime(self.ui_widget.date.selectedDate(), QtCore.QTime()).toSecsSinceEpoch(), self.ui_widget.airplane.currentText(), int(self.ui_widget.seats.text()), self.viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text()), self.ui_widget.payment_method.currentText(), QtCore.QDateTime.currentSecsSinceEpoch()))
                 QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
         # Freight
@@ -123,7 +123,8 @@ class ManagerAuthenticationWidget(BaseWidget):
                                           QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.
                                           NoButton)
             return
-        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self.viewmodel.get_name(identification.get_raw_identification())}.")
+        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self.viewmodel.get_name(
+            identification.get_raw_identification())}.")
         self.widget = ManagerSummaryWidget(self.viewmodel)
         self.widget.show()
 
