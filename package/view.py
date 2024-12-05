@@ -1,5 +1,6 @@
 """Provides the View class to graphically interact with the program."""
 # pylint: disable=I1101,R0903
+import collections
 import os
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
@@ -16,8 +17,8 @@ class BaseWidget(QtUiTools.QUiLoader):
         self.ui_widget.show()
 
 
-class ClientWidget(BaseWidget):
-    """Class that configures and shows the client widget."""
+class EmployeeWidget(BaseWidget):
+    """Class that loads and shows the employee widget."""
     def handle_flight_button(self):
         # Show airplane widget
         self.ui_widget.airplane_label.show()
@@ -85,7 +86,7 @@ class ClientWidget(BaseWidget):
                 QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
 
     def __init__(self, viewmodel: ViewModel):
-        super().__init__(os.path.join("ui", "ClientWidget.ui"))
+        super().__init__(os.path.join("ui", "EmployeeWidget.ui"))
         self.viewmodel = viewmodel
         # Window title
         self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
@@ -187,7 +188,7 @@ class ManagerTableWidget(BaseWidget):
             self.ui_widget.table.setCurrentCell(-1, -1)
             QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Entrada borrada con éxito.")
 
-    def __init__(self, window_title, rows, columns, delete_function):
+    def __init__(self, window_title, rows, columns, delete_function: collections.abc.Callable[[str], None]):
         super().__init__(os.path.join("ui", "ManagerTableWidget.ui"))
         self.delete_function = delete_function
         # Window title
@@ -208,7 +209,7 @@ class ManagerTableWidget(BaseWidget):
 class View(BaseWidget):
     """Class to graphically interact with the program."""
     def handle_employee_button(self):
-        self.widget = ClientWidget(self.viewmodel)
+        self.widget = EmployeeWidget(self.viewmodel)
         self.widget.show()
 
     def handle_manager_button(self):

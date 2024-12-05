@@ -10,7 +10,6 @@ class Identification:
         self.identification = identification
 
     def get_raw_identification(self):
-        """Removes the verification digit from the provided identification and returns it as an integer."""
         return int(self.identification.replace('-', '').replace('.', '')[:-1])
 
     @staticmethod
