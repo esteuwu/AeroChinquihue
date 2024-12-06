@@ -35,7 +35,10 @@ CREATE TABLE flights (
     seats INTEGER,
     payment_method TEXT,
     cost INTEGER,
-    epoch INTEGER
+    epoch INTEGER,
+    FOREIGN KEY (airplane) REFERENCES airplanes (airplane),
+    FOREIGN KEY (destination) REFERENCES destinations (destination),
+    FOREIGN KEY (payment_method) REFERENCES payment_methods (payment_method)
 );
 
 -- Freights
@@ -47,7 +50,9 @@ CREATE TABLE freights (
     weight INTEGER,
     payment_method TEXT,
     cost INTEGER,
-    epoch INTEGER
+    epoch INTEGER,
+    FOREIGN KEY (destination) REFERENCES destinations (destination),
+    FOREIGN KEY (payment_method) REFERENCES payment_methods (payment_method)
 );
 
 -- Payment Methods

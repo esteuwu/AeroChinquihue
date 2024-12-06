@@ -14,6 +14,7 @@ class Model:
             raise FileNotFoundError("Database does not exist")
         self._connection = sqlite3.connect(database_filename)
         self._cursor = self._connection.cursor()
+        self._cursor.execute("PRAGMA foreign_keys = 1;")
 
     def add_flight(self, values: tuple):
         """
