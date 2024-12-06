@@ -7,14 +7,14 @@ class Identification:
     def __init__(self, identification: str):
         if not self._is_identification_valid(identification):
             raise ValueError("Invalid identification")
-        self.identification = identification
+        self._identification = identification
 
     def get_raw_identification(self):
         """
         Returns the raw identification.
         :return: Identification with no verification digit
         """
-        return int(self.identification.replace('-', '').replace('.', '')[:-1])
+        return int(self._identification.replace('-', '').replace('.', '')[:-1])
 
     @staticmethod
     def _is_identification_valid(identification: str):

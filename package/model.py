@@ -12,8 +12,8 @@ class Model:
         database_filename = os.getenv("DATABASE_FILENAME")
         if not pathlib.Path(database_filename).exists():
             raise FileNotFoundError("Database does not exist")
-        self.connection = sqlite3.connect(database_filename)
-        self.cursor = self.connection.cursor()
+        self._connection = sqlite3.connect(database_filename)
+        self._cursor = self._connection.cursor()
 
     def add_flight(self, values: tuple):
         """
@@ -21,8 +21,8 @@ class Model:
         :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
         :return: Nothing
         """
-        self.cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
-        self.connection.commit()
+        self._cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
+        self._connection.commit()
 
     def add_freight(self, values: tuple):
         """
@@ -30,8 +30,8 @@ class Model:
         :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
         :return: Nothing
         """
-        self.cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
-        self.connection.commit()
+        self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
+        self._connection.commit()
 
     def delete_flight(self, uuid: tuple):
         """
@@ -39,8 +39,8 @@ class Model:
         :param uuid: UUID to delete from the table
         :return: Nothing
         """
-        self.cursor.execute("DELETE FROM flights WHERE uuid = ?;", uuid)
-        self.connection.commit()
+        self._cursor.execute("DELETE FROM flights WHERE uuid = ?;", uuid)
+        self._connection.commit()
 
     def delete_freight(self, uuid: tuple):
         """
@@ -48,22 +48,22 @@ class Model:
         :param uuid: UUID to delete from the table
         :return: Nothing
         """
-        self.cursor.execute("DELETE FROM freights WHERE uuid = ?;", uuid)
-        self.connection.commit()
+        self._cursor.execute("DELETE FROM freights WHERE uuid = ?;", uuid)
+        self._connection.commit()
 
     def get_airplanes(self):
         """
         Returns all the airplanes in the database's airplanes table.
         :return: Airplanes
         """
-        return self.cursor.execute("SELECT airplane FROM airplanes;").fetchall()
+        return self._cursor.execute("SELECT airplane FROM airplanes;").fetchall()
 
     def get_destinations(self):
         """
         Returns all the destinations in the database's destinations table.
         :return: Destinations
         """
-        return self.cursor.execute("SELECT destination FROM destinations;").fetchall()
+        return self._cursor.execute("SELECT destination FROM destinations;").fetchall()
 
     def get_flight_count(self, identification: tuple) -> tuple:
         """
@@ -71,7 +71,7 @@ class Model:
         :param identification: Raw identification
         :return: Flight count
         """
-        return self.cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?;", identification).fetchone()
+        return self._cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?;", identification).fetchone()
 
     def get_flight_count_in_range(self, ranges: tuple) -> tuple:
         """
@@ -79,14 +79,14 @@ class Model:
         :param ranges: Start and end ranges
         :return: Flight count
         """
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
 
     def get_flights(self):
         """
         Returns all the registered flights in the database's flights table.
         :return: Flights
         """
-        return self.cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
 
     def get_freight_count_in_range(self, ranges: tuple) -> tuple:
         """
@@ -94,14 +94,14 @@ class Model:
         :param ranges: Start and end ranges
         :return: Flight count
         """
-        return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
 
     def get_freights(self):
         """
         Returns all the registered freights in the database's freights table.
         :return: Freights
         """
-        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
 
     def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
         """
@@ -109,7 +109,7 @@ class Model:
         :param identification: Raw identification
         :return: Hashed password and salt
         """
-        return self.cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;", identification).fetchone()
+        return self._cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;", identification).fetchone()
 
     def get_name(self, identification: tuple) -> tuple:
         """
@@ -117,14 +117,14 @@ class Model:
         :param identification: Raw identification
         :return: Name
         """
-        return self.cursor.execute("SELECT name FROM users WHERE identification = ?;", identification).fetchone()
+        return self._cursor.execute("SELECT name FROM users WHERE identification = ?;", identification).fetchone()
 
     def get_payment_methods(self):
         """
         Returns all available payment methods.
         :return: Payment methods
         """
-        return self.cursor.execute("SELECT payment_method FROM payment_methods;").fetchall()
+        return self._cursor.execute("SELECT payment_method FROM payment_methods;").fetchall()
 
     def get_prices(self, destination: tuple) -> tuple:
         """
@@ -132,4 +132,4 @@ class Model:
         :param destination: Destination to query
         :return: Prices
         """
-        return self.cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
+        return self._cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
