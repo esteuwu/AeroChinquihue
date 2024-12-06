@@ -10,6 +10,10 @@ class Identification:
         self.identification = identification
 
     def get_raw_identification(self):
+        """
+        Returns the raw identification.
+        :return: Identification with no verification digit
+        """
         return int(self.identification.replace('-', '').replace('.', '')[:-1])
 
     @staticmethod
