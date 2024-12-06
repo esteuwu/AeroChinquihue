@@ -7,6 +7,14 @@ import dotenv
 
 class Model:
     """Class to interact with the database."""
+    def __init__(self):
+        dotenv.load_dotenv()
+        database_filename = os.getenv("DATABASE_FILENAME")
+        if not pathlib.Path(database_filename).exists():
+            raise FileNotFoundError("Database does not exist")
+        self.connection = sqlite3.connect(database_filename)
+        self.cursor = self.connection.cursor()
+
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
@@ -65,14 +73,7 @@ class Model:
         """
         return self.cursor.execute("SELECT COUNT() FROM flights WHERE identification = ?;", identification).fetchone()
 
-    def get_flights(self):
-        """
-        Returns all the registered flights in the database's flights table.
-        :return: Flights
-        """
-        return self.cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
-
-    def get_flights_in_range(self, ranges: tuple) -> tuple:
+    def get_flight_count_in_range(self, ranges: tuple) -> tuple:
         """
         Returns the count of the registered flights that are between the specified ranges.
         :param ranges: Start and end ranges
@@ -80,20 +81,27 @@ class Model:
         """
         return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
 
-    def get_freights(self):
+    def get_flights(self):
         """
-        Returns all the registered freights in the database's freights table.
-        :return: Freights
+        Returns all the registered flights in the database's flights table.
+        :return: Flights
         """
-        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
+        return self.cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
 
-    def get_freights_in_range(self, ranges: tuple) -> tuple:
+    def get_freight_count_in_range(self, ranges: tuple) -> tuple:
         """
         Returns the count of the registered freights that are between the specified ranges.
         :param ranges: Start and end ranges
         :return: Flight count
         """
         return self.cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+
+    def get_freights(self):
+        """
+        Returns all the registered freights in the database's freights table.
+        :return: Freights
+        """
+        return self.cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
 
     def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
         """
@@ -125,11 +133,3 @@ class Model:
         :return: Prices
         """
         return self.cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
-
-    def __init__(self):
-        dotenv.load_dotenv()
-        database_filename = os.getenv("DATABASE_FILENAME")
-        if not pathlib.Path(database_filename).exists():
-            raise FileNotFoundError("Database does not exist")
-        self.connection = sqlite3.connect(database_filename)
-        self.cursor = self.connection.cursor()
