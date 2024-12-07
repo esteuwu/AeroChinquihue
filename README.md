@@ -60,7 +60,9 @@ plano en la base de datos.
 
 ### Ejecutando el programa
 
-Basta con ejecutar el archivo main.py de la siguiente manera:
+Basta con solo ejecutar el archivo main.py.
+
+Ejemplo:
 
 > $ python main.py
 
