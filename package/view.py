@@ -134,7 +134,7 @@ class ManagerAuthenticationWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "ManagerAuthenticationWidget.ui"))
         self._viewmodel = viewmodel
-        self._widget = None
+        self._widget: ManagerSummaryWidget
         # Reveal password button
         self.ui_widget.reveal_password_button.clicked.connect(self._handle_reveal_password_button)
         # OK button
@@ -183,7 +183,7 @@ class ManagerSummaryWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "ManagerSummaryWidget.ui"))
         self._viewmodel = viewmodel
-        self._widget = None
+        self._widget: ManagerTableWidget
         # Epoch
         epoch = QtCore.QDateTime()
         epoch.setDate(QtCore.QDate.currentDate())
@@ -247,7 +247,7 @@ class View(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "View.ui"))
         self._viewmodel = viewmodel
-        self._widget = None
+        self._widget: EmployeeWidget | ManagerAuthenticationWidget
         # Window title
         self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
         # Slogan label
