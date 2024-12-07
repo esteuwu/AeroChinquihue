@@ -19,8 +19,7 @@ class Model:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats,
-        payment method, cost and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
@@ -29,8 +28,7 @@ class Model:
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost
-        and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
@@ -90,8 +88,7 @@ class Model:
         Returns all the registered flights in the database's flights table.
         :return: Flights
         """
-        return self._cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, "
-                                    "payment_method, cost, epoch FROM flights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
 
     def get_freight_count_in_range(self, ranges: tuple) -> tuple:
         """
@@ -107,8 +104,7 @@ class Model:
         Returns all the registered freights in the database's freights table.
         :return: Freights
         """
-        return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, "
-                                    "epoch FROM freights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
 
     def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
         """

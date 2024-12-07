@@ -16,8 +16,7 @@ class ViewModel:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats,
-        payment method, cost and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
         :return: Nothing
         """
         self._model.add_flight(
@@ -26,8 +25,7 @@ class ViewModel:
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost
-        and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
         :return: Nothing
         """
         self._model.add_freight(
