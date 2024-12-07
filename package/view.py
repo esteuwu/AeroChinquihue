@@ -168,11 +168,11 @@ class ManagerAuthenticationWidget(BaseWidget):
         if self.ui_widget.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Password:
             self.ui_widget.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Normal)
             self.ui_widget.reveal_password_button.setIcon(
-                QtGui.QIcon(os.path.join("assets", "eye-password-hide-svgrepo-com.svg")))
+                QtGui.QIcon(os.path.join("assets", "basicons", "eye-password-off.svg")))
         elif self.ui_widget.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Normal:
             self.ui_widget.password.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
             self.ui_widget.reveal_password_button.setIcon(
-                QtGui.QIcon(os.path.join("assets", "eye-password-show-svgrepo-com.svg")))
+                QtGui.QIcon(os.path.join("assets", "basicons", "eye-password.svg")))
 
 
 class ManagerSummaryWidget(BaseWidget):
