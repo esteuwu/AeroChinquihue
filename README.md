@@ -12,7 +12,8 @@ En caso de que quieras desarrollar, instala las dependencias necesarias ejecutan
 
 > $ pip install -r requirements.dev.txt -r requirements.txt
 
-En caso de que solo quieras ejecutar el programa, instala las dependencias necesarias ejecutando:
+En caso de que solo quieras ejecutar el programa, instala las dependencias
+necesarias ejecutando:
 
 > $ pip install -r requirements.txt
 
@@ -38,7 +39,8 @@ Ejemplo:
 
 ### Base de datos
 
-Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema y crear la base de datos inicial de acuerdo al archivo sql/createDatabase.sql.
+Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema
+y crear la base de datos inicial de acuerdo al archivo sql/createDatabase.sql.
 
 Ejemplo:
 
@@ -52,7 +54,9 @@ Ejemplo:
 
 > $ python create_user.py *nombre* *RUT* *contraseña*
 
-Las contraseñas están sujetas a hashing mediante el uso de [yescrypt](https://en.wikipedia.org/wiki/Yescrypt), por lo tanto, no se guardan en texto plano en la base de datos.
+Las contraseñas están sujetas a hashing mediante el uso de [yescrypt](
+https://en.wikipedia.org/wiki/Yescrypt), por lo tanto, no se guardan en texto
+plano en la base de datos.
 
 ### Ejecutando el programa
 
@@ -74,7 +78,8 @@ Contiene recursos tales como imágenes usadas en el programa.
 
 ### Carpeta package
 
-Contiene un paquete principalmente relacionado con el patrón de arquitectura [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+Contiene un paquete principalmente relacionado con el patrón de arquitectura [Mo
+delo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
 
 * \_\_init__.py: Provee las clases necesarias (Identification, Model, View, ViewModel).
 
@@ -92,7 +97,8 @@ Contiene un paquete principalmente relacionado con el patrón de arquitectura [M
 
 ### Carpeta ui
 
-El nombre de un archivo .ui corresponde a la interfaz de una clase del mismo nombre (sin la extensión) ubicada en el archivo package/view.py.
+El nombre de un archivo .ui corresponde a la interfaz de una clase del mismo
+nombre (sin la extensión) ubicada en el archivo package/view.py.
 
 ## Software necesario
 
@@ -124,15 +130,20 @@ Solo para uso interno.
 
 * [X] Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
 
-* [ ] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50% implementado; implementado en Model y ViewModel con la función get_flight_count(), falta implementarlo en View)
+* [ ] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50%
+implementado; implementado en Model y ViewModel con la función
+get_flight_count(), falta implementarlo en View)
 
-* [ ] Agregar límites de pasajeros y peso para cada avión y agregar validaciones correspondientes
+* [ ] Agregar límites de pasajeros y peso para cada avión y agregar validaciones
+correspondientes
 
 * [ ] Mostrar una fecha de entrega para encomiendas al confirmar la reserva
 
-* [ ] Agregar opción de obviar pago utilizando credenciales de gerente en vista de empleados (agregar callback functions)
+* [ ] Agregar opción de obviar pago utilizando credenciales de gerente en vista
+de empleados (agregar callback functions)
 
-* [ ] Permitir la modificación de valores en la vista de gerente y agregar validaciones correspondientes
+* [ ] Permitir la modificación de valores en la vista de gerente y agregar
+validaciones correspondientes
 
 * [ ] Agregar algoritmo de hora de salida
 
@@ -146,4 +157,5 @@ Solo para uso interno.
 
 * [ ] Hacer que todo ocurra en una sola ventana (puede chocar con n.º 3)
 
-* [ ] Avisar de que solo se puede seleccionar una entrada para Gerente, posiblemente usando QTableWidget.selectedRanges() (dificultad: media)
+* [ ] Avisar de que solo se puede seleccionar una entrada para Gerente,
+posiblemente usando QTableWidget.selectedRanges() (dificultad: media)

@@ -19,7 +19,8 @@ class Model:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats,
+        payment method, cost and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
@@ -28,7 +29,8 @@ class Model:
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
+        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost
+        and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
@@ -80,14 +82,16 @@ class Model:
         :param ranges: Start and end ranges
         :return: Flight count
         """
-        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM flights WHERE epoch BETWEEN ? AND ?);",
+                                    ranges).fetchone()
 
     def get_flights(self):
         """
         Returns all the registered flights in the database's flights table.
         :return: Flights
         """
-        return self._cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, payment_method, cost, epoch FROM flights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, airplane, leave, seats, "
+                                    "payment_method, cost, epoch FROM flights;").fetchall()
 
     def get_freight_count_in_range(self, ranges: tuple) -> tuple:
         """
@@ -95,14 +99,16 @@ class Model:
         :param ranges: Start and end ranges
         :return: Flight count
         """
-        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);", ranges).fetchone()
+        return self._cursor.execute("SELECT COUNT() FROM (SELECT epoch FROM freights WHERE epoch BETWEEN ? AND ?);",
+                                    ranges).fetchone()
 
     def get_freights(self):
         """
         Returns all the registered freights in the database's freights table.
         :return: Freights
         """
-        return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
+        return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, "
+                                    "epoch FROM freights;").fetchall()
 
     def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
         """
@@ -110,7 +116,8 @@ class Model:
         :param identification: Raw identification
         :return: Hashed password and salt
         """
-        return self._cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;", identification).fetchone()
+        return self._cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;",
+                                    identification).fetchone()
 
     def get_name(self, identification: tuple) -> tuple:
         """
