@@ -24,9 +24,15 @@ En caso de que solo quieras ejecutar el programa, instala las dependencias neces
 
 Ejemplo:
 
+> \# Nombre de aerolínea
+>
 > BRANDING=AeroChinquihue
 >
+> \# Nombre del archivo de la base de datos
+>
 > DATABASE_FILENAME=database.db
+>
+> \# Eslogan que aparece en la vista principal
 >
 > SLOGAN=Vuelos en toda la Región de Los Lagos.
 
