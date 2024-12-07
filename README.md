@@ -10,11 +10,11 @@ Este programa es funcional en Python 3.12. No probado en otras versiones.
 
 En caso de que quieras desarrollar, instala las dependencias necesarias ejecutando:
 
-> pip install -r requirements.dev.txt -r requirements.txt
+> $ pip install -r requirements.dev.txt -r requirements.txt
 
 En caso de que solo quieras ejecutar el programa, instala las dependencias necesarias ejecutando:
 
-> pip install -r requirements.txt
+> $ pip install -r requirements.txt
 
 ## Configuración básica
 
@@ -42,7 +42,7 @@ Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema 
 
 Ejemplo:
 
-> sqlite3 database.db < sql/createDatabase.sql
+> $ sqlite3 database.db < sql/createDatabase.sql
 
 ### Creación de usuarios (opcional)
 
@@ -50,9 +50,15 @@ El script create_user.py es usado para esto.
 
 Ejemplo:
 
-> python create_user.py *nombre* *RUT* *contraseña*
+> $ python create_user.py *nombre* *RUT* *contraseña*
 
 Las contraseñas están sujetas a hashing mediante el uso de [yescrypt](https://en.wikipedia.org/wiki/Yescrypt), por lo tanto, no se guardan en texto plano en la base de datos.
+
+### Ejecutando el programa
+
+Basta con ejecutar el archivo main.py de la siguiente manera:
+
+> $ python main.py
 
 ## Estructura de archivos
 
