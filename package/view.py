@@ -218,6 +218,8 @@ class View(BaseWidget):
         self._widget = None
         # Window title
         self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
+        # Slogan label
+        self.ui_widget.slogan_label.setText(os.getenv("SLOGAN"))
         # Employee button
         self.ui_widget.employee_button.clicked.connect(self._handle_employee_button)
         # Manager button

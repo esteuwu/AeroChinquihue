@@ -2,7 +2,7 @@
 
 ![Imagen de AeroChinquihue](assets/picture.png)
 
-Vuelos en toda la Región de Los Lagos.
+**Vuelos en toda la Región de Los Lagos.**
 
 Este programa es funcional en Python 3.12. No probado en otras versiones.
 
@@ -16,70 +16,71 @@ En caso de que solo quieras ejecutar el programa, instala las dependencias neces
 
 > pip install -r requirements.txt
 
+## Configuración básica
+
+### Archivo .env
+
 **Copia** el archivo .env.example a .env y configura las variables de entorno.
-
-> \# Debes colocar el nombre de la base de datos, por ejemplo database.db
->
-> DATABASE_FILENAME=
->
-> \# Debes colocar el nombre de la imagen de presentación, por ejemplo
-> AeroChinquihue.png que viene incluido
->
-> PICTURE_FILENAME=
-
-### Creando la base de datos
-
-Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema y ejecutar un comando tal como:
-
-> sqlite3 database.db < sql/createDatabase.sql
-
-### Creando un usuario (gerente) en la base de datos
-
-Puedes usar el script create_user.py para esto.
 
 Ejemplo:
 
-> python create_user.py "John Doe" 12.345.678-5 JohnDoe123
-
-Las contraseñas están sujetas a hashing y salting mediante el uso de [yescrypt](https://en.wikipedia.org/wiki/Yescrypt) (sitio web en inglés), por lo tanto, no se guardan en texto plano en la base de datos.
-
-Los usuarios lucen así en la base de datos:
-
-> sqlite> SELECT * FROM users;
+> BRANDING=AeroChinquihue
 >
-> John Doe|12345678|DAvEmTm3fQYjWLuqMZ/+aXgQJptxW3idghEJydn3I2c=|b0Q8nnAd5QFlxKgB8ogFAlmOCU7/8BmSkDgWBrTM6Bk=
+> DATABASE_FILENAME=database.db
 >
-> sqlite>
+> SLOGAN=Vuelos en toda la Región de Los Lagos.
 
-Los usuarios se guardan de la siguiente manera:
+### Base de datos
 
-> name|identification|hashed_password|salt
+Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema y crear la base de datos inicial de acuerdo al archivo sql/createDatabase.sql.
 
-* name: Nombre del usuario.
+Ejemplo:
 
-* identification: RUT del usuario sin dígito verificador.
+> sqlite3 database.db < sql/createDatabase.sql
 
-* hashed_password: Contraseña hasheada junto con la respectiva salt, nuevamente
+### Creación de usuarios (opcional)
 
-* salt: Salt de la contraseña codificada en [base64](https://es.wikipedia.org/wiki/Base64). codificada en base64.
+El script create_user.py es usado para esto.
+
+Ejemplo:
+
+> python create_user.py *nombre* *RUT* *contraseña*
+
+Las contraseñas están sujetas a hashing mediante el uso de [yescrypt](https://en.wikipedia.org/wiki/Yescrypt), por lo tanto, no se guardan en texto plano en la base de datos.
 
 ## Estructura de archivos
 
-* main.py: Programa principal.
+### Carpeta principal
 
-### Paquete mvvm
+* create_user.py: Script para crear usuarios.
 
-Contiene código relacionado con el patrón de arquitectura [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+* main.py: Script principal.
+
+### Carpeta assets
+
+Contiene recursos tales como imágenes usadas en el programa.
+
+### Carpeta package
+
+Contiene un paquete principalmente relacionado con el patrón de arquitectura [Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+
+* \_\_init__.py: Provee las clases necesarias (Identification, Model, View, ViewModel).
+
+* identification.py: Clase Identification utilizada para manipular RUTs.
 
 * model.py: **Modelo**. Contiene funcionalidad relacionada con la base de datos (SQLite).
 
-* viewmodel.py: **Modelo de vista**. Maneja las interacciones entre modelo y vista.
-
 * view.py: **Vista**. Interfaz de usuario (PySide).
 
-#### Carpeta sql
+* viewmodel.py: **Modelo de vista**. Maneja las interacciones entre modelo y vista.
+
+### Carpeta sql
 
 * createDatabase.sql: Crea una base de datos inicial con la información requerida.
+
+### Carpeta ui
+
+El nombre de un archivo .ui corresponde a la interfaz de una clase del mismo nombre (sin la extensión) ubicada en el archivo package/view.py.
 
 ## Software necesario
 
@@ -87,7 +88,7 @@ Contiene código relacionado con el patrón de arquitectura [Modelo–vista–mo
 
 * [Git](https://git-scm.com/)
 
-#### Uso
+### Uso
 
 * [Python](https://www.python.org/)
 
@@ -109,7 +110,7 @@ Solo para uso interno.
 
 ### Necesario
 
-* [ ] Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
+* [X] Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
 
 * [ ] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50% implementado; implementado en Model y ViewModel con la función get_flight_count(), falta implementarlo en View)
 
@@ -123,11 +124,9 @@ Solo para uso interno.
 
 * [ ] Agregar algoritmo de hora de salida
 
-### Entre necesario y no tan prioritario
-
 * [ ] Convertir los valores como tal antes de mostrarlos en la tabla de gerente
 
-### No tan prioritario
+### No necesario
 
 * [ ] Agregar sistema de localización (borrar strings localizadas del código)
 
