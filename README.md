@@ -78,8 +78,8 @@ Contiene recursos tales como imágenes usadas en el programa.
 
 ### Carpeta package
 
-Contiene un paquete principalmente relacionado con el patrón de arquitectura [Mo
-delo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
+Contiene un paquete principalmente relacionado con el patrón de arquitectura
+[Modelo–vista–modelo de vista](https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista).
 
 * \_\_init__.py: Provee las clases necesarias (Identification, Model, View, ViewModel).
 
