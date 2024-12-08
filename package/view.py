@@ -108,7 +108,9 @@ class EmployeeWidget(BaseWidget):
                                             self.ui_widget.destination.currentText(),
                                             self.ui_widget.airplane.currentText(), leave.toSecsSinceEpoch(),
                                             int(self.ui_widget.seats.text()),
-                                            self.ui_widget.payment_method.currentText()))
+                                            self.ui_widget.payment_method.currentText(),
+                                            self._viewmodel.get_prices(self.ui_widget.destination.currentText())[
+                                                0] * int(self.ui_widget.seats.text())))
                 QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
         # Freight
         elif self.ui_widget.freight_button.isChecked():
@@ -123,7 +125,9 @@ class EmployeeWidget(BaseWidget):
                 self._viewmodel.add_freight((self.ui_widget.name.text(), identification.identification,
                                              self.ui_widget.destination.currentText(),
                                              int(self.ui_widget.weight.text()),
-                                             self.ui_widget.payment_method.currentText()))
+                                             self.ui_widget.payment_method.currentText(),
+                                             self._viewmodel.get_prices(self.ui_widget.destination.currentText())[
+                                                 1] * int(self.ui_widget.weight.text())))
                 QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nAl hacer entrega de esta en el aeródromo La Paloma, será entregada en un transcurso de 3 a 5 días hábiles.")
 
 

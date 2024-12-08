@@ -16,20 +16,18 @@ class ViewModel:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
+        :param values: Values to insert, that is, name, identification, destination, airplane, leave, seats and payment method
         :return: Nothing
         """
-        self._model.add_flight(
-            (str(uuid.uuid4()),) + values + (self.get_prices(values[2])[0] * values[5], int(time.time())))
+        self._model.add_flight((str(uuid.uuid4()),) + values + (int(time.time()),))
 
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
+        :param values: Values to insert, that is, name, identification, destination, weight and payment method
         :return: Nothing
         """
-        self._model.add_freight(
-            (str(uuid.uuid4()),) + values + (self.get_prices(values[2])[1] * values[3], int(time.time())))
+        self._model.add_freight((str(uuid.uuid4()),) + values + (int(time.time()),))
 
     def delete_flight(self, flight_uuid: str):
         """
