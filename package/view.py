@@ -22,7 +22,7 @@ class BaseWidget(QtUiTools.QUiLoader):
 
 
 class EmployeeWidget(BaseWidget):
-    """Class that loads and shows the employee widget."""
+    """Class that loads the employee widget."""
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "EmployeeWidget.ui"))
         self._viewmodel = viewmodel
@@ -128,11 +128,11 @@ class EmployeeWidget(BaseWidget):
 
 
 class ManagerAuthenticationWidget(BaseWidget):
-    """Class that loads and shows the manager authentication widget."""
+    """Class that loads the manager authentication widget."""
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "ManagerAuthenticationWidget.ui"))
         self._viewmodel = viewmodel
-        self._widget: ManagerSummaryWidget
+        self._widget: ManagerTabWidget
         # Reveal password button
         self.ui_widget.reveal_password_button.clicked.connect(self._handle_reveal_password_button)
         # OK button
@@ -161,7 +161,7 @@ class ManagerAuthenticationWidget(BaseWidget):
                                           QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self._viewmodel.get_name(identification.get_raw_identification())}.")
-        self._widget = ManagerSummaryWidget(self._viewmodel)
+        self._widget = ManagerTabWidget(self._viewmodel)
         self._widget.show()
 
     def _handle_reveal_password_button(self):
@@ -175,12 +175,11 @@ class ManagerAuthenticationWidget(BaseWidget):
                 QtGui.QIcon(os.path.join("assets", "basicons", "eye-password.svg")))
 
 
-class ManagerSummaryWidget(BaseWidget):
-    """Class that loads and shows the manager summary widget."""
+class ManagerTabWidget(BaseWidget):
+    """Class that loads the manager tab widget."""
     def __init__(self, viewmodel: ViewModel):
-        super().__init__(os.path.join("ui", "ManagerSummaryWidget.ui"))
+        super().__init__(os.path.join("ui", "ManagerTabWidget.ui"))
         self._viewmodel = viewmodel
-        self._widget: ManagerTableWidget
         # Epoch
         epoch = QtCore.QDateTime()
         epoch.setDate(QtCore.QDate.currentDate())
@@ -189,31 +188,23 @@ class ManagerSummaryWidget(BaseWidget):
         self.ui_widget.daily_flights.setText(str(self._viewmodel.get_flight_count_in_range(epoch, epoch + 86399)))
         # Daily freights
         self.ui_widget.daily_freights.setText(str(self._viewmodel.get_freight_count_in_range(epoch, epoch + 86399)))
-        # Flight table button
-        self.ui_widget.flight_table_button.clicked.connect(self._handle_flight_table_button)
-        # Freight table button
-        self.ui_widget.freight_table_button.clicked.connect(self._handle_freight_table_button)
-
-    def _handle_flight_table_button(self):
-        self._widget = ManagerTableWidget("Registro de Vuelos", self._viewmodel.get_flights(),
-                                          ["UUID", "Nombre", "RUT", "Destino", "Avión", "Salida", "Asientos",
-                                           "Medio de pago", "Costo", "Epoch"], self._viewmodel.delete_flight)
-        self._widget.show()
-
-    def _handle_freight_table_button(self):
-        self._widget = ManagerTableWidget("Registro de Encomiendas", self._viewmodel.get_freights(),
-                                          ["UUID", "Nombre", "RUT", "Destino", "Peso", "Medio de pago", "Costo",
-                                           "Epoch"], self._viewmodel.delete_freight)
-        self._widget.show()
+        # Flight table tab
+        self.flight_table = ManagerTableWidget(self._viewmodel.get_flights(),
+                                               ["UUID", "Nombre", "RUT", "Destino", "Avión", "Salida", "Asientos",
+                                                "Medio de pago", "Costo", "Epoch"], self._viewmodel.delete_flight)
+        self.ui_widget.tab_widget.addTab(self.flight_table.ui_widget, "Tabla de vuelos")
+        # Freight table tab
+        self.freight_table = ManagerTableWidget(self._viewmodel.get_freights(),
+                                                ["UUID", "Nombre", "RUT", "Destino", "Peso", "Medio de pago", "Costo",
+                                                 "Epoch"], self._viewmodel.delete_freight)
+        self.ui_widget.tab_widget.addTab(self.freight_table.ui_widget, "Tabla de encomiendas")
 
 
 class ManagerTableWidget(BaseWidget):
-    """Class that loads and shows the manager table widget."""
-    def __init__(self, window_title, rows, columns, delete_function: collections.abc.Callable[[str], None]):
+    """Class that loads the manager table widget."""
+    def __init__(self, rows, columns, delete_function: collections.abc.Callable[[str], None]):
         super().__init__(os.path.join("ui", "ManagerTableWidget.ui"))
         self._delete_function = delete_function
-        # Window title
-        self.ui_widget.setWindowTitle(window_title)
         # Table
         self.ui_widget.table.setRowCount(len(rows))
         self.ui_widget.table.setColumnCount(len(columns))
