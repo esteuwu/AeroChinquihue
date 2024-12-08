@@ -104,7 +104,7 @@ class EmployeeWidget(BaseWidget):
             if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Número de pasajeros: {self.ui_widget.seats.text()}\nCosto por pasajero: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0]}\nSubtotal: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
                 leave = QtCore.QDateTime()
                 leave.setDate(self.ui_widget.date.selectedDate())
-                self._viewmodel.add_flight((self.ui_widget.name.text(), identification.get_raw_identification(),
+                self._viewmodel.add_flight((self.ui_widget.name.text(), identification.identification,
                                             self.ui_widget.destination.currentText(),
                                             self.ui_widget.airplane.currentText(), leave.toSecsSinceEpoch(),
                                             int(self.ui_widget.seats.text()),
@@ -120,7 +120,7 @@ class EmployeeWidget(BaseWidget):
                 return
             # Again, 16384 is the identity of the Yes button in the message box dialog, so we check for that
             if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Peso: {self.ui_widget.weight.text()} kg\nCosto por kilo: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[1]}\nSubtotal: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[1] * int(self.ui_widget.weight.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
-                self._viewmodel.add_freight((self.ui_widget.name.text(), identification.get_raw_identification(),
+                self._viewmodel.add_freight((self.ui_widget.name.text(), identification.identification,
                                              self.ui_widget.destination.currentText(),
                                              int(self.ui_widget.weight.text()),
                                              self.ui_widget.payment_method.currentText()))
@@ -149,7 +149,7 @@ class ManagerAuthenticationWidget(BaseWidget):
                                           QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         try:
-            result = self._viewmodel.is_password_valid(identification.get_raw_identification(), password)
+            result = self._viewmodel.is_password_valid(identification.identification, password)
         except ValueError:
             QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "RUT o contraseña inválidos.",
                                           QtWidgets.QMessageBox.StandardButton.NoButton,
@@ -160,7 +160,7 @@ class ManagerAuthenticationWidget(BaseWidget):
                                           QtWidgets.QMessageBox.StandardButton.NoButton,
                                           QtWidgets.QMessageBox.StandardButton.NoButton)
             return
-        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self._viewmodel.get_name(identification.get_raw_identification())}.")
+        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self._viewmodel.get_name(identification.identification)}.")
         self._widget = ManagerTabWidget(self._viewmodel)
         self._widget.show()
 

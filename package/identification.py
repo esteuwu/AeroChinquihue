@@ -1,5 +1,4 @@
 """Provides the Identification class to interact with identifications."""
-# pylint: disable=R0903
 
 
 class Identification:
@@ -7,31 +6,42 @@ class Identification:
     def __init__(self, identification: str):
         if not self._is_identification_valid(identification):
             raise ValueError("Invalid identification")
-        self._identification = identification
+        self._identification = int(identification.replace('-', '').replace('.', '')[:-1])
 
-    def get_raw_identification(self):
+    def get_pretty_identification(self):
         """
-        Returns the raw identification.
-        :return: Identification with no verification digit
+        Returns a pretty identification.
+        :return: Human-readable identification
         """
-        return int(self._identification.replace('-', '').replace('.', '')[:-1])
+        return f"{f"{self._identification:,}".replace(',', '.')}-{self._get_verification_digit(self._identification)}"
 
     @staticmethod
-    def _is_identification_valid(identification: str):
-        identification = identification.replace('-', '').replace('.', '')
-        if identification.count('K') + identification.count('k') > 1 or len(
-                identification) < 2 or not identification.replace('K', '').replace('k', '').isnumeric():
-            return False
+    def _get_verification_digit(identification: int):
         multiplier = 2
         result = 0
-        for character in identification[-2::-1]:
+        for character in str(identification)[::-1]:
             if multiplier > 7:
                 multiplier = 2
             result += int(character) * multiplier
             multiplier += 1
         result = 11 - result % 11
         if result == 10:
-            return identification[-1] == 'K' or identification[-1] == 'k'
+            return 'K'
         if result == 11:
-            return identification[-1] == '0'
-        return identification[-1] == str(result)
+            return '0'
+        return str(result)
+
+    @property
+    def identification(self):
+        """
+        Returns the raw identification.
+        :return: Identification with no verification digit
+        """
+        return self._identification
+
+    @staticmethod
+    def _is_identification_valid(identification: str):
+        identification = identification.replace('-', '').replace('.', '').replace('k', 'K')
+        if identification.count('K') > 1 or len(identification) < 2 or not identification.replace('K', '').isnumeric():
+            return False
+        return identification[-1] == str(Identification._get_verification_digit(int(identification[:-1])))
