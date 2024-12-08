@@ -101,14 +101,17 @@ class EmployeeWidget(BaseWidget):
                                               QtWidgets.QMessageBox.StandardButton.NoButton)
                 return
             # Apply a 10% discount for select customers
-            subtotal = self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(self.ui_widget.seats.text())
+            subtotal = self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(
+                self.ui_widget.seats.text())
             question = f"Número de pasajeros: {self.ui_widget.seats.text()}\nCosto por pasajero: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0]}\n"
             if self._viewmodel.get_flight_count(identification.identification) > 10:
                 subtotal = round(subtotal * 0.9)
-                question += f"Dado que el cliente ha realizado 10 o más vuelos, se le otorga un descuento del 10%.\n"
+                question += "Dado que el cliente ha realizado 10 o más vuelos, se le otorga un descuento del 10%.\n"
             question += f"Subtotal: ${subtotal}\nDesea confirmar la reserva?"
             # 16384 is the identity of the Yes button in the message box dialog, so we check for that
-            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", question, QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
+            if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", question,
+                                              QtWidgets.QMessageBox.StandardButton.No,
+                                              QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
                 leave = QtCore.QDateTime()
                 leave.setDate(self.ui_widget.date.selectedDate())
                 self._viewmodel.add_flight((self.ui_widget.name.text(), identification.identification,
