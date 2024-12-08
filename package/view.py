@@ -160,7 +160,8 @@ class ManagerAuthenticationWidget(BaseWidget):
                                           QtWidgets.QMessageBox.StandardButton.NoButton,
                                           QtWidgets.QMessageBox.StandardButton.NoButton)
             return
-        QtWidgets.QMessageBox.information(self.ui_widget, "Información", f"Bienvenido, {self._viewmodel.get_name(identification.identification)}.")
+        QtWidgets.QMessageBox.information(self.ui_widget, "Información",
+                                          f"Bienvenido, {self._viewmodel.get_name(identification.identification)}.")
         self._widget = ManagerTabWidget(self._viewmodel)
         self._widget.show()
 
@@ -227,7 +228,9 @@ class ManagerTableWidget(BaseWidget):
 
     def _handle_delete_entry_button(self):
         if self.ui_widget.table.currentRow() == -1:
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "No hay ninguna entrada seleccionada.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "No hay ninguna entrada seleccionada.",
+                                          QtWidgets.QMessageBox.StandardButton.NoButton,
+                                          QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Está seguro de borrar la entrada número {self.ui_widget.table.currentRow() + 1}?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
             self._delete_function(self.ui_widget.table.item(self.ui_widget.table.currentRow(), 0).text())

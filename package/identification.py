@@ -8,12 +8,13 @@ class Identification:
             raise ValueError("Invalid identification")
         self._identification = int(identification.replace('-', '').replace('.', '')[:-1])
 
-    def get_pretty_identification(self):
+    @staticmethod
+    def get_pretty_identification(identification: int):
         """
         Returns a pretty identification.
         :return: Human-readable identification
         """
-        return f"{f"{self._identification:,}".replace(',', '.')}-{self._get_verification_digit(self._identification)}"
+        return f"{identification:,}-{Identification._get_verification_digit(identification)}".replace(',', '.')
 
     @staticmethod
     def _get_verification_digit(identification: int):
@@ -44,4 +45,4 @@ class Identification:
         identification = identification.replace('-', '').replace('.', '').replace('k', 'K')
         if identification.count('K') > 1 or len(identification) < 2 or not identification.replace('K', '').isnumeric():
             return False
-        return identification[-1] == str(Identification._get_verification_digit(int(identification[:-1])))
+        return identification[-1] == Identification._get_verification_digit(int(identification[:-1]))
