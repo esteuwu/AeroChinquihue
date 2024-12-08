@@ -106,11 +106,11 @@ class Model:
         """
         return self._cursor.execute("SELECT uuid, name, identification, destination, weight, payment_method, cost, epoch FROM freights;").fetchall()
 
-    def get_hashed_password_and_salt(self, identification: tuple) -> tuple:
+    def get_hashed_password(self, identification: tuple) -> tuple:
         """
-        Returns the hashed password and salt for a specific identification.
+        Returns the hashed password for a specific identification.
         :param identification: Raw identification
-        :return: Hashed password and salt
+        :return: Hashed password
         """
         return self._cursor.execute("SELECT hashed_password, salt FROM users WHERE identification = ?;",
                                     identification).fetchone()

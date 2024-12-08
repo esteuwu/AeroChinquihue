@@ -139,7 +139,7 @@ get_flight_count(), falta implementarlo en View)
 * [ ] Agregar límites de pasajeros y peso para cada avión y agregar validaciones
 correspondientes
 
-* [ ] Mostrar una fecha de entrega para encomiendas al confirmar la reserva
+* [X] Mostrar una fecha de entrega para encomiendas al confirmar la reserva
 
 * [ ] Agregar opción de obviar pago utilizando credenciales de gerente en vista
 de empleados (agregar callback functions)
@@ -149,7 +149,7 @@ validaciones correspondientes
 
 * [ ] Agregar algoritmo de hora de salida
 
-* [ ] Convertir los valores como tal antes de mostrarlos en la tabla de gerente
+* [X] Convertir los valores como tal antes de mostrarlos en la tabla de gerente
 
 ### No necesario
 

@@ -124,7 +124,7 @@ class EmployeeWidget(BaseWidget):
                                              self.ui_widget.destination.currentText(),
                                              int(self.ui_widget.weight.text()),
                                              self.ui_widget.payment_method.currentText()))
-                QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nDebe hacer entrega de esta en el aeródromo La Paloma.")
+                QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nAl hacer entrega de esta en el aeródromo La Paloma, será entregada en un transcurso de 3 a 5 días hábiles.")
 
 
 class ManagerAuthenticationWidget(BaseWidget):
@@ -211,7 +211,15 @@ class ManagerTableWidget(BaseWidget):
         self.ui_widget.table.setHorizontalHeaderLabels(columns)
         for row_index, row_value in enumerate(rows):
             for column_index, column_value in enumerate(row_value):
-                self.ui_widget.table.setItem(row_index, column_index, QtWidgets.QTableWidgetItem(str(column_value)))
+                if columns[column_index] == "Asientos" or columns[column_index] == "Costo" or columns[column_index] == "Peso":
+                    value = f"{column_value:,}".replace(',', '.')
+                elif columns[column_index] == "Epoch" or columns[column_index] == "Salida":
+                    value = QtCore.QDateTime.fromSecsSinceEpoch(column_value).toString()
+                elif columns[column_index] == "RUT":
+                    value = Identification.get_pretty_identification(column_value)
+                else:
+                    value = column_value
+                self.ui_widget.table.setItem(row_index, column_index, QtWidgets.QTableWidgetItem(value))
         # Delete entry button
         self.ui_widget.delete_entry_button.clicked.connect(self._handle_delete_entry_button)
         # Do not select the first entry if there is one by default

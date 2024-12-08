@@ -132,7 +132,7 @@ class ViewModel:
         :return: True if password is valid, otherwise False
         """
         hasher = pyescrypt.Yescrypt(mode=pyescrypt.Mode.RAW)
-        result = self._model.get_hashed_password_and_salt((identification,))
+        result = self._model.get_hashed_password((identification,))
         if isinstance(result, types.NoneType):
             raise ValueError("Specified identification does not have an user in the database")
         try:
