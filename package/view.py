@@ -204,12 +204,12 @@ class ManagerTabWidget(BaseWidget):
         # Flight table tab
         self.flight_table = ManagerTableWidget(self._viewmodel.get_flights(),
                                                ["UUID", "Nombre", "RUT", "Destino", "Avión", "Salida", "Asientos",
-                                                "Medio de pago", "Costo", "Epoch"], self._viewmodel.delete_flight)
+                                                "Medio de pago", "Costo", "Creación"], self._viewmodel.delete_flight)
         self.ui_widget.tab_widget.addTab(self.flight_table.ui_widget, "Tabla de vuelos")
         # Freight table tab
         self.freight_table = ManagerTableWidget(self._viewmodel.get_freights(),
                                                 ["UUID", "Nombre", "RUT", "Destino", "Peso", "Medio de pago", "Costo",
-                                                 "Epoch"], self._viewmodel.delete_freight)
+                                                 "Creación"], self._viewmodel.delete_freight)
         self.ui_widget.tab_widget.addTab(self.freight_table.ui_widget, "Tabla de encomiendas")
 
 
@@ -226,7 +226,7 @@ class ManagerTableWidget(BaseWidget):
             for column_index, column_value in enumerate(row_value):
                 if columns[column_index] == "Asientos" or columns[column_index] == "Costo" or columns[column_index] == "Peso":
                     value = f"{column_value:,}".replace(',', '.')
-                elif columns[column_index] == "Epoch" or columns[column_index] == "Salida":
+                elif columns[column_index] == "Creación" or columns[column_index] == "Salida":
                     value = QtCore.QDateTime.fromSecsSinceEpoch(column_value).toString()
                 elif columns[column_index] == "RUT":
                     value = Identification.get_pretty_identification(column_value)
