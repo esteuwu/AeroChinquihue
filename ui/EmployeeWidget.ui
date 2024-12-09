@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>412</width>
-    <height>707</height>
+    <height>739</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -164,6 +164,13 @@
      </item>
      <item>
       <widget class="QComboBox" name="payment_method"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="nullify_payment_button">
+       <property name="text">
+        <string>Obviar pago</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="ok_button">

@@ -130,6 +130,9 @@ Solo para uso interno.
 
 ### Necesario
 
+* [X] OK: Agregar opción de obviar pago utilizando credenciales de
+  gerente en vista de empleados (agregar callback functions)
+
 * [X] OK: Convertir los valores como tal antes de mostrarlos en la tabla de gerente
 
 * [X] OK: Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50%
@@ -148,8 +151,7 @@ validaciones correspondientes
 * [ ] Pendiente: Agregar límites de pasajeros y peso para cada avión y agregar validaciones
 correspondientes
 
-* [ ] Pendiente: Agregar opción de obviar pago utilizando credenciales de
-gerente en vista de empleados (agregar callback functions)
+* [ ] Pendiente: Agregar una representación gráfica de los asientos para un vuelo
 
 ### No necesario
 

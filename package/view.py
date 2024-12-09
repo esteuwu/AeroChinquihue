@@ -1,5 +1,6 @@
 """Provides the View class to graphically interact with the program."""
 # pylint: disable=I1101,R0903
+import collections
 import os
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
@@ -33,6 +34,7 @@ class EmployeeWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "EmployeeWidget.ui"))
         self._viewmodel = viewmodel
+        self._widget: ManagerAuthenticationWidget
         # Window title
         self.ui_widget.setWindowTitle(os.getenv("BRANDING"))
         # Flight button
@@ -47,10 +49,52 @@ class EmployeeWidget(BaseWidget):
         self.ui_widget.date.setMinimumDate(QtCore.QDate.currentDate())
         # Payment method
         self.ui_widget.payment_method.addItems(self._viewmodel.get_payment_methods())
+        # Nullify payment button
+        self.ui_widget.nullify_payment_button.clicked.connect(self._handle_nullify_payment_button)
         # OK button
         self.ui_widget.ok_button.clicked.connect(self._handle_ok_button)
         # Set default service
         self.ui_widget.flight_button.click()
+
+    def _callback_function(self, manager_identification: int):
+        self._widget.ui_widget.hide()
+        del self._widget
+        identification = Identification(self.ui_widget.identification.text())
+        # Flight
+        if self.ui_widget.flight_button.isChecked():
+            leave = QtCore.QDateTime()
+            leave.setDate(self.ui_widget.date.selectedDate())
+            self._viewmodel.add_flight((self.ui_widget.name.text(), identification.identification, self.ui_widget.destination.currentText(), self.ui_widget.airplane.currentText(), leave.toSecsSinceEpoch(), int(self.ui_widget.seats.text()), "Especial: No Pago", 0))
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
+        # Freight
+        elif self.ui_widget.freight_button.isChecked():
+            self._viewmodel.add_freight((self.ui_widget.name.text(), identification.identification, self.ui_widget.destination.currentText(), int(self.ui_widget.weight.text()), "Especial: No Pago", 0))
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Encomienda reservada con éxito.\nAl hacer entrega de esta en el aeródromo La Paloma, será entregada en un transcurso de 3 a 5 días hábiles.")
+
+    def _is_user_input_valid(self):
+        # No. https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
+        if len(self.ui_widget.name.text().strip()) == 0:
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El nombre ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            return False
+        # Identification validation
+        try:
+            Identification(self.ui_widget.identification.text())
+        except ValueError:
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            return False
+        # Flight
+        if self.ui_widget.flight_button.isChecked():
+            # Basic seats validation
+            if not (self.ui_widget.seats.text().isnumeric() and int(self.ui_widget.seats.text()) > 0):
+                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+                return False
+        # Freight
+        elif self.ui_widget.freight_button.isChecked():
+            # Basic weight validation
+            if not (self.ui_widget.weight.text().isnumeric() and int(self.ui_widget.weight.text()) > 0):
+                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+                return False
+        return True
 
     def _handle_flight_button(self):
         # Show airplane widget
@@ -84,29 +128,20 @@ class EmployeeWidget(BaseWidget):
         self.ui_widget.weight_label.show()
         self.ui_widget.weight.show()
 
+    def _handle_nullify_payment_button(self):
+        if not self._is_user_input_valid():
+            return
+        if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", "Está seguro de que desea continuar? Esto resultará en un agendamiento inmediato.", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Se requiere la autenticación de un gerente. Presione OK para continuar.")
+            self._widget = ManagerAuthenticationWidget(self._viewmodel, self._callback_function)
+            self._widget.show()
+
     def _handle_ok_button(self):
-        # No. https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
-        if len(self.ui_widget.name.text().strip()) == 0:
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El nombre ingresado es inválido.",
-                                          QtWidgets.QMessageBox.StandardButton.NoButton,
-                                          QtWidgets.QMessageBox.StandardButton.NoButton)
+        if not self._is_user_input_valid():
             return
-        # Identification validation
-        try:
-            identification = Identification(self.ui_widget.identification.text())
-        except ValueError:
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El RUT ingresado es inválido.",
-                                          QtWidgets.QMessageBox.StandardButton.NoButton,
-                                          QtWidgets.QMessageBox.StandardButton.NoButton)
-            return
+        identification = Identification(self.ui_widget.identification.text())
         # Flight
         if self.ui_widget.flight_button.isChecked():
-            # Basic seats validation
-            if not (self.ui_widget.seats.text().isnumeric() and int(self.ui_widget.seats.text()) > 0):
-                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Los asientos ingresados son inválidos.",
-                                              QtWidgets.QMessageBox.StandardButton.NoButton,
-                                              QtWidgets.QMessageBox.StandardButton.NoButton)
-                return
             # Apply a 10% discount for select customers
             subtotal = self._viewmodel.get_prices(self.ui_widget.destination.currentText())[0] * int(
                 self.ui_widget.seats.text())
@@ -129,12 +164,6 @@ class EmployeeWidget(BaseWidget):
                 QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
         # Freight
         elif self.ui_widget.freight_button.isChecked():
-            # Basic weight validation
-            if not (self.ui_widget.weight.text().isnumeric() and int(self.ui_widget.weight.text()) > 0):
-                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El peso ingresado es inválido.",
-                                              QtWidgets.QMessageBox.StandardButton.NoButton,
-                                              QtWidgets.QMessageBox.StandardButton.NoButton)
-                return
             # Again, 16384 is the identity of the Yes button in the message box dialog, so we check for that
             if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Peso: {self.ui_widget.weight.text()} kg\nCosto por kilo: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[1]}\nSubtotal: ${self._viewmodel.get_prices(self.ui_widget.destination.currentText())[1] * int(self.ui_widget.weight.text())}\nDesea confirmar la reserva?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
                 self._viewmodel.add_freight((self.ui_widget.name.text(), identification.identification,
@@ -148,10 +177,10 @@ class EmployeeWidget(BaseWidget):
 
 class ManagerAuthenticationWidget(BaseWidget):
     """Class that loads the manager authentication widget."""
-    def __init__(self, viewmodel: ViewModel):
+    def __init__(self, viewmodel: ViewModel, callback_function: collections.abc.Callable[[int], None]):
         super().__init__(os.path.join("ui", "ManagerAuthenticationWidget.ui"))
+        self._callback_function = callback_function
         self._viewmodel = viewmodel
-        self._widget: ManagerTabWidget
         # Reveal password button
         self.ui_widget.reveal_password_button.clicked.connect(self._handle_reveal_password_button)
         # OK button
@@ -181,8 +210,7 @@ class ManagerAuthenticationWidget(BaseWidget):
             return
         QtWidgets.QMessageBox.information(self.ui_widget, "Información",
                                           f"Bienvenido, {self._viewmodel.get_name(identification.identification)}.")
-        self._widget = ManagerTabWidget(self._viewmodel)
-        self._widget.show()
+        self._callback_function(identification.identification)
 
     def _handle_reveal_password_button(self):
         if self.ui_widget.password.echoMode() == QtWidgets.QLineEdit.EchoMode.Password:
@@ -308,10 +336,14 @@ class View(BaseWidget):
         # Manager button
         self.ui_widget.manager_button.clicked.connect(self._handle_manager_button)
 
+    def _callback_function(self, manager_identification: int):
+        self._widget = ManagerTabWidget(self._viewmodel)
+        self._widget.show()
+
     def _handle_employee_button(self):
         self._widget = EmployeeWidget(self._viewmodel)
         self._widget.show()
 
     def _handle_manager_button(self):
-        self._widget = ManagerAuthenticationWidget(self._viewmodel)
+        self._widget = ManagerAuthenticationWidget(self._viewmodel, self._callback_function)
         self._widget.show()

@@ -16,7 +16,7 @@ class ViewModel:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: name, identification, destination, airplane, leave, seats and payment method
+        :param values: name, identification, destination, airplane, leave, seats, payment method and cost
         :return: Nothing
         """
         self._model.add_flight((str(uuid.uuid4()),) + values + (int(time.time()),))
@@ -24,7 +24,7 @@ class ViewModel:
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, name, identification, destination, weight and payment method
+        :param values: Values to insert, that is, name, identification, destination, weight, payment method and cost
         :return: Nothing
         """
         self._model.add_freight((str(uuid.uuid4()),) + values + (int(time.time()),))
@@ -105,7 +105,11 @@ class ViewModel:
         Returns all available payment methods.
         :return: Payment methods
         """
-        return self._resultset_to_list(self._model.get_payment_methods())
+        resultset = self._model.get_payment_methods()
+        for index, value in enumerate(resultset):
+            if value[0].startswith("Especial: "):
+                resultset.pop(index)
+        return self._resultset_to_list(resultset)
 
     def get_prices(self, destination: str) -> list:
         """

@@ -58,6 +58,7 @@ CREATE TABLE freights (
 -- Payment Methods
 CREATE TABLE payment_methods (payment_method TEXT PRIMARY KEY);
 INSERT INTO payment_methods VALUES ('Efectivo');
+INSERT INTO payment_methods VALUES ('Especial: No Pago');
 INSERT INTO payment_methods VALUES ('Tarjeta de Crédito');
 INSERT INTO payment_methods VALUES ('Tarjeta de Débito');
 INSERT INTO payment_methods VALUES ('Transferencia');
