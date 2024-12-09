@@ -12,6 +12,7 @@ class Identification:
     def get_pretty_identification(identification: int):
         """
         Returns a pretty identification.
+        :param identification: Raw identification
         :return: Human-readable identification
         """
         return f"{identification:,}-{Identification._get_verification_digit(identification)}".replace(',', '.')

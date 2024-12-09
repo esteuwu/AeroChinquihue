@@ -19,7 +19,7 @@ class Model:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
+        :param values: UUID, name, identification, destination, airplane, leave, seats, payment method, cost and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO flights VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", values)
@@ -28,7 +28,7 @@ class Model:
     def add_freight(self, values: tuple):
         """
         Adds a freight to the database's freights table.
-        :param values: Values to insert, that is, UUID, name, identification, destination, weight, payment method, cost and epoch
+        :param values: UUID, name, identification, destination, weight, payment method, cost and epoch
         :return: Nothing
         """
         self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)

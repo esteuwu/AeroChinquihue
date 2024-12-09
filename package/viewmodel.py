@@ -16,7 +16,7 @@ class ViewModel:
     def add_flight(self, values: tuple):
         """
         Adds a flight to the database's flights table.
-        :param values: Values to insert, that is, name, identification, destination, airplane, leave, seats and payment method
+        :param values: name, identification, destination, airplane, leave, seats and payment method
         :return: Nothing
         """
         self._model.add_flight((str(uuid.uuid4()),) + values + (int(time.time()),))
