@@ -29,21 +29,14 @@ class ViewModel:
         """
         self._model.add_freight((str(uuid.uuid4()),) + values + (int(time.time()),))
 
-    def delete_flight(self, flight_uuid: str):
+    def delete(self, table: str, entry_uuid: str):
         """
-        Deletes a flight from the database's flights table.
-        :param flight_uuid: UUID to delete from the table
+        Deletes an entry from a table.
+        :param table: Table to operate in
+        :param entry_uuid: UUID to delete from the table
         :return: Nothing
         """
-        self._model.delete_flight((flight_uuid,))
-
-    def delete_freight(self, freight_uuid: str):
-        """
-        Deletes a freight from the database's freights table.
-        :param freight_uuid: UUID to delete from the table
-        :return: Nothing
-        """
-        self._model.delete_freight((freight_uuid,))
+        self._model.delete(table, (entry_uuid,))
 
     def get_airplanes(self):
         """

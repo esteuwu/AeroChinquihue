@@ -1,6 +1,5 @@
 """Provides the View class to graphically interact with the program."""
 # pylint: disable=I1101,R0903
-import collections
 import os
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
@@ -202,41 +201,71 @@ class ManagerTabWidget(BaseWidget):
         # Daily freights
         self.ui_widget.daily_freights.setText(str(self._viewmodel.get_freight_count_in_range(epoch, epoch + 86399)))
         # Flight table tab
-        self.flight_table = ManagerTableWidget(self._viewmodel.get_flights(),
+        self.flight_table = ManagerTableWidget(self._viewmodel, self._viewmodel.get_flights(),
                                                ["UUID", "Nombre", "RUT", "Destino", "Avión", "Salida", "Asientos",
-                                                "Medio de pago", "Costo", "Creación"], self._viewmodel.delete_flight)
+                                                "Medio de pago", "Costo", "Creación"], "flights")
         self.ui_widget.tab_widget.addTab(self.flight_table.ui_widget, "Tabla de vuelos")
         # Freight table tab
-        self.freight_table = ManagerTableWidget(self._viewmodel.get_freights(),
+        self.freight_table = ManagerTableWidget(self._viewmodel, self._viewmodel.get_freights(),
                                                 ["UUID", "Nombre", "RUT", "Destino", "Peso", "Medio de pago", "Costo",
-                                                 "Creación"], self._viewmodel.delete_freight)
+                                                 "Creación"], "freights")
         self.ui_widget.tab_widget.addTab(self.freight_table.ui_widget, "Tabla de encomiendas")
 
 
 class ManagerTableWidget(BaseWidget):
     """Class that loads the manager table widget."""
-    def __init__(self, rows, columns, delete_function: collections.abc.Callable[[str], None]):
+    def __init__(self, viewmodel: ViewModel, rows, columns, table_name):
         super().__init__(os.path.join("ui", "ManagerTableWidget.ui"))
-        self._delete_function = delete_function
+        self._columns = columns
+        self._data = []
+        self._table_name = table_name
+        self._viewmodel = viewmodel
         # Table
         self.ui_widget.table.setRowCount(len(rows))
         self.ui_widget.table.setColumnCount(len(columns))
         self.ui_widget.table.setHorizontalHeaderLabels(columns)
+        for _ in range(len(rows)):
+            self._data.append([])
         for row_index, row_value in enumerate(rows):
             for column_index, column_value in enumerate(row_value):
-                if columns[column_index] == "Asientos" or columns[column_index] == "Costo" or columns[column_index] == "Peso":
+                if columns[column_index] in ["Asientos", "Costo", "Peso"]:
                     value = f"{column_value:,}".replace(',', '.')
-                elif columns[column_index] == "Creación" or columns[column_index] == "Salida":
+                elif columns[column_index] in ["Creación", "Salida"]:
                     value = QtCore.QDateTime.fromSecsSinceEpoch(column_value).toString()
-                elif columns[column_index] == "RUT":
+                elif columns[column_index] in ["RUT"]:
                     value = Identification.get_pretty_identification(column_value)
                 else:
                     value = column_value
+                self._data[row_index].append(value)
                 self.ui_widget.table.setItem(row_index, column_index, QtWidgets.QTableWidgetItem(value))
+        # Connections
+        self.ui_widget.table.cellChanged.connect(self._handle_cell_change)
         # Delete entry button
         self.ui_widget.delete_entry_button.clicked.connect(self._handle_delete_entry_button)
         # Do not select the first entry if there is one by default
         self.ui_widget.table.setCurrentCell(-1, -1)
+
+    def _handle_cell_change(self, row, column):
+        if self._columns[column] not in ["Costo"]:
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "No puede cambiar este valor.")
+            self._set_item(row, column)
+            return
+        if self._columns[column] in ["Costo"] and not self.ui_widget.table.item(row, column).text().isnumeric():
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Entrada inválida.",
+                                          QtWidgets.QMessageBox.StandardButton.NoButton,
+                                          QtWidgets.QMessageBox.StandardButton.NoButton)
+            self._set_item(row, column)
+            return
+        result = QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Valor antiguo: {self._data[row][column]}\nValor nuevo: {self.ui_widget.table.item(row, column).text()}\nDesea confirmar esta operación?", QtWidgets.QMessageBox.StandardButton.Yes, QtWidgets.QMessageBox.StandardButton.No)
+        # Yes button identifier
+        if result == 16384:
+            self._data[row][column] = self.ui_widget.table.item(row, column).text()
+            self._viewmodel.update(self._table_name, self._columns[column],
+                                   self.ui_widget.table.item(row, column).text(), str(self._data[row][0]))
+            QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Valor actualizado con éxito.")
+        # No button identifier
+        elif result == 65536:
+            self._set_item(row, column)
 
     def _handle_delete_entry_button(self):
         if self.ui_widget.table.currentRow() == -1:
@@ -245,10 +274,17 @@ class ManagerTableWidget(BaseWidget):
                                           QtWidgets.QMessageBox.StandardButton.NoButton)
             return
         if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", f"Está seguro de borrar la entrada número {self.ui_widget.table.currentRow() + 1}?", QtWidgets.QMessageBox.StandardButton.No, QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
-            self._delete_function(self.ui_widget.table.item(self.ui_widget.table.currentRow(), 0).text())
+            self._data.pop(self.ui_widget.table.currentRow())
+            self._viewmodel.delete(self._table_name,
+                                   self.ui_widget.table.item(self.ui_widget.table.currentRow(), 0).text())
             self.ui_widget.table.removeRow(self.ui_widget.table.currentRow())
             self.ui_widget.table.setCurrentCell(-1, -1)
             QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Entrada borrada con éxito.")
+
+    def _set_item(self, row, column):
+        self.ui_widget.table.cellChanged.disconnect()
+        self.ui_widget.table.setItem(row, column, QtWidgets.QTableWidgetItem(str(self._data[row][column])))
+        self.ui_widget.table.cellChanged.connect(self._handle_cell_change)
 
 
 class View(BaseWidget):

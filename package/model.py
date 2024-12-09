@@ -34,22 +34,16 @@ class Model:
         self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
         self._connection.commit()
 
-    def delete_flight(self, uuid: tuple):
+    def delete(self, table: str, uuid: tuple):
         """
-        Deletes a flight from the database's flights table.
+        Deletes an entry from a table.
+        :param table: Table to operate in
         :param uuid: UUID to delete from the table
         :return: Nothing
         """
-        self._cursor.execute("DELETE FROM flights WHERE uuid = ?;", uuid)
-        self._connection.commit()
-
-    def delete_freight(self, uuid: tuple):
-        """
-        Deletes a freight from the database's freights table.
-        :param uuid: UUID to delete from the table
-        :return: Nothing
-        """
-        self._cursor.execute("DELETE FROM freights WHERE uuid = ?;", uuid)
+        if table not in ["flights", "freights"]:
+            raise ValueError("Invalid table specified; refusing to do this operation")
+        self._cursor.execute(f"DELETE FROM {table} WHERE uuid = ?;", uuid)
         self._connection.commit()
 
     def get_airplanes(self):

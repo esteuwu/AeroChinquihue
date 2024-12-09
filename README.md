@@ -130,26 +130,26 @@ Solo para uso interno.
 
 ### Necesario
 
-* [X] OK: Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
+* [X] OK: Convertir los valores como tal antes de mostrarlos en la tabla de gerente
 
 * [X] OK: Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50%
 implementado; implementado en Model y ViewModel con la función
 get_flight_count(), falta implementarlo en View)
 
-* [ ] Pendiente: Agregar límites de pasajeros y peso para cada avión y agregar validaciones
-correspondientes
+* [X] OK: Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
 
 * [X] OK: Mostrar una fecha de entrega para encomiendas al confirmar la reserva
-
-* [ ] Pendiente: Agregar opción de obviar pago utilizando credenciales de
-gerente en vista de empleados (agregar callback functions)
 
 * [X] OK: Permitir la modificación de valores en la vista de gerente y agregar
 validaciones correspondientes
 
 * [ ] Pendiente: Agregar algoritmo de hora de salida
 
-* [X] OK: Convertir los valores como tal antes de mostrarlos en la tabla de gerente
+* [ ] Pendiente: Agregar límites de pasajeros y peso para cada avión y agregar validaciones
+correspondientes
+
+* [ ] Pendiente: Agregar opción de obviar pago utilizando credenciales de
+gerente en vista de empleados (agregar callback functions)
 
 ### No necesario
 
