@@ -137,3 +137,20 @@ class Model:
         :return: Prices
         """
         return self._cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
+
+    def update(self, table: str, key: str, values: tuple):
+        """
+        Updates a key value in a given table.
+        :param table: Must be a valid table. Otherwise, raise ValueError
+        :param key: Must be a valid key. Otherwise, raise ValueError
+        :param values: Key value and entry UUID
+        :return: Nothing
+        """
+        if table not in ["flights", "freights"]:
+            raise ValueError("Invalid table specified; refusing to do this operation")
+        if table == "flights" and key not in ["uuid", "name", "identification", "destination", "airplane", "leave", "seats", "payment_method", "cost", "epoch"]:
+            raise ValueError("Invalid key specified; refusing to do this operation")
+        if table == "freights" and key not in ["uuid", "name", "identification", "destination", "weight", "payment_method", "cost", "epoch"]:
+            raise ValueError("Invalid key specified; refusing to do this operation")
+        self._cursor.execute(f"UPDATE {table} SET {key} = ? WHERE uuid = ?;", values)
+        self._connection.commit()

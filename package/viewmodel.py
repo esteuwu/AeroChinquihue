@@ -145,3 +145,20 @@ class ViewModel:
         for result in resultset:
             results.append(result[0])
         return results
+
+    def update(self, table: str, key: str, value: int | str, entry_uuid: str):
+        """
+        Updates a key value in a given table.
+        :param table: Must be valid
+        :param key: Must be valid
+        :param value: Key value
+        :param entry_uuid: Entry UUID
+        :return: None
+        """
+        if table == "flights":
+            if key == "Costo":
+                key = "cost"
+        elif table == "freights":
+            if key == "Costo":
+                key = "cost"
+        return self._model.update(table, key, (value, entry_uuid))

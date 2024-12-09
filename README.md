@@ -40,7 +40,7 @@ Ejemplo:
 ### Base de datos
 
 Debes tener [SQLite](https://www.sqlite.org/index.html) instalado en tu sistema
-y crear la base de datos inicial de acuerdo al archivo sql/createDatabase.sql.
+**para crear** la base de datos inicial de acuerdo al archivo sql/createDatabase.sql.
 
 Ejemplo:
 
@@ -130,26 +130,26 @@ Solo para uso interno.
 
 ### Necesario
 
-* [X] Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
+* [X] OK: Documentar el código hasta el commit c2f40c1 o aplicable (Esteban)
 
-* [X] Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50%
+* [X] OK: Descuento de 10% para clientes frecuentes (más de 10 vuelos, 50%
 implementado; implementado en Model y ViewModel con la función
 get_flight_count(), falta implementarlo en View)
 
-* [ ] Agregar límites de pasajeros y peso para cada avión y agregar validaciones
+* [ ] Pendiente: Agregar límites de pasajeros y peso para cada avión y agregar validaciones
 correspondientes
 
-* [X] Mostrar una fecha de entrega para encomiendas al confirmar la reserva
+* [X] OK: Mostrar una fecha de entrega para encomiendas al confirmar la reserva
 
-* [ ] Agregar opción de obviar pago utilizando credenciales de gerente en vista
-de empleados (agregar callback functions)
+* [ ] Pendiente: Agregar opción de obviar pago utilizando credenciales de
+gerente en vista de empleados (agregar callback functions)
 
-* [ ] Permitir la modificación de valores en la vista de gerente y agregar
+* [X] OK: Permitir la modificación de valores en la vista de gerente y agregar
 validaciones correspondientes
 
-* [ ] Agregar algoritmo de hora de salida
+* [ ] Pendiente: Agregar algoritmo de hora de salida
 
-* [X] Convertir los valores como tal antes de mostrarlos en la tabla de gerente
+* [X] OK: Convertir los valores como tal antes de mostrarlos en la tabla de gerente
 
 ### No necesario
 
