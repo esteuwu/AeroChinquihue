@@ -53,6 +53,9 @@ class Model:
         """
         return self._cursor.execute("SELECT airplane FROM airplanes;").fetchall()
 
+    def get_destination_frequency(self, destination: tuple) -> tuple:
+        return self._cursor.execute("SELECT frequency FROM destinations WHERE destination = ?;", destination).fetchone()
+
     def get_destinations(self):
         """
         Returns all the destinations in the database's destinations table.

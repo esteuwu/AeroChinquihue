@@ -42,6 +42,7 @@ class EmployeeWidget(BaseWidget):
         # Freight button
         self.ui_widget.freight_button.clicked.connect(self._handle_freight_button)
         # Destination list
+        self.ui_widget.destination.currentTextChanged.connect(self._handle_destination)
         self.ui_widget.destination.addItems(self._viewmodel.get_destinations())
         # Airplane list
         self.ui_widget.airplane.addItems(self._viewmodel.get_airplanes())
@@ -95,6 +96,10 @@ class EmployeeWidget(BaseWidget):
                 QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
                 return False
         return True
+
+    def _handle_destination(self, text: str):
+        self.ui_widget.time.clear()
+        self.ui_widget.time.addItems(self._viewmodel.get_destination_frequency(text))
 
     def _handle_flight_button(self):
         # Show airplane widget

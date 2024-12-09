@@ -45,6 +45,14 @@ class ViewModel:
         """
         return self._resultset_to_list(self._model.get_airplanes())
 
+    def get_destination_frequency(self, destination: str):
+        frequencies = []
+        frequency: int = self._model.get_destination_frequency((destination,))[0]
+        for i in range(int(1440 / frequency)):
+            struct_time = time.gmtime(i * frequency * 60)
+            frequencies.append(f"{f"{struct_time.tm_hour}".rjust(2, '0')}:{f"{struct_time.tm_min}".rjust(2, '0')}")
+        return frequencies
+
     def get_destinations(self):
         """
         Returns all the destinations in the database's destinations table.
