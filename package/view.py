@@ -10,14 +10,22 @@ class BaseWidget(QtUiTools.QUiLoader):
     """Base class used by all Widget classes."""
     def __init__(self, path: str):
         super().__init__()
-        self.ui_widget = self.load(path)
+        self._ui_widget = self.load(path)
 
     def show(self):
         """
         Calls QWidget's show() method.
         :return: Nothing
         """
-        self.ui_widget.show()
+        self._ui_widget.show()
+
+    @property
+    def ui_widget(self):
+        """
+        Returns the actual widget.
+        :return: QWidget-type variable
+        """
+        return self._ui_widget
 
 
 class EmployeeWidget(BaseWidget):
@@ -150,7 +158,7 @@ class ManagerAuthenticationWidget(BaseWidget):
         self.ui_widget.ok_button.clicked.connect(self._handle_ok_button)
 
     def _handle_ok_button(self):
-        password = self.ui_widget.password.text()
+        password: str = self.ui_widget.password.text()
         self.ui_widget.password.clear()
         try:
             identification = Identification(self.ui_widget.identification.text())
@@ -193,9 +201,7 @@ class ManagerTabWidget(BaseWidget):
         super().__init__(os.path.join("ui", "ManagerTabWidget.ui"))
         self._viewmodel = viewmodel
         # Epoch
-        epoch = QtCore.QDateTime()
-        epoch.setDate(QtCore.QDate.currentDate())
-        epoch = epoch.toSecsSinceEpoch()
+        epoch = QtCore.QDateTime(QtCore.QDate.currentDate(), QtCore.QTime()).toSecsSinceEpoch()
         # Daily flights
         self.ui_widget.daily_flights.setText(str(self._viewmodel.get_flight_count_in_range(epoch, epoch + 86399)))
         # Daily freights
@@ -214,7 +220,7 @@ class ManagerTabWidget(BaseWidget):
 
 class ManagerTableWidget(BaseWidget):
     """Class that loads the manager table widget."""
-    def __init__(self, viewmodel: ViewModel, rows, columns, table_name):
+    def __init__(self, viewmodel: ViewModel, rows: list, columns: list, table_name: str):
         super().__init__(os.path.join("ui", "ManagerTableWidget.ui"))
         self._columns = columns
         self._data = []
@@ -245,7 +251,7 @@ class ManagerTableWidget(BaseWidget):
         # Do not select the first entry if there is one by default
         self.ui_widget.table.setCurrentCell(-1, -1)
 
-    def _handle_cell_change(self, row, column):
+    def _handle_cell_change(self, row: int, column: int):
         if self._columns[column] not in ["Costo"]:
             QtWidgets.QMessageBox.information(self.ui_widget, "Información", "No puede cambiar este valor.")
             self._set_item(row, column)
@@ -281,7 +287,7 @@ class ManagerTableWidget(BaseWidget):
             self.ui_widget.table.setCurrentCell(-1, -1)
             QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Entrada borrada con éxito.")
 
-    def _set_item(self, row, column):
+    def _set_item(self, row: int, column: int):
         self.ui_widget.table.cellChanged.disconnect()
         self.ui_widget.table.setItem(row, column, QtWidgets.QTableWidgetItem(str(self._data[row][column])))
         self.ui_widget.table.cellChanged.connect(self._handle_cell_change)

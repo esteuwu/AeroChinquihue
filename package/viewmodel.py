@@ -133,7 +133,7 @@ class ViewModel:
         return True
 
     @staticmethod
-    def _resultset_to_list(resultset):
+    def _resultset_to_list(resultset: list):
         results = []
         for result in resultset:
             results.append(result[0])

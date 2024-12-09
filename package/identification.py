@@ -3,7 +3,7 @@
 
 class Identification:
     """Class to interact with identifications."""
-    def __init__(self, identification: str):
+    def __init__(self, identification: str) -> None:
         if not self._is_identification_valid(identification):
             raise ValueError("Invalid identification")
         self._identification = int(identification.replace('-', '').replace('.', '')[:-1])

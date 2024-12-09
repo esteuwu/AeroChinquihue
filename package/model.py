@@ -7,7 +7,7 @@ import dotenv
 
 class Model:
     """Class to interact with the database."""
-    def __init__(self):
+    def __init__(self) -> None:
         dotenv.load_dotenv()
         database_filename = os.getenv("DATABASE_FILENAME")
         if not pathlib.Path(database_filename).exists():
@@ -34,7 +34,7 @@ class Model:
         self._cursor.execute("INSERT INTO freights VALUES (?, ?, ?, ?, ?, ?, ?, ?);", values)
         self._connection.commit()
 
-    def delete(self, table: str, uuid: tuple):
+    def delete(self, table: str, uuid: tuple) -> None:
         """
         Deletes an entry from a table.
         :param table: Table to operate in
@@ -132,7 +132,7 @@ class Model:
         """
         return self._cursor.execute("SELECT prices FROM destinations WHERE destination = ?;", destination).fetchone()
 
-    def update(self, table: str, key: str, values: tuple):
+    def update(self, table: str, key: str, values: tuple) -> None:
         """
         Updates a key value in a given table.
         :param table: Must be a valid table. Otherwise, raise ValueError
