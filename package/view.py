@@ -67,8 +67,7 @@ class EmployeeWidget(BaseWidget):
         identification = Identification(self.ui_widget.identification.text())
         # Flight
         if self.ui_widget.flight_button.isChecked():
-            leave = QtCore.QDateTime()
-            leave.setDate(self.ui_widget.date.selectedDate())
+            leave = QtCore.QDateTime(self.ui_widget.date.selectedDate(), QtCore.QTime.fromString(self.ui_widget.time.currentItem().text()))
             self._viewmodel.add_flight((self.ui_widget.name.text(), identification.identification, self.ui_widget.destination.currentText(), self.ui_widget.airplane.currentText(), leave.toSecsSinceEpoch(), int(self.ui_widget.seats.text()), "Especial: No Pago", 0))
             QtWidgets.QMessageBox.information(self.ui_widget, "Información", "Vuelo reservado con éxito.")
         # Freight
