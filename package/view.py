@@ -36,7 +36,6 @@ class EmployeeWidget(BaseWidget):
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "EmployeeWidget.ui"))
         self._seats_widgets = []
-        self._selected_seats = []
         self._viewmodel = viewmodel
         self._widget: ManagerAuthenticationWidget
         # Window title
