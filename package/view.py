@@ -90,7 +90,7 @@ class EmployeeWidget(BaseWidget):
             return False
         if isinstance(self.ui_widget.time.currentItem(), types.NoneType):
             QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Debe seleccionar un horario de ida válido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
-            return
+            return False
         # Flight
         if self.ui_widget.flight_button.isChecked():
             # Basic seats validation
@@ -118,8 +118,11 @@ class EmployeeWidget(BaseWidget):
         for i in range(rows):
             self._seats_widgets.append([])
             for j in range(columns):
+                seat_number = i * columns + j + 1
                 self._seats_widgets[i].append(QtWidgets.QPushButton())
-                self._seats_widgets[i][j].setText(str(i * columns + j + 1))
+                self._seats_widgets[i][j].setText(str(seat_number))
+                if seat_number > seats:
+                    self._seats_widgets[i][j].setEnabled(False)
                 self.ui_widget.seats_layout.addWidget(self._seats_widgets[i][j], i, j)
 
     def _handle_destination(self, text: str):
