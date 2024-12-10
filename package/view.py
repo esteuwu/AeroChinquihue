@@ -87,11 +87,15 @@ class EmployeeWidget(BaseWidget):
         except ValueError:
             QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return False
-        if isinstance(self.ui_widget.time.currentItem(), types.NoneType):
-            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Debe seleccionar un horario de ida válido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
-            return False
         # Flight
         if self.ui_widget.flight_button.isChecked():
+            # Time validation
+            if isinstance(self.ui_widget.time.currentItem(), types.NoneType):
+                QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia",
+                                              "Debe seleccionar un horario de ida válido.",
+                                              QtWidgets.QMessageBox.StandardButton.NoButton,
+                                              QtWidgets.QMessageBox.StandardButton.NoButton)
+                return False
             # Basic seats validation
             if not (self.ui_widget.seats.text().isnumeric() and int(self.ui_widget.seats.text()) > 0):
                 QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Los asientos ingresados son inválidos.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
