@@ -1,7 +1,9 @@
 """Provides the View class to graphically interact with the program."""
 # pylint: disable=I1101,R0903
 import collections
+import math
 import os
+import types
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
 from .identification import Identification
 from .viewmodel import ViewModel
@@ -33,6 +35,8 @@ class EmployeeWidget(BaseWidget):
     """Class that loads the employee widget."""
     def __init__(self, viewmodel: ViewModel):
         super().__init__(os.path.join("ui", "EmployeeWidget.ui"))
+        self._seats_widgets = []
+        self._selected_seats = []
         self._viewmodel = viewmodel
         self._widget: ManagerAuthenticationWidget
         # Window title
@@ -45,6 +49,7 @@ class EmployeeWidget(BaseWidget):
         self.ui_widget.destination.currentTextChanged.connect(self._handle_destination)
         self.ui_widget.destination.addItems(self._viewmodel.get_destinations())
         # Airplane list
+        self.ui_widget.airplane.currentTextChanged.connect(self._handle_airplane)
         self.ui_widget.airplane.addItems(self._viewmodel.get_airplanes())
         # Date picker
         self.ui_widget.date.setMinimumDate(QtCore.QDate.currentDate())
@@ -83,6 +88,9 @@ class EmployeeWidget(BaseWidget):
         except ValueError:
             QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El RUT ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
             return False
+        if isinstance(self.ui_widget.time.currentItem(), types.NoneType):
+            QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "Debe seleccionar un horario de ida válido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
+            return
         # Flight
         if self.ui_widget.flight_button.isChecked():
             # Basic seats validation
@@ -96,6 +104,23 @@ class EmployeeWidget(BaseWidget):
                 QtWidgets.QMessageBox.warning(self.ui_widget, "Advertencia", "El peso ingresado es inválido.", QtWidgets.QMessageBox.StandardButton.NoButton, QtWidgets.QMessageBox.StandardButton.NoButton)
                 return False
         return True
+
+    def _handle_airplane(self, text: str):
+        if len(self._seats_widgets) != 0:
+            for row_value in self._seats_widgets:
+                for column_value in row_value:
+                    self.ui_widget.seats_layout.removeWidget(column_value)
+                    column_value.hide()
+            self._seats_widgets.clear()
+        seats = self._viewmodel.get_airplane_seats(text)
+        rows = math.floor(math.sqrt(seats))
+        columns = math.ceil(seats / rows)
+        for i in range(rows):
+            self._seats_widgets.append([])
+            for j in range(columns):
+                self._seats_widgets[i].append(QtWidgets.QPushButton())
+                self._seats_widgets[i][j].setText(str(i * columns + j + 1))
+                self.ui_widget.seats_layout.addWidget(self._seats_widgets[i][j], i, j)
 
     def _handle_destination(self, text: str):
         self.ui_widget.time.clear()
@@ -159,8 +184,7 @@ class EmployeeWidget(BaseWidget):
             if QtWidgets.QMessageBox.question(self.ui_widget, "Pregunta", question,
                                               QtWidgets.QMessageBox.StandardButton.No,
                                               QtWidgets.QMessageBox.StandardButton.Yes) == 16384:
-                leave = QtCore.QDateTime()
-                leave.setDate(self.ui_widget.date.selectedDate())
+                leave = QtCore.QDateTime(self.ui_widget.date.selectedDate(), QtCore.QTime.fromString(self.ui_widget.time.currentItem().text()))
                 self._viewmodel.add_flight((self.ui_widget.name.text(), identification.identification,
                                             self.ui_widget.destination.currentText(),
                                             self.ui_widget.airplane.currentText(), leave.toSecsSinceEpoch(),

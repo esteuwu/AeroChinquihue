@@ -38,6 +38,14 @@ class ViewModel:
         """
         self._model.delete(table, (entry_uuid,))
 
+    def get_airplane_seats(self, airplane: str) -> int:
+        """
+        Gets the number of seats for a specific airplane.
+        :param airplane: Airplane to query
+        :return: Number of seats
+        """
+        return self._model.get_airplane_seats((airplane,))[0]
+
     def get_airplanes(self):
         """
         Returns all the airplanes in the database's airplanes table.
@@ -46,6 +54,11 @@ class ViewModel:
         return self._resultset_to_list(self._model.get_airplanes())
 
     def get_destination_frequency(self, destination: str):
+        """
+        Get the flight frequency for a specific destination.
+        :param destination: Destination to query
+        :return: Flight frequencies (list)
+        """
         frequencies = []
         frequency: int = self._model.get_destination_frequency((destination,))[0]
         for i in range(int(1440 / frequency)):

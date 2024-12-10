@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
+    <width>478</width>
     <height>739</height>
    </rect>
   </property>
@@ -122,6 +122,20 @@
          </item>
          <item>
           <widget class="QListWidget" name="time"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Asientos</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="seats_layout"/>
          </item>
         </layout>
        </item>

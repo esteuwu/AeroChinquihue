@@ -46,6 +46,14 @@ class Model:
         self._cursor.execute(f"DELETE FROM {table} WHERE uuid = ?;", uuid)
         self._connection.commit()
 
+    def get_airplane_seats(self, airplane: tuple) -> tuple:
+        """
+        Gets the number of seats for a specific airplane.
+        :param airplane: Airplane to query
+        :return: Number of seats
+        """
+        return self._cursor.execute("SELECT seats FROM airplanes WHERE airplane = ?;", airplane).fetchone()
+
     def get_airplanes(self):
         """
         Returns all the airplanes in the database's airplanes table.
@@ -54,6 +62,11 @@ class Model:
         return self._cursor.execute("SELECT airplane FROM airplanes;").fetchall()
 
     def get_destination_frequency(self, destination: tuple) -> tuple:
+        """
+        Get the flight frequency for a specific destination.
+        :param destination: Destination to query
+        :return: Flight frequency (int in tuple)
+        """
         return self._cursor.execute("SELECT frequency FROM destinations WHERE destination = ?;", destination).fetchone()
 
     def get_destinations(self):

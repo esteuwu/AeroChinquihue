@@ -130,6 +130,8 @@ Solo para uso interno.
 
 ### Necesario
 
+* [X] OK: Agregar algoritmo de hora de salida
+
 * [X] OK: Agregar opción de obviar pago utilizando credenciales de
   gerente en vista de empleados (agregar callback functions)
 
@@ -145,8 +147,6 @@ get_flight_count(), falta implementarlo en View)
 
 * [X] OK: Permitir la modificación de valores en la vista de gerente y agregar
 validaciones correspondientes
-
-* [ ] Pendiente: Agregar algoritmo de hora de salida
 
 * [ ] Pendiente: Agregar límites de pasajeros y peso para cada avión y agregar validaciones
 correspondientes
