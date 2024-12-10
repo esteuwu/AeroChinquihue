@@ -109,7 +109,7 @@ class EmployeeWidget(BaseWidget):
         if len(self._seats_widgets) != 0:
             for row_value in self._seats_widgets:
                 for column_value in row_value:
-                    self.ui_widget.seats_layout.removeWidget(column_value)
+                    self.ui_widget.new_seats_layout.removeWidget(column_value)
                     column_value.hide()
             self._seats_widgets.clear()
         seats = self._viewmodel.get_airplane_seats(text)
@@ -123,7 +123,7 @@ class EmployeeWidget(BaseWidget):
                 self._seats_widgets[i][j].setText(str(seat_number))
                 if seat_number > seats:
                     self._seats_widgets[i][j].setEnabled(False)
-                self.ui_widget.seats_layout.addWidget(self._seats_widgets[i][j], i, j)
+                self.ui_widget.new_seats_layout.addWidget(self._seats_widgets[i][j], i, j)
 
     def _handle_destination(self, text: str):
         self.ui_widget.time.clear()
