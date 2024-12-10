@@ -1,7 +1,7 @@
 """Provides the View class to graphically interact with the program."""
 # pylint: disable=I1101,R0903
 import collections
-import math
+# import math
 import os
 import types
 from PySide6 import QtCore, QtGui, QtUiTools, QtWidgets
@@ -49,7 +49,7 @@ class EmployeeWidget(BaseWidget):
         self.ui_widget.destination.currentTextChanged.connect(self._handle_destination)
         self.ui_widget.destination.addItems(self._viewmodel.get_destinations())
         # Airplane list
-        self.ui_widget.airplane.currentTextChanged.connect(self._handle_airplane)
+        # self.ui_widget.airplane.currentTextChanged.connect(self._handle_airplane)
         self.ui_widget.airplane.addItems(self._viewmodel.get_airplanes())
         # Date picker
         self.ui_widget.date.setMinimumDate(QtCore.QDate.currentDate())
@@ -105,6 +105,7 @@ class EmployeeWidget(BaseWidget):
                 return False
         return True
 
+    '''
     def _handle_airplane(self, text: str):
         if len(self._seats_widgets) != 0:
             for row_value in self._seats_widgets:
@@ -124,6 +125,7 @@ class EmployeeWidget(BaseWidget):
                 if seat_number > seats:
                     self._seats_widgets[i][j].setEnabled(False)
                 self.ui_widget.new_seats_layout.addWidget(self._seats_widgets[i][j], i, j)
+    '''
 
     def _handle_destination(self, text: str):
         self.ui_widget.time.clear()
