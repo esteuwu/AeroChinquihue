@@ -298,8 +298,10 @@ class ManagerTableWidget(BaseWidget):
             self._data.append([])
         for row_index, row_value in enumerate(rows):
             for column_index, column_value in enumerate(row_value):
-                if columns[column_index] in ["Asientos", "Costo", "Peso"]:
+                if columns[column_index] in ["Asientos", "Peso"]:
                     value = f"{column_value:,}".replace(',', '.')
+                elif columns[column_index] in ["Costo"]:
+                    value = f"${column_value:,}".replace(',', '.')
                 elif columns[column_index] in ["Creación", "Salida"]:
                     value = QtCore.QDateTime.fromSecsSinceEpoch(column_value).toString()
                 elif columns[column_index] in ["RUT"]:
