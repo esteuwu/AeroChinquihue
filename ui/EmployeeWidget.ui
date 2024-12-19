@@ -125,20 +125,6 @@
          </item>
         </layout>
        </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QLabel" name="new_seats_label">
-           <property name="text">
-            <string>Asientos</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="new_seats_layout"/>
-         </item>
-        </layout>
-       </item>
       </layout>
      </item>
      <item>
